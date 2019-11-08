@@ -1,3 +1,20 @@
+grub2 (2.04-4) unstable; urgency=medium
+
+  [ Thomas Gaugler ]
+  * Add leading / to prefix of network boot image for d-i.
+
+  [ Martin von Wittich ]
+  * upgrade-from-grub-legacy: Set DPKG_MAINTSCRIPT_NAME and
+    DPKG_MAINTSCRIPT_PACKAGE when calling grub-pc.postinst manually (closes:
+    #943387).
+
+  [ Colin Watson ]
+  * Use policy-compliant architecture wildcards in libefiboot-dev and
+    libefivar-dev build-dependencies.
+  * Build with GCC 9 (closes: #944166).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 08 Nov 2019 10:58:30 +0000
+
 grub2 (2.04-3) unstable; urgency=medium
 
   * Apply patch from James Clarke to fix BIOS Boot Partition support on
