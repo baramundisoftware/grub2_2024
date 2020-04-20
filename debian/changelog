@@ -1,3 +1,21 @@
+grub2 (2.04-6) unstable; urgency=medium
+
+  [ Romain Perier ]
+  * Add f2fs module to signed UEFI images
+
+  [ Steve McIntyre ]
+  * Add jfs module to signed UEFI images. Closes: #950959
+
+  [ Colin Watson ]
+  * Drop mkconfig-mid-upgrade.patch; it was only needed for upgrades from
+    GRUB 1.99 (now a long time ago) and can inappropriately hide problems
+    when /etc/grub.d/00_header should have been updated but wasn't (closes:
+    #953201).
+  * Cherry-pick from upstream:
+    - btrfs: Add support for new RAID1C34 profiles (closes: #958236).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 20 Apr 2020 01:03:08 +0100
+
 grub2 (2.04-5) unstable; urgency=medium
 
   * Cherry-pick from upstream:
