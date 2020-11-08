@@ -1,3 +1,27 @@
+grub2 (2.04-10) unstable; urgency=medium
+
+  [ Ian Campbell ]
+  * Remove myself from uploaders.
+
+  [ Colin Watson ]
+  * When upgrading grub-pc noninteractively, bail out if grub-install fails.
+    It's better to fail the upgrade than to produce a possibly-unbootable
+    system.
+  * Explicitly check whether the target device exists before running
+    grub-install, since grub-install copies modules to /boot/grub/ before
+    installing the core image, and the new modules might be incompatible
+    with the old core image (closes: #966575).
+  * Cherry-pick from upstream:
+    - tftp: Roll-over block counter to prevent data packets timeouts
+      (LP: #1892290).
+
+  [ Dimitri John Ledkov ]
+  * grub-install: Add backup and restore.
+  * Don't call grub-install on fresh install of grub-pc.  It's the job of
+    installers to do that after a fresh install.
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 08 Nov 2020 16:26:08 +0000
+
 grub2 (2.04-9) unstable; urgency=high
 
   * Backport security patch series from upstream:
