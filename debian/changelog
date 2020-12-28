@@ -1,6 +1,15 @@
+grub2 (2.04-12) unstable; urgency=medium
+
+  * Cherry-pick from upstream:
+    - mdraid1x_linux: Fix gcc10 error -Werror=array-bounds
+    - zfs: Fix gcc10 error -Werror=zero-length-bounds
+  * Build with GCC 10 (closes: #978515).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 28 Dec 2020 22:33:23 +0000
+
 grub2 (2.04-11) unstable; urgency=medium
 
-  * grub-install: Fix backup restoration on i386.
+  * grub-install: Fix backup restoration on i386 (closes: #976671).
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Dec 2020 18:29:51 +0000
 
