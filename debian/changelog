@@ -1,3 +1,11 @@
+grub2 (2.04-13) unstable; urgency=medium
+
+  [ Steve McIntyre ]
+  * Switch to using the efivarfs interface for detecting "system setup"
+    (Closes: #979299)
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 06 Feb 2021 17:30:38 +0000
+
 grub2 (2.04-12) unstable; urgency=medium
 
   * Cherry-pick from upstream:
