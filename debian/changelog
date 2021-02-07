@@ -1,3 +1,21 @@
+grub2 (2.04-14) unstable; urgency=medium
+
+  [ Raphaël Hertzog ]
+  * Extend grub-efi to also cover arm64/ia64/arm (closes: #981819).
+
+  [ Colin Watson ]
+  * Cherry-pick from upstream:
+    - grub-install: Fix inverted test for NLS enabled when copying locales
+      (closes: #979754).
+  * Fix handling of trailing commas in grub-pc/install_devices (closes:
+    #913928).
+  * Make grub-firmware-qemu Recommend/Enhance qemu-system-x86, not qemu
+    (closes: #966243).
+  * Make grub-common depend on mtools on EFI platforms, for grub-mkrescue
+    (closes: #774910).
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 07 Feb 2021 15:23:51 +0000
+
 grub2 (2.04-13) unstable; urgency=medium
 
   [ Steve McIntyre ]
