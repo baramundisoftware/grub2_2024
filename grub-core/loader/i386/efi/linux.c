@@ -28,6 +28,7 @@
 #include <grub/lib/cmdline.h>
 #include <grub/linux.h>
 #include <grub/efi/efi.h>
+#include <grub/efi/sb.h>
 #include <stddef.h>
 
 GRUB_MOD_LICENSE ("GPLv3+");
@@ -59,7 +60,7 @@ grub_linuxefi_secure_validate (void *data, grub_uint32_t size)
   grub_efi_shim_lock_t *shim_lock;
   grub_efi_status_t status;
 
-  if (! grub_efi_secure_boot())
+  if (grub_efi_get_secureboot () != GRUB_EFI_SECUREBOOT_MODE_ENABLED)
     {
       grub_dprintf ("linuxefi", "secure boot not enabled, not validating");
       return 1;
@@ -312,6 +313,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
       grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("can't allocate kernel"));
       goto fail;
     }
+  grub_errno = GRUB_ERR_NONE;
 
   grub_dprintf ("linuxefi", "kernel_mem = %lx\n", (unsigned long) kernel_mem);
 

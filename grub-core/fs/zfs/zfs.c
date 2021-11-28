@@ -1175,7 +1175,7 @@ scan_disk (grub_device_t dev, struct grub_zfs_data *data,
   desc.original = original;
 
   /* Don't check back labels on CDROM.  */
-  if (grub_disk_get_size (dev->disk) == GRUB_DISK_SIZE_UNKNOWN)
+  if (grub_disk_native_sectors (dev->disk) == GRUB_DISK_SIZE_UNKNOWN)
     vdevnum = VDEV_LABELS / 2;
 
   for (label = 0; ubbest == NULL && label < vdevnum; label++)
@@ -1184,7 +1184,7 @@ scan_disk (grub_device_t dev, struct grub_zfs_data *data,
 	= label * (sizeof (vdev_label_t) >> SPA_MINBLOCKSHIFT)
 	+ ((VDEV_SKIP_SIZE + VDEV_BOOT_HEADER_SIZE) >> SPA_MINBLOCKSHIFT)
 	+ (label < VDEV_LABELS / 2 ? 0 : 
-	   ALIGN_DOWN (grub_disk_get_size (dev->disk), sizeof (vdev_label_t))
+	   ALIGN_DOWN (grub_disk_native_sectors (dev->disk), sizeof (vdev_label_t))
 	   - VDEV_LABELS * (sizeof (vdev_label_t) >> SPA_MINBLOCKSHIFT));
 
       /* Read in the uberblock ring (128K). */
@@ -1869,8 +1869,8 @@ zio_read (blkptr_t *bp, grub_zfs_endian_t endian, void **buf,
     {
       if (BPE_GET_ETYPE(bp) != BP_EMBEDDED_TYPE_DATA)
 	return grub_error (GRUB_ERR_NOT_IMPLEMENTED_YET,
-			   "unsupported embedded BP (type=%u)\n",
-			   BPE_GET_ETYPE(bp));
+			   "unsupported embedded BP (type=%llu)\n",
+			   (long long unsigned int) BPE_GET_ETYPE(bp));
       lsize = BPE_GET_LSIZE(bp);
       psize = BF64_GET_SB(grub_zfs_to_cpu64 ((bp)->blk_prop, endian), 25, 7, 0, 1);
     }
@@ -3771,7 +3771,7 @@ zfs_uuid (grub_device_t device, char **uuid)
 }
 
 static grub_err_t 
-zfs_mtime (grub_device_t device, grub_int32_t *mt)
+zfs_mtime (grub_device_t device, grub_int64_t *mt)
 {
   struct grub_zfs_data *data;
   grub_zfs_endian_t ub_endian = GRUB_ZFS_UNKNOWN_ENDIAN;

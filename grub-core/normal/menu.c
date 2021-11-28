@@ -170,8 +170,7 @@ grub_menu_set_timeout (int timeout)
 static int
 get_and_remove_first_entry_number (const char *name)
 {
-  const char *val;
-  char *tail;
+  const char *val, *tail;
   int entry;
 
   val = grub_env_get (name);
@@ -639,26 +638,7 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
       saved_time = grub_get_time_ms ();
       while (1)
 	{
-	  int mods = 0;
-	  grub_term_input_t term;
 	  int key;
-
-	  if (grub_term_poll_usb)
-	    grub_term_poll_usb (0);
-
-	  FOR_ACTIVE_TERM_INPUTS(term)
-	  {
-	    if (term->getkeystatus)
-	      mods |= term->getkeystatus (term);
-	  }
-
-	  if (mods >= 0 &&
-	      (mods & (GRUB_TERM_STATUS_LSHIFT
-		       | GRUB_TERM_STATUS_RSHIFT)) != 0)
-	    {
-	      timeout = -1;
-	      break;
-	    }
 
 	  key = grub_getkey_noblock ();
 	  if (key != GRUB_TERM_NO_KEY)
@@ -667,7 +647,7 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
 	      if (entry >= 0)
 		break;
 	    }
-	  if (key == GRUB_TERM_ESC)
+	  if (grub_key_is_interrupt (key))
 	    {
 	      timeout = -1;
 	      break;

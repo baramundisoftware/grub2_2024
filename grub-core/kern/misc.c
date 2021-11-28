@@ -159,17 +159,28 @@ int grub_err_printf (const char *fmt, ...)
 __attribute__ ((alias("grub_printf")));
 #endif
 
+int
+grub_debug_enabled (const char * condition)
+{
+  const char *debug;
+
+  debug = grub_env_get ("debug");
+  if (!debug)
+    return 0;
+
+  if (grub_strword (debug, "all") || grub_strword (debug, condition))
+    return 1;
+
+  return 0;
+}
+
 void
 grub_real_dprintf (const char *file, const int line, const char *condition,
 		   const char *fmt, ...)
 {
   va_list args;
-  const char *debug = grub_env_get ("debug");
 
-  if (! debug)
-    return;
-
-  if (grub_strword (debug, "all") || grub_strword (debug, condition))
+  if (grub_debug_enabled (condition))
     {
       grub_printf ("%s:%d: ", file, line);
       va_start (args, fmt);
@@ -341,7 +352,8 @@ grub_isspace (int c)
 }
 
 unsigned long
-grub_strtoul (const char *str, char **end, int base)
+grub_strtoul (const char * restrict str, const char ** const restrict end,
+	      int base)
 {
   unsigned long long num;
 
@@ -358,7 +370,8 @@ grub_strtoul (const char *str, char **end, int base)
 }
 
 unsigned long long
-grub_strtoull (const char *str, char **end, int base)
+grub_strtoull (const char * restrict str, const char ** const restrict end,
+	       int base)
 {
   unsigned long long num = 0;
   int found = 0;
@@ -597,7 +610,7 @@ grub_divmod64 (grub_uint64_t n, grub_uint64_t d, grub_uint64_t *r)
 static inline char *
 grub_lltoa (char *str, int c, unsigned long long n)
 {
-  unsigned base = (c == 'x' || c == 'X') ? 16 : 10;
+  unsigned base = ((c == 'x') || (c == 'X')) ? 16 : 10;
   char *p;
 
   if ((long long) n < 0 && c == 'd')
@@ -917,14 +930,14 @@ grub_vsnprintf_real (char *str, grub_size_t max_len, const char *fmt0,
 	{
 	  if (fmt[0] == '0')
 	    zerofill = '0';
-	  format1 = grub_strtoul (fmt, (char **) &fmt, 10);
+	  format1 = grub_strtoul (fmt, &fmt, 10);
 	}
 
       if (*fmt == '.')
 	fmt++;
 
       if (grub_isdigit (*fmt))
-	format2 = grub_strtoul (fmt, (char **) &fmt, 10);
+	format2 = grub_strtoul (fmt, &fmt, 10);
 
       if (*fmt == '$')
 	{

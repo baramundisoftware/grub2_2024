@@ -346,10 +346,10 @@ grub_script_yylex (union YYSTYPE *value,
 }
 
 void
-grub_script_yyerror (struct grub_parser_param *state, char const *err)
+grub_script_yyerror (struct grub_parser_param *state, const char *err)
 {
   if (err)
-    grub_error (GRUB_ERR_INVALID_COMMAND, err);
+    grub_error (GRUB_ERR_INVALID_COMMAND, "%s", err);
 
   grub_print_error ();
   state->err++;

@@ -1,3 +1,18 @@
+grub2 (2.06-1) unstable; urgency=medium
+
+  * Use "command -v" in maintainer scripts rather than "which".
+  * New upstream release.
+    - Switch to the upstream shim_lock verifier, dropping several more
+      manual checks for UEFI Secure Boot.
+  * Cherry-pick from upstream:
+    - fs/xfs: Fix unreadable filesystem with v4 superblock
+    - tests/ahci: Change "ide-drive" deprecated QEMU device name to "ide-hd"
+      (closes: #997100)
+  * Remove dir_to_symlink maintainer script code, which was only needed for
+    upgrades from before jessie.
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 28 Nov 2021 13:30:32 +0000
+
 grub2 (2.04-20) unstable; urgency=medium
 
   [ Mathieu Trudel-Lapierre ]

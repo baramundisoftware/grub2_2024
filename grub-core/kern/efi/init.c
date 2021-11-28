@@ -20,6 +20,7 @@
 #include <grub/efi/efi.h>
 #include <grub/efi/console.h>
 #include <grub/efi/disk.h>
+#include <grub/efi/sb.h>
 #include <grub/lockdown.h>
 #include <grub/term.h>
 #include <grub/misc.h>
@@ -98,17 +99,10 @@ grub_efi_init (void)
    * Lockdown the GRUB and register the shim_lock verifier
    * if the UEFI Secure Boot is enabled.
    */
-  if (grub_efi_secure_boot ())
+  if (grub_efi_get_secureboot () == GRUB_EFI_SECUREBOOT_MODE_ENABLED)
     {
       grub_lockdown ();
-
-      /*
-       * TODO: Move Debian to using the shim_lock verifier and
-       * enable the lockdown verifier.
-       */
-#if 0
       grub_shim_lock_verifier_setup ();
-#endif
     }
 
   efi_call_4 (grub_efi_system_table->boot_services->set_watchdog_timer,

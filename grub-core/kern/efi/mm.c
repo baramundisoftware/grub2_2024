@@ -157,12 +157,25 @@ grub_efi_allocate_pages_real (grub_efi_physical_address_t address,
 
   /* Limit the memory access to less than 4GB for 32-bit platforms.  */
   if (address > GRUB_EFI_MAX_USABLE_ADDRESS)
-    return 0;
+    {
+      char inv_addr[17], max_addr[17]; /* log16(2^64) = 16, plus NUL. */
+
+      grub_snprintf (inv_addr, sizeof (inv_addr) - 1, "%" PRIxGRUB_UINT64_T,
+		     address);
+      grub_snprintf (max_addr, sizeof (max_addr) - 1, "%" PRIxGRUB_UINT64_T,
+		     (grub_efi_uint64_t) GRUB_EFI_MAX_USABLE_ADDRESS);
+      grub_error (GRUB_ERR_BAD_ARGUMENT,
+		  N_("invalid memory address (0x%s > 0x%s)"), inv_addr, max_addr);
+      return NULL;
+    }
 
   b = grub_efi_system_table->boot_services;
   status = efi_call_4 (b->allocate_pages, alloctype, memtype, pages, &address);
   if (status != GRUB_EFI_SUCCESS)
-    return 0;
+    {
+      grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("out of memory"));
+      return NULL;
+    }
 
   if (address == 0)
     {
@@ -172,7 +185,10 @@ grub_efi_allocate_pages_real (grub_efi_physical_address_t address,
       status = efi_call_4 (b->allocate_pages, alloctype, memtype, pages, &address);
       grub_efi_free_pages (0, pages);
       if (status != GRUB_EFI_SUCCESS)
-	return 0;
+	{
+	  grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("out of memory"));
+	  return NULL;
+	}
     }
 
   grub_efi_store_alloc (address, pages);

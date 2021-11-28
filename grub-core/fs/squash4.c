@@ -769,7 +769,7 @@ direct_read (struct grub_squash_data *data,
 	     struct grub_squash_cache_inode *ino,
 	     grub_off_t off, char *buf, grub_size_t len)
 {
-  grub_err_t err;
+  grub_err_t err = GRUB_ERR_NONE;
   grub_off_t cumulated_uncompressed_size = 0;
   grub_uint64_t a = 0;
   grub_size_t i;
@@ -1003,7 +1003,7 @@ grub_squash_close (grub_file_t file)
 }
 
 static grub_err_t
-grub_squash_mtime (grub_device_t dev, grub_int32_t *tm)
+grub_squash_mtime (grub_device_t dev, grub_int64_t *tm)
 {
   struct grub_squash_data *data = 0;
 

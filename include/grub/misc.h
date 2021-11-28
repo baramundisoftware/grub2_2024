@@ -28,10 +28,10 @@
 #include <grub/compiler.h>
 
 #define ALIGN_UP(addr, align) \
-	((addr + (typeof (addr)) align - 1) & ~((typeof (addr)) align - 1))
+	(((addr) + (typeof (addr)) (align) - 1) & ~((typeof (addr)) (align) - 1))
 #define ALIGN_UP_OVERHEAD(addr, align) ((-(addr)) & ((typeof (addr)) (align) - 1))
 #define ALIGN_DOWN(addr, align) \
-	((addr) & ~((typeof (addr)) align - 1))
+	((addr) & ~((typeof (addr)) (align) - 1))
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof (array[0]))
 #define COMPILE_TIME_ASSERT(cond) switch (0) { case 1: case !(cond): ; }
 
@@ -243,11 +243,29 @@ grub_strncasecmp (const char *s1, const char *s2, grub_size_t n)
     - (int) grub_tolower ((grub_uint8_t) *s2);
 }
 
-unsigned long EXPORT_FUNC(grub_strtoul) (const char *str, char **end, int base);
-unsigned long long EXPORT_FUNC(grub_strtoull) (const char *str, char **end, int base);
+/*
+ * Note that these differ from the C standard's definitions of strtol,
+ * strtoul(), and strtoull() by the addition of two const qualifiers on the end
+ * pointer, which make the declaration match the *semantic* requirements of
+ * their behavior.  This means that instead of:
+ *
+ *  char *s = "1234 abcd";
+ *  char *end;
+ *  unsigned long l;
+ *
+ *  l = grub_strtoul(s, &end, 10);
+ *
+ * We must one of:
+ *
+ *  const char *end;
+ *  ... or ...
+ *  l = grub_strtoul(s, (const char ** const)&end, 10);
+ */
+unsigned long EXPORT_FUNC(grub_strtoul) (const char * restrict str, const char ** const restrict end, int base);
+unsigned long long EXPORT_FUNC(grub_strtoull) (const char * restrict str, const char ** const restrict end, int base);
 
 static inline long
-grub_strtol (const char *str, char **end, int base)
+grub_strtol (const char * restrict str, const char ** const restrict end, int base)
 {
   int negative = 0;
   unsigned long long magnitude;
@@ -322,6 +340,7 @@ grub_puts (const char *s)
 }
 
 int EXPORT_FUNC(grub_puts_) (const char *s);
+int EXPORT_FUNC(grub_debug_enabled) (const char *condition);
 void EXPORT_FUNC(grub_real_dprintf) (const char *file,
                                      const int line,
                                      const char *condition,
@@ -478,5 +497,7 @@ void EXPORT_FUNC(grub_real_boot_time) (const char *file,
 
 #define grub_max(a, b) (((a) > (b)) ? (a) : (b))
 #define grub_min(a, b) (((a) < (b)) ? (a) : (b))
+
+#define grub_log2ull(n) (GRUB_TYPE_BITS (grub_uint64_t) - __builtin_clzll (n) - 1)
 
 #endif /* ! GRUB_MISC_HEADER */

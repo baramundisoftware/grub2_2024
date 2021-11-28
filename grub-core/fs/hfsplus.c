@@ -199,7 +199,8 @@ grub_hfsplus_read_block (grub_fshelp_node_t node, grub_disk_addr_t fileblock)
 	  || !nnode)
 	{
 	  grub_error (GRUB_ERR_READ_ERROR,
-		      "no block found for the file id 0x%x and the block offset 0x%x",
+		      "no block found for the file id 0x%x and the block"
+		      " offset 0x%" PRIuGRUB_UINT64_T,
 		      node->fileid, fileblock);
 	  break;
 	}
@@ -1082,7 +1083,7 @@ grub_hfsplus_label (grub_device_t device, char **label)
 
 /* Get mtime.  */
 static grub_err_t
-grub_hfsplus_mtime (grub_device_t device, grub_int32_t *tm)
+grub_hfsplus_mtime (grub_device_t device, grub_int64_t *tm)
 {
   struct grub_hfsplus_data *data;
   grub_disk_t disk = device->disk;

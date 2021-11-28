@@ -160,8 +160,7 @@ grub_initrd_init (int argc, char *argv[],
   initrd_ctx->nfiles = 0;
   initrd_ctx->components = 0;
 
-  initrd_ctx->components = grub_calloc (argc,
-					sizeof (initrd_ctx->components[0]));
+  initrd_ctx->components = grub_calloc (argc, sizeof (initrd_ctx->components[0]));
   if (!initrd_ctx->components)
     return grub_errno;
 
@@ -243,7 +242,7 @@ grub_initrd_init (int argc, char *argv[],
   
   return GRUB_ERR_NONE;
 
-overflow:
+ overflow:
   free_dir (root);
   grub_initrd_close (initrd_ctx);
   return grub_error (GRUB_ERR_OUT_OF_RANGE, N_("overflow is detected"));

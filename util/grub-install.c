@@ -353,6 +353,14 @@ get_default_platform (void)
    return "arm64-efi";
 #elif defined (__amd64__) || defined (__x86_64__) || defined (__i386__)
    return grub_install_get_default_x86_platform ();
+#elif defined (__riscv)
+#if __riscv_xlen == 32
+   return "riscv32-efi";
+#elif __riscv_xlen == 64
+   return "riscv64-efi";
+#else
+   return NULL;
+#endif
 #else
    return NULL;
 #endif
@@ -769,7 +777,7 @@ is_prep_empty (grub_device_t dev)
   grub_disk_addr_t dsize, addr;
   grub_uint32_t buffer[32768];
 
-  dsize = grub_disk_get_size (dev->disk);
+  dsize = grub_disk_native_sectors (dev->disk);
   for (addr = 0; addr < dsize;
        addr += sizeof (buffer) / GRUB_DISK_SECTOR_SIZE)
     {
@@ -1872,7 +1880,8 @@ main (int argc, char *argv[])
 	  {
 	    grub_util_bios_setup (platdir, "boot.img", "core.img",
 				  install_drive, force,
-				  fs_probe, allow_floppy, add_rs_codes);
+				  fs_probe, allow_floppy, add_rs_codes,
+				  !grub_install_is_short_mbrgap_supported ());
 
 	    grub_set_install_backup_ponr ();
 	  }
@@ -1916,7 +1925,7 @@ main (int argc, char *argv[])
 	    grub_util_sparc_setup (platdir, "boot.img", "core.img",
 				   install_drive, force,
 				   fs_probe, allow_floppy,
-				   0 /* unused */ );
+				   0 /* unused */, 0 /* unused */ );
 
 	    grub_set_install_backup_ponr ();
 	  }

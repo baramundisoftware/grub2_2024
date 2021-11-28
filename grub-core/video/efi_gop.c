@@ -71,7 +71,10 @@ check_protocol (void)
   handles = grub_efi_locate_handle (GRUB_EFI_BY_PROTOCOL,
 				    &graphics_output_guid, NULL, &num_handles);
   if (!handles || num_handles == 0)
-    return 0;
+    {
+      grub_dprintf ("video", "GOP: no handles\n");
+      return 0;
+    }
 
   for (i = 0; i < num_handles; i++)
     {
@@ -81,6 +84,7 @@ check_protocol (void)
       grub_video_gop_iterate (check_protocol_hook, &have_usable_mode);
       if (have_usable_mode)
 	{
+	  grub_dprintf ("video", "GOP: found usable mode\n");
 	  grub_free (handles);
 	  return 1;
 	}
@@ -88,6 +92,8 @@ check_protocol (void)
 
   gop = 0;
   gop_handle = 0;
+
+  grub_dprintf ("video", "GOP: no usable mode\n");
 
   return 0;
 }
@@ -121,6 +127,7 @@ grub_video_gop_get_bpp (struct grub_efi_gop_mode_info *in)
     {
     case GRUB_EFI_GOT_BGRA8:
     case GRUB_EFI_GOT_RGBA8:
+    case GRUB_EFI_GOT_BLT_ONLY:
       return 32;
 
     case GRUB_EFI_GOT_BITMASK:
@@ -187,6 +194,7 @@ grub_video_gop_fill_real_mode_info (unsigned mode,
   switch (in->pixel_format)
     {
     case GRUB_EFI_GOT_RGBA8:
+    case GRUB_EFI_GOT_BLT_ONLY:
       out->red_mask_size = 8;
       out->red_field_pos = 0;
       out->green_mask_size = 8;
@@ -300,7 +308,7 @@ grub_video_gop_get_edid (struct grub_video_edid_info *edid_info)
       char edidname[] = "agp-internal-edid";
       grub_size_t datasize;
       grub_uint8_t *data;
-      data = grub_efi_get_variable (edidname, &efi_var_guid, &datasize);
+      grub_efi_get_variable (edidname, &efi_var_guid, &datasize, (void **) &data);
       if (data && datasize > 16)
 	{
 	  copy_size = datasize - 16;
