@@ -59,3 +59,4 @@ mkimage-fix-section-sizes.patch
 tpm-unknown-error-non-fatal.patch
 xfs-fix-v4-superblock.patch
 tests-ahci-update-qemu-device-name.patch
+minilzo-2.10.patch
