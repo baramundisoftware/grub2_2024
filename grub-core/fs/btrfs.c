@@ -912,6 +912,23 @@ grub_btrfs_read_logical (struct grub_btrfs_data *data, grub_disk_addr_t addr,
 	return grub_error (GRUB_ERR_BAD_FS,
 			   "couldn't find the chunk descriptor");
 
+      if (!chsize)
+	{
+	  grub_dprintf ("btrfs", "zero-size chunk\n");
+	  return grub_error (GRUB_ERR_BAD_FS,
+			     "got an invalid zero-size chunk");
+	}
+
+      /*
+       * The space being allocated for a chunk should at least be able to
+       * contain one chunk item.
+       */
+      if (chsize < sizeof (struct grub_btrfs_chunk_item))
+       {
+         grub_dprintf ("btrfs", "chunk-size too small\n");
+         return grub_error (GRUB_ERR_BAD_FS,
+                            "got an invalid chunk size");
+       }
       chunk = grub_malloc (chsize);
       if (!chunk)
 	return grub_errno;
@@ -970,6 +987,16 @@ grub_btrfs_read_logical (struct grub_btrfs_data *data, grub_disk_addr_t addr,
 	      stripe_length = grub_divmod64 (grub_le_to_cpu64 (chunk->size),
 					     nstripes,
 					     NULL);
+
+	      /* For single, there should be exactly 1 stripe. */
+	      if (grub_le_to_cpu16 (chunk->nstripes) != 1)
+		{
+		  grub_dprintf ("btrfs", "invalid RAID_SINGLE: nstripes != 1 (%u)\n",
+				grub_le_to_cpu16 (chunk->nstripes));
+		  return grub_error (GRUB_ERR_BAD_FS,
+				     "invalid RAID_SINGLE: nstripes != 1 (%u)",
+				      grub_le_to_cpu16 (chunk->nstripes));
+		}
 	      if (stripe_length == 0)
 		stripe_length = 512;
 	      stripen = grub_divmod64 (off, stripe_length, &stripe_offset);
@@ -989,6 +1016,19 @@ grub_btrfs_read_logical (struct grub_btrfs_data *data, grub_disk_addr_t addr,
 	      stripen = 0;
 	      stripe_offset = off;
 	      csize = grub_le_to_cpu64 (chunk->size) - off;
+
+             /*
+	      * Redundancy, and substripes only apply to RAID10, and there
+	      * should be exactly 2 sub-stripes.
+	      */
+	     if (grub_le_to_cpu16 (chunk->nstripes) != redundancy)
+               {
+                 grub_dprintf ("btrfs", "invalid RAID1: nstripes != %u (%u)\n",
+                               redundancy, grub_le_to_cpu16 (chunk->nstripes));
+                 return grub_error (GRUB_ERR_BAD_FS,
+                                    "invalid RAID1: nstripes != %u (%u)",
+                                    redundancy, grub_le_to_cpu16 (chunk->nstripes));
+               }
 	      break;
 	    }
 	  case GRUB_BTRFS_CHUNK_TYPE_RAID0:
@@ -1025,6 +1065,20 @@ grub_btrfs_read_logical (struct grub_btrfs_data *data, grub_disk_addr_t addr,
 	      stripe_offset = low + chunk_stripe_length
 		* high;
 	      csize = chunk_stripe_length - low;
+
+	      /*
+	       * Substripes only apply to RAID10, and there
+	       * should be exactly 2 sub-stripes.
+	       */
+	      if (grub_le_to_cpu16 (chunk->nsubstripes) != 2)
+		{
+		  grub_dprintf ("btrfs", "invalid RAID10: nsubstripes != 2 (%u)",
+				grub_le_to_cpu16 (chunk->nsubstripes));
+		  return grub_error (GRUB_ERR_BAD_FS,
+				     "invalid RAID10: nsubstripes != 2 (%u)",
+				     grub_le_to_cpu16 (chunk->nsubstripes));
+		}
+
 	      break;
 	    }
 	  case GRUB_BTRFS_CHUNK_TYPE_RAID5:
@@ -1122,8 +1176,17 @@ grub_btrfs_read_logical (struct grub_btrfs_data *data, grub_disk_addr_t addr,
 	if (csize > (grub_uint64_t) size)
 	  csize = size;
 
+	/*
+	 * The space for a chunk stripe is limited to the space provide in the super-block's
+	 * bootstrap mapping with an initial btrfs key at the start of each chunk.
+	 */
+	grub_size_t avail_stripes = sizeof (data->sblock.bootstrap_mapping) /
+	  (sizeof (struct grub_btrfs_key) + sizeof (struct grub_btrfs_chunk_stripe));
+
 	for (j = 0; j < 2; j++)
 	  {
+	    grub_size_t est_chunk_alloc = 0;
+
 	    grub_dprintf ("btrfs", "chunk 0x%" PRIxGRUB_UINT64_T
 			  "+0x%" PRIxGRUB_UINT64_T
 			  " (%d stripes (%d substripes) of %"
@@ -1135,6 +1198,22 @@ grub_btrfs_read_logical (struct grub_btrfs_data *data, grub_disk_addr_t addr,
 			  grub_le_to_cpu64 (chunk->stripe_length));
 	    grub_dprintf ("btrfs", "reading laddr 0x%" PRIxGRUB_UINT64_T "\n",
 			  addr);
+
+	    if (grub_mul (sizeof (struct grub_btrfs_chunk_stripe),
+			  grub_le_to_cpu16 (chunk->nstripes), &est_chunk_alloc) ||
+		grub_add (est_chunk_alloc,
+			  sizeof (struct grub_btrfs_chunk_item), &est_chunk_alloc) ||
+		est_chunk_alloc > chunk->size)
+	      {
+		err = GRUB_ERR_BAD_FS;
+		break;
+	      }
+
+	   if (grub_le_to_cpu16 (chunk->nstripes) > avail_stripes)
+             {
+               err = GRUB_ERR_BAD_FS;
+               break;
+             }
 
 	    if (is_raid56)
 	      {
@@ -1961,6 +2040,7 @@ grub_btrfs_dir (grub_device_t device, const char *path,
   int r = 0;
   grub_uint64_t tree;
   grub_uint8_t type;
+  grub_size_t est_size = 0;
 
   if (!data)
     return grub_errno;
@@ -2019,6 +2099,18 @@ grub_btrfs_dir (grub_device_t device, const char *path,
 	  break;
 	}
 
+      if (direl == NULL ||
+	  grub_add (grub_le_to_cpu16 (direl->n),
+		    grub_le_to_cpu16 (direl->m), &est_size) ||
+	  grub_add (est_size, sizeof (*direl), &est_size) ||
+	  grub_sub (est_size, sizeof (direl->name), &est_size) ||
+	  est_size > allocated)
+       {
+         grub_errno = GRUB_ERR_OUT_OF_RANGE;
+         r = -grub_errno;
+         goto out;
+       }
+
       for (cdirel = direl;
 	   (grub_uint8_t *) cdirel - (grub_uint8_t *) direl
 	   < (grub_ssize_t) elemsize;
@@ -2029,6 +2121,19 @@ grub_btrfs_dir (grub_device_t device, const char *path,
 	  char c;
 	  struct grub_btrfs_inode inode;
 	  struct grub_dirhook_info info;
+
+	  if (cdirel == NULL ||
+	      grub_add (grub_le_to_cpu16 (cdirel->n),
+			grub_le_to_cpu16 (cdirel->m), &est_size) ||
+	      grub_add (est_size, sizeof (*cdirel), &est_size) ||
+	      grub_sub (est_size, sizeof (cdirel->name), &est_size) ||
+	      est_size > allocated)
+	   {
+	     grub_errno = GRUB_ERR_OUT_OF_RANGE;
+	     r = -grub_errno;
+	     goto out;
+	   }
+
 	  err = grub_btrfs_read_inode (data, &inode, cdirel->key.object_id,
 				       tree);
 	  grub_memset (&info, 0, sizeof (info));
