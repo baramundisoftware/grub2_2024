@@ -2,8 +2,8 @@ Source: grub2
 Section: admin
 Priority: optional
 Maintainer: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
-Uploaders: Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>, Colin Watson <cjwatson@debian.org>, Steve McIntyre <93sam@debian.org>
-Build-Depends: debhelper-compat (= 10),
+Uploaders: Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>, Colin Watson <cjwatson@debian.org>, Steve McIntyre <93sam@debian.org>, Julian Andres Klode <jak@debian.org>
+Build-Depends: debhelper-compat (= 13),
  patchutils,
  python3,
  flex,
@@ -302,6 +302,7 @@ Description: GRand Unified Bootloader, version 2 (EFI-IA32 version)
 
 Package: grub-efi-ia32-signed-template
 Architecture: i386
+Depends: ${misc:Depends}
 Description: GRand Unified Bootloader, version 2 (EFI-IA32 signing template)
  This package contains template files for grub-efi-ia32-signed.
  This is only needed for Secure Boot signing.
@@ -363,6 +364,7 @@ Description: GRand Unified Bootloader, version 2 (EFI-AMD64 version)
 
 Package: grub-efi-amd64-signed-template
 Architecture: amd64
+Depends: ${misc:Depends}
 Description: GRand Unified Bootloader, version 2 (EFI-AMD64 signing template)
  This package contains template files for grub-efi-amd64-signed.
  This is only needed for Secure Boot signing.
@@ -519,6 +521,7 @@ Description: GRand Unified Bootloader, version 2 (ARM64 UEFI version)
 
 Package: grub-efi-arm64-signed-template
 Architecture: arm64
+Depends: ${misc:Depends}
 Description: GRand Unified Bootloader, version 2 (ARM64 UEFI signing template)
  This package contains template files for grub-efi-arm64-signed.
  This is only needed for Secure Boot signing.
