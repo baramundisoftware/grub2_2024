@@ -1,3 +1,13 @@
+grub2 (2.06-5) unstable; urgency=high
+
+  [ Steve McIntyre ]
+  * Explicitly unset SOURCE_DATE_EPOCH before running fs tests
+  * Pull in upstream patches to harden font and image handling -
+    CVE-2022-2601, CVE-2022-3775.
+  * Bump SBAT level to 3 for grub-efi packages
+
+ -- Steve McIntyre <93sam@debian.org>  Sun, 13 Nov 2022 00:33:35 +0000
+
 grub2 (2.06-4) unstable; urgency=high
 
   [ Steve McIntyre ]
