@@ -4,6 +4,9 @@ set -e
 
 fs="$1"
 
+# We can't have this set, or filesystem tests will fail
+unset SOURCE_DATE_EPOCH
+
 GRUBFSTEST="@builddir@/grub-fstest"
 
 tempdir=`mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX"` || exit 1
