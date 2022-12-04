@@ -1,3 +1,16 @@
+grub2 (2.06-6) unstable; urgency=medium
+
+  [ Steve McIntyre ]
+  * Include fonts in the memdisk build for EFI images.
+    Closes: #1024395, #1025352, #1024447
+  * Bump Debian SBAT level to 4
+    - Due to a mistake in the buster upload (2.06-3~deb10u2) that left
+      the CVE-2022-2601 bugs in place, we need to bump SBAT for all of
+      the Debian GRUB binaries. :-(
+  * Switch away from git-dpm
+
+ -- Steve McIntyre <93sam@debian.org>  Sun, 04 Dec 2022 20:42:23 +0000
+
 grub2 (2.06-5) unstable; urgency=high
 
   [ Steve McIntyre ]

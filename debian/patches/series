@@ -105,3 +105,4 @@ cve_2022_2601/0011-font-Fix-an-integer-underflow-in-blit_comb.patch
 cve_2022_2601/0012-font-Harden-grub_font_blit_glyph-and-grub_font_blit_.patch
 cve_2022_2601/0013-font-Assign-null_font-to-glyphs-in-ascii_font_glyph.patch
 cve_2022_2601/0014-normal-charset-Fix-an-integer-overflow-in-grub_unico.patch
+font-Try-opening-fonts-from-the-bundled-memdisk.patch
