@@ -1500,10 +1500,7 @@ main (int argc, char *argv[])
       {
 	char *dir = xasprintf ("%s-signed", grub_install_source_directory);
 	char *signed_image;
-	if (removable)
-	  signed_image = xasprintf ("gcd%s.efi.signed", efi_suffix);
-	else
-	  signed_image = xasprintf ("grub%s.efi.signed", efi_suffix);
+	signed_image = xasprintf ("grub%s.efi.signed", efi_suffix);
 	efi_signed = grub_util_path_concat (2, dir, signed_image);
 	break;
       }
@@ -2149,8 +2146,9 @@ main (int argc, char *argv[])
 						    fb_signed);
 		fb_dst = grub_util_path_concat (2, efidir,
 						    fb_file);
-		grub_install_copy_file (fb_src,
-					fb_dst, 0);
+		if (!removable)
+		  grub_install_copy_file (fb_src,
+					  fb_dst, 0);
 
 		csv_src = grub_util_path_concat (2, "/usr/lib/shim/",
 						    csv_file);

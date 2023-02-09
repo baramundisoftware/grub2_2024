@@ -107,3 +107,10 @@ cve_2022_2601/0013-font-Assign-null_font-to-glyphs-in-ascii_font_glyph.patch
 cve_2022_2601/0014-normal-charset-Fix-an-integer-overflow-in-grub_unico.patch
 font-Try-opening-fonts-from-the-bundled-memdisk.patch
 kern-file-Fix-error-handling-in-grub_file_open.patch
+gcc12_build_dangling_pointer.patch
+gcc12_build_array_bounds.patch
+gcc12_build_array_bounds2.patch
+arm64_remove_magic_number_check.patch
+grub_mkconfig_restore_umask.patch
+ignore_checksum_seed_incompat_feature.patch
+ignore_the_large_dir_incompat_feature.patch
