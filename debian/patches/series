@@ -114,3 +114,4 @@ arm64_remove_magic_number_check.patch
 grub_mkconfig_restore_umask.patch
 ignore_checksum_seed_incompat_feature.patch
 ignore_the_large_dir_incompat_feature.patch
+987008-lvrename-boot-fail.patch
