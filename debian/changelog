@@ -1,3 +1,11 @@
+grub2 (2.06-8.1) experimental; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix an issue where a logical volume rename would lead grub to fail to
+    boot (Closes: #987008)
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sat, 25 Feb 2023 15:16:55 -0500
+
 grub2 (2.06-8) unstable; urgency=medium
 
   [ Steve McIntyre ]
