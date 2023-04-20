@@ -1,3 +1,29 @@
+grub2 (2.06-9) unstable; urgency=medium
+
+  [ Steve McIntyre ]
+  * postinst: make config_item() more robust
+  * Add debconf logic for GRUB_DISABLE_OS_PROBER to make it easier to
+    control things here. Particularly useful for the installer.
+    Closes: #1031594, #1012865, #1025698.
+  * Add luks2 to the signed grub efi images. Closes: #1001248
+
+  [ Ben Hutchings ]
+  * Fix probing of LUKS2 devices (Closes: #1028301):
+    - disk/cryptodisk: When cheatmounting, use the sector info of the cheat
+      device
+    - osdep/devmapper/getroot: Have devmapper recognize LUKS2
+    - osdep/devmapper/getroot: Set up cheated LUKS2 cryptodisk mount from DM
+      parameters
+
+  [ Emanuele Rocca ]
+  * Add arm64-handover-to-kernel-if-sb-enabled.patch to fix Secure Boot on
+    arm64 (Closes: #1033657)
+
+  [ Mattia Rizzolo ]
+  * Don't warn about os-prober if it's not installed. Closes: #1020769
+
+ -- Steve McIntyre <93sam@debian.org>  Thu, 20 Apr 2023 20:35:11 +0100
+
 grub2 (2.06-8.1) experimental; urgency=medium
 
   * Non-maintainer upload.

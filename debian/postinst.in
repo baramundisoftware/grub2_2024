@@ -301,7 +301,9 @@ config_item()
 {
   for x in /etc/default/grub /etc/default/grub.d/*.cfg; do
     if [ -e "$x" ]; then
-      . "$x"
+	# Lose any output here so we don't confuse our
+	# caller. The xen packages echo stuff here, Aargh!
+      . "$x" > /dev/null
     fi
   done
   if [ "$(eval echo "\${$1+set}")" = set ]; then
@@ -392,6 +394,19 @@ case "$1" in
 
     apply_conf_tweaks "$conf_files" merge_debconf_into_conf GRUB_CMDLINE_LINUX grub2/linux_cmdline
     apply_conf_tweaks "$conf_files" merge_debconf_into_conf GRUB_CMDLINE_LINUX_DEFAULT grub2/linux_cmdline_default
+
+    # Horrible stuff here, as the os-prober option is a negative
+    # setting (GRUB_DISABLE_OS_PROBER). To not confuse people with
+    # double negative questions in templates, invert it here.
+    db_get grub2/enable_os_prober
+    if [ "$RET" = false ]; then
+      # enable == false -> put in place the commented-out default
+      # #GRUB_DISABLE_OS_PROBER=false that we ship with
+      apply_conf_tweaks "$conf_files" sed_conf 's/^.*GRUB_DISABLE_OS_PROBER.*$/#GRUB_DISABLE_OS_PROBER=false/'
+    else
+      # enable == true -> put in place a valid GRUB_DISABLE_OS_PROBER=false
+      apply_conf_tweaks "$conf_files" sed_conf 's/^.*GRUB_DISABLE_OS_PROBER.*$/GRUB_DISABLE_OS_PROBER=false/'
+    fi
 
     case @PACKAGE@ in
       grub-pc)
