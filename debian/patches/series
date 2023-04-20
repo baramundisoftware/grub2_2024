@@ -115,3 +115,8 @@ grub_mkconfig_restore_umask.patch
 ignore_checksum_seed_incompat_feature.patch
 ignore_the_large_dir_incompat_feature.patch
 987008-lvrename-boot-fail.patch
+disk-cryptodisk-when-cheatmounting-use-the-sector-info-of-the-cheat-device.patch
+osdep-devmapper-getroot-have-devmapper-recognize-luks2.patch
+osdep-devmapper-getroot-set-up-cheated-luks2-cryptodisk-mount-from-dm-parameters.patch
+arm64-handover-to-kernel-if-sb-enabled.patch
+grub_os-prober.patch
