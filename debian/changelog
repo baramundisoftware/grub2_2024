@@ -1,3 +1,9 @@
+grub2 (2.06-11) unstable; urgency=medium
+
+  * And try again... :-/
+
+ -- Steve McIntyre <93sam@debian.org>  Fri, 21 Apr 2023 01:50:26 +0100
+
 grub2 (2.06-10) unstable; urgency=medium
 
   * Fix 32-bit build with the osdep/devmapper/getroot patches.
