@@ -148,8 +148,10 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
   grub_efi_boot_services_t *b;
   grub_efi_status_t status;
   grub_efi_loaded_image_t *loaded_image;
-  handover_func hf;
   int len;
+
+#ifdef __aarch64__  /* SB only enabled for arm64 */
+  handover_func hf;
 
   if (grub_efi_get_secureboot() == GRUB_EFI_SECUREBOOT_MODE_ENABLED) {
       grub_dprintf ("linux", "GRUB_EFI_SECUREBOOT_MODE enabled\n");
@@ -179,6 +181,7 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
   }
 
   grub_dprintf ("linux", "GRUB_EFI_SECUREBOOT_MODE is NOT enabled\n");
+#endif
 
   mempath = grub_malloc (2 * sizeof (grub_efi_memory_mapped_device_path_t));
   if (!mempath)
