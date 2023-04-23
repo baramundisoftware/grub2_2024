@@ -2167,6 +2167,7 @@ main (int argc, char *argv[])
 		    also_install_removable (shim_signed, base_efidir, removable_file, 1);
 
 		    also_install_removable (efi_signed, base_efidir, chained_base, 1);
+		    also_install_removable (mok_src, base_efidir, mok_file, 0);
 
 		    /* If we're updating the NVRAM, add fallback too - it
 			will re-update the NVRAM later if things break */

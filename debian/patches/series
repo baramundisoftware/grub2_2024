@@ -120,3 +120,4 @@ osdep-devmapper-getroot-have-devmapper-recognize-luks2.patch
 osdep-devmapper-getroot-set-up-cheated-luks2-cryptodisk-mount-from-dm-parameters.patch
 arm64-handover-to-kernel-if-sb-enabled.patch
 grub_os-prober.patch
+os-prober-Allow-initrd-to-contain-spaces.patch

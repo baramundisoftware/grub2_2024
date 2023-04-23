@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub2 2.02~beta3-4\n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-04-21 15:46+0000\n"
-"PO-Revision-Date: 2017-01-20 21:56-0200\n"
+"POT-Creation-Date: 2023-04-23 20:27+0000\n"
+"PO-Revision-Date: 2023-04-24 21:29-0300\n"
 "Last-Translator: Adriano Rafael Gomes <adrianorg@debian.org>\n"
 "Language-Team: Brazilian Portuguese <debian-l10n-portuguese@lists.debian."
 "org>\n"
@@ -397,6 +397,8 @@ msgstr ""
 #: ../templates.in:5001
 msgid "Run os-prober automatically to detect and boot other OSes?"
 msgstr ""
+"Executar os-prober automaticamente para detectar e inicializar outros "
+"sistemas operacionais?"
 
 #. Type: boolean
 #. Description
@@ -405,6 +407,9 @@ msgid ""
 "GRUB can use the os-prober tool to attempt to detect other operating systems "
 "on your computer and add them to its list of boot options automatically."
 msgstr ""
+"O GRUB pode usar a ferramenta os-prober para tentar detectar outros sistemas "
+"operacionais no seu computador e adicioná-los na lista de opções de "
+"inicialização automaticamente."
 
 #. Type: boolean
 #. Description
@@ -415,6 +420,12 @@ msgid ""
 "installed via LVM or raw disk devices, running os-prober can cause damage to "
 "those guest OSes as it mounts filesystems to look for things."
 msgstr ""
+"Se o seu computador tem múltiplos sistemas operacionais instalados, então "
+"essa opção é provavelmente o que você quer. Entretanto, se o seu computador "
+"é um hospedeiro para sistemas operacionais convidados instalados via LVM ou "
+"dispositivos de disco \"raw\", executar o os-prober pode causar danos a "
+"esses sistemas operacionais convidados, uma vez que ele monta os sistemas de "
+"arquivos para fazer procuras."
 
 #. Type: string
 #. Description

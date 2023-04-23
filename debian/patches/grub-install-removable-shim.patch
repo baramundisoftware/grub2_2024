@@ -107,7 +107,7 @@ Index: grub.git/util/grub-install.c
  
  		fb_src = grub_util_path_concat (2, "/usr/lib/shim/",
  						    fb_signed);
-@@ -2154,30 +2152,81 @@ main (int argc, char *argv[])
+@@ -2154,30 +2152,82 @@ main (int argc, char *argv[])
  		if (!removable)
  		  grub_install_copy_file (fb_src,
  					  fb_dst, 0);
@@ -129,6 +129,7 @@ Index: grub.git/util/grub-install.c
 +		    also_install_removable (shim_signed, base_efidir, removable_file, 1);
 +
 +		    also_install_removable (efi_signed, base_efidir, chained_base, 1);
++		    also_install_removable (mok_src, base_efidir, mok_file, 0);
 +
 +		    /* If we're updating the NVRAM, add fallback too - it
 +			will re-update the NVRAM later if things break */

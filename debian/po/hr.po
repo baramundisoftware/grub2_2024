@@ -2,14 +2,14 @@
 # Copyright (C) 2010 Josip Rodin
 # This file is distributed under the same license as the grub2 package.
 # Josip Rodin <joy+ditrans@linux.hr>, 2010.
-# Tomislav Krznar <tomislav.krznar@gmail.com>, 2012, 2017.
+# Tomislav Krznar <tomislav.krznar@gmail.com>, 2012, 2017, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub2 1.97-2\n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-04-21 15:46+0000\n"
-"PO-Revision-Date: 2017-01-23 17:16+0100\n"
+"POT-Creation-Date: 2023-04-23 20:27+0000\n"
+"PO-Revision-Date: 2023-04-25 13:07+0200\n"
 "Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: hrvatski <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #. Type: boolean
 #. Description
@@ -169,7 +169,7 @@ msgstr "Instalacija GRUB-a nije uspjela - želite li nastaviti?"
 #. Description
 #: ../grub-pc.templates.in:7001 ../grub-pc.templates.in:8001
 msgid "GRUB failed to install to the following devices:"
-msgstr "GRUB nije uspio instalaciju na sljedeće uređaje:"
+msgstr "GRUB nije uspješno instaliran na sljedeće uređaje:"
 
 #. Type: boolean
 #. Description
@@ -312,9 +312,9 @@ msgid ""
 "`kopt' parameter in GRUB Legacy's menu.lst. Please verify that it is "
 "correct, and modify it if necessary. The command line is allowed to be empty."
 msgstr ""
-"Ovaj naredbeni redak za sam Linux kernel je izvađen iz /etc/default/grub ili "
+"Ovaj naredbeni redak za sam Linux kernel je preuzet iz /etc/default/grub ili "
 "iz parametra 'kopt' u GRUB Legacy datoteci menu.lst. Molim provjerite je li "
-"ispravan, i ako je potrebno uredite ga. Naredbeni redak smije biti prazan."
+"ispravan i, ako je potrebno, uredite ga. Naredbeni redak smije biti prazan."
 
 #. Type: string
 #. Description
@@ -329,7 +329,7 @@ msgid ""
 "The following string will be used as Linux parameters for the default menu "
 "entry but not for the recovery mode."
 msgstr ""
-"Sljedeći izraz će biti korišten kao parametar za Linux stavke u izborniku, "
+"Sljedeći izraz će se koristiti kao parametar za Linux stavke u izborniku, "
 "osim za spasonosni način rada."
 
 #. Type: boolean
@@ -385,6 +385,8 @@ msgstr ""
 #: ../templates.in:5001
 msgid "Run os-prober automatically to detect and boot other OSes?"
 msgstr ""
+"Pokrenuti os-prober za automatsko traženje i učitavanje drugih operacijskih "
+"sustava?"
 
 #. Type: boolean
 #. Description
@@ -393,7 +395,10 @@ msgid ""
 "GRUB can use the os-prober tool to attempt to detect other operating systems "
 "on your computer and add them to its list of boot options automatically."
 msgstr ""
+"GRUB može alatom os-prober pokušati pronaći druge operacijske sustave na "
+"Vašem računalu i automatski ih dodati na popis za učitavanje."
 
+# TK: TODO: find if we translated 'LVM' in other files.
 #. Type: boolean
 #. Description
 #: ../templates.in:5001
@@ -403,6 +408,11 @@ msgid ""
 "installed via LVM or raw disk devices, running os-prober can cause damage to "
 "those guest OSes as it mounts filesystems to look for things."
 msgstr ""
+"Ovo vjerojatno želite ako je na Vašem računalu instalirano više operacijskih "
+"sustava. Međutim, budući da alat pokušava montirati datotečne sustave kako "
+"bi pronašao druge operacijske sustave, u slučaju kada su na računalu "
+"instalirani virtualni operacijski sustavi na LVM ili 'neobrađene' diskove, "
+"može doći do njihovog oštećenja."
 
 #. Type: string
 #. Description
@@ -418,9 +428,9 @@ msgid ""
 "the `kopt' parameter in GRUB Legacy's menu.lst. Please verify that it is "
 "correct, and modify it if necessary. The command line is allowed to be empty."
 msgstr ""
-"Ovaj naredbeni redak za kFreeBSD kernel je izvađen iz /etc/default/grub ili "
+"Ovaj naredbeni redak za kFreeBSD kernel je preuzet iz /etc/default/grub ili "
 "iz parametra 'kopt' u GRUB Legacy datoteci menu.lst. Molim provjerite je li "
-"ispravan, i ako je potrebno uredite ga. Naredbeni redak smije biti prazan."
+"ispravan i, ako je potrebno, uredite ga. Naredbeni redak smije biti prazan."
 
 #. Type: string
 #. Description
@@ -435,8 +445,8 @@ msgid ""
 "The following string will be used as kFreeBSD parameters for the default "
 "menu entry but not for the recovery mode."
 msgstr ""
-"Sljedeći izraz će biti korišten kao parametar za kFreeBSD stavke u "
-"izborniku, osim za spasonosni način rada."
+"Sljedeći izraz će se koristiti kao parametar za kFreeBSD stavke u izborniku, "
+"osim za spasonosni način rada."
 
 #~ msgid "/boot/grub/device.map has been regenerated"
 #~ msgstr "/boot/grub/device.map je regeneriran"
