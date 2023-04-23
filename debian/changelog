@@ -1,3 +1,35 @@
+grub2 (2.06-13) unstable; urgency=medium
+
+  [ Steve McIntyre ]
+  * When *also* installing to the removable media path, include the
+    relevant mokmanager binary. Closes: #1034409
+
+  [ General Chaos ]
+  * Allow initrd to contain spaces. Closes: #838177, #820838.
+
+  [ Translators ]
+  * Update lots of translations of debconf templates, thanks to the
+    following:
+    + Welsh (Dafydd Tomos)
+    + German (Helge Kreutzmann). Closes: #1034850
+    + Croatian (Tomislav Krznar)
+    + Greek (Emmanuel Galatoulas)
+    + Esperanto (Felipe Castro)
+    + French (Baptiste Jammet). Closes: #1035761
+    + Italian (Luca Monducci). Closes: #1034825
+    + Kazakh (Baurzhan Muftakhidinov)
+    + Korean (Changwoo Ryu). Closes: #1034868
+    + Latvian (Rudolfs Mazurs)
+    + Dutch (Frans Spiesschaert). Closes: #1035399
+    + Norwegian Bokmål (Petter Reinholdtsen, Sverre Vaabenoe)
+    + Brazilian Portuguese (Adriano Rafael Gomes). Closes: #1035905
+    + Romanian (Remus-Gabriel Chelu)
+    + Russian (Yuri Kozlov). Closes: #1035294
+    + Turkish (Atila KOÇ). Closes: #1035846
+    + Swedish (Luna Jernberg)
+
+ -- Steve McIntyre <93sam@debian.org>  Sun, 23 Apr 2023 20:55:54 +0100
+
 grub2 (2.06-12) unstable; urgency=medium
 
   * Fix up arm64 SB patch to fix build failure on 32-bit arm systems

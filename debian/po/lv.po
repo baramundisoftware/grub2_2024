@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-04-21 15:46+0000\n"
-"PO-Revision-Date: 2015-02-10 21:14+0200\n"
+"POT-Creation-Date: 2023-04-23 20:27+0000\n"
+"PO-Revision-Date: 2023-04-30 22:01+0300\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. Type: boolean
 #. Description
@@ -359,7 +359,7 @@ msgstr ""
 #. Description
 #: ../templates.in:4001
 msgid "Update NVRAM variables to automatically boot into Debian?"
-msgstr ""
+msgstr "Atjaunināt NVRAM mainīgos, lai automātiski ielādētu Debian?"
 
 #. Type: boolean
 #. Description
@@ -371,12 +371,19 @@ msgid ""
 "your NVRAM variables have been set up such that your system contacts a PXE "
 "server on every boot, this would preserve that behavior."
 msgstr ""
+"GRUB var konfigurēt jūsu platformas NVRAM mainīgos, lai pēc sistēmas "
+"ieslēgšanas ielādētu Debian. Jūs varētu vēlēties izslēgt šo uzvedību, lai "
+"nemainītu ielādes konfigurāciju. Piemēram, ja jūsu NVRAM mainīgie ir "
+"iestatīti tā, ka pie katras ielādes sistēma sazinās ar PXE serveri, šis "
+"iestatījums saglabātu tādu uzvedību."
 
 #. Type: boolean
 #. Description
 #: ../templates.in:5001
 msgid "Run os-prober automatically to detect and boot other OSes?"
 msgstr ""
+"Automātiski palaist operētājsistēmu meklētāju, lai atklātu un ielādētu citas "
+"OS?"
 
 #. Type: boolean
 #. Description
@@ -385,6 +392,9 @@ msgid ""
 "GRUB can use the os-prober tool to attempt to detect other operating systems "
 "on your computer and add them to its list of boot options automatically."
 msgstr ""
+"GRUB var izmantot operētājsistēmu meklēšanas rīku, lai uz jūsu datora "
+"mēģinātu atklāt citas operētājsistēmas un automātiski pievienot tās pie "
+"ielādes opcijām."
 
 #. Type: boolean
 #. Description
@@ -395,6 +405,11 @@ msgid ""
 "installed via LVM or raw disk devices, running os-prober can cause damage to "
 "those guest OSes as it mounts filesystems to look for things."
 msgstr ""
+"Ja uz jūsu datora ir uzinstalētas vairākas operētājsistēmas, jūs visdrīzāk "
+"gribat šo opciju. Savukārt, ja jūsu dators ir saimnieks viesa "
+"operētājsistēmai, kas ir uzinstalēts caur LVM vai diska ierīci, tad "
+"operētājsistēmu meklētājs var sabojāt tās OS, jo, lai varētu meklēt, tas "
+"montē datņu sistēmas."
 
 #. Type: string
 #. Description

@@ -1,13 +1,13 @@
 # Italian (it) translation of debconf templates for grub2
 # This file is distributed under the same license as the grub2 package.
-# Luca Monducci <luca.mo@tiscali.it>, 2007-2017.
+# Luca Monducci <luca.mo@tiscali.it>, 2007-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub2 2.02~beta3-4 italian debconf templates\n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-04-21 15:46+0000\n"
-"PO-Revision-Date: 2017-01-21 11:39+0100\n"
+"POT-Creation-Date: 2023-04-23 20:27+0000\n"
+"PO-Revision-Date: 2023-04-29 21:20+0200\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "Language: it\n"
@@ -120,9 +120,9 @@ msgid ""
 "not recommended."
 msgstr ""
 "Nota: è possibile installare GRUB anche nei boot record delle partizioni e "
-"qui sono elencate le partizioni più appropriate. Purtroppo questo obbliga "
-"GRUB a usare il meccanismo del \"blocklist\", che lo rende meno affidabile e "
-"di conseguenza non è raccomandato."
+"qui sono elencate alcune partizioni  appropriate. Però questo obbliga GRUB a "
+"usare il meccanismo del \"blocklist\", che lo rende meno affidabile e di "
+"conseguenza non è raccomandato."
 
 #. Type: multiselect
 #. Description
@@ -385,7 +385,7 @@ msgstr ""
 #. Description
 #: ../templates.in:5001
 msgid "Run os-prober automatically to detect and boot other OSes?"
-msgstr ""
+msgstr "Eseguire automaticamente os-prober per rilevare e avviare altri OS?"
 
 #. Type: boolean
 #. Description
@@ -394,6 +394,9 @@ msgid ""
 "GRUB can use the os-prober tool to attempt to detect other operating systems "
 "on your computer and add them to its list of boot options automatically."
 msgstr ""
+"GRUB può usare il programma os-prober per provare a individuare altri "
+"sistemi operativi presenti sul computer e aggiungerli automaticamente "
+"all'elenco delle scelte all'avvio."
 
 #. Type: boolean
 #. Description
@@ -404,6 +407,11 @@ msgid ""
 "installed via LVM or raw disk devices, running os-prober can cause damage to "
 "those guest OSes as it mounts filesystems to look for things."
 msgstr ""
+"Se sul proprio computer sono installati più sistemi operativi, probabilmente "
+"questo è ciò che si desidera. Tuttavia, se il computer fa da host per più SO "
+"ospiti installati tramite device LVM o dischi raw, l'uso di os-prober "
+"potrebbe danneggiare i SO ospiti dato che per fare la ricerca monta i "
+"filesystem."
 
 #. Type: string
 #. Description
