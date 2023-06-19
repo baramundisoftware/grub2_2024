@@ -196,7 +196,7 @@ program = {
   common = util/config.c;
 
   extra_dist = util/grub-mkimagexx.c;
-
+  cppflags = '-I/usr/include/fuse3';
   ldadd = libgrubmods.a;
   ldadd = libgrubgcry.a;
   ldadd = libgrubkern.a;
@@ -313,7 +313,7 @@ program = {
   ldadd = libgrubgcry.a;
   ldadd = libgrubkern.a;
   ldadd = grub-core/lib/gnulib/libgnu.a;
-  ldadd = '$(LIBINTL) $(LIBDEVMAPPER) $(LIBZFS) $(LIBNVPAIR) $(LIBGEOM) -lfuse';
+  ldadd = '$(LIBINTL) $(LIBDEVMAPPER) $(LIBZFS) $(LIBNVPAIR) $(LIBGEOM) -lfuse3';
   condition = COND_GRUB_MOUNT;
 };
 

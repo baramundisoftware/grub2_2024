@@ -1781,16 +1781,16 @@ if test x"$enable_grub_mount" = xno ; then
 fi
 
 if test x"$grub_mount_excuse" = x ; then
-  AC_CHECK_LIB([fuse], [fuse_main_real], [],
-               [grub_mount_excuse="need FUSE library"])
+  AC_CHECK_LIB([fuse3], [fuse_main_real], [],
+               [grub_mount_excuse="need FUSE3 library"])
 fi
 
 if test x"$grub_mount_excuse" = x ; then
   # Check for fuse headers.
   SAVED_CPPFLAGS="$CPPFLAGS"
-  CPPFLAGS="$CPPFLAGS -DFUSE_USE_VERSION=26"
-  AC_CHECK_HEADERS([fuse/fuse.h], [],
-  	[grub_mount_excuse=["need FUSE headers"]])
+  CPPFLAGS="$CPPFLAGS -I/usr/include/fuse3 -DFUSE_USE_VERSION=30"
+  AC_CHECK_HEADERS([fuse3/fuse.h], [],
+  	[grub_mount_excuse=["need FUSE3 headers"]])
   CPPFLAGS="$SAVED_CPPFLAGS"
 fi
 
