@@ -1,4 +1,3 @@
-From 9c8e1c85ec9971f2c6bb9a8a7530e94f7dbec14a Mon Sep 17 00:00:00 2001
 From: Chris Coulson <chris.coulson@canonical.com>
 Date: Tue, 5 Apr 2022 10:02:04 +0100
 Subject: loader/efi/chainloader: Simplify the loader state
@@ -12,11 +11,11 @@ up before grub_cmd_chainloader() finishes.
 Signed-off-by: Chris Coulson <chris.coulson@canonical.com>
 Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
 ---
- grub-core/loader/efi/chainloader.c | 38 +++++++++++++++++-------------
+ grub-core/loader/efi/chainloader.c | 38 +++++++++++++++++++++-----------------
  1 file changed, 21 insertions(+), 17 deletions(-)
 
 diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
-index 2bd80f4db..d1602c89b 100644
+index 2bd80f4..d1602c8 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
 @@ -44,25 +44,20 @@ GRUB_MOD_LICENSE ("GPLv3+");

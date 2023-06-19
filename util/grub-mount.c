@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define FUSE_USE_VERSION 26
+#define FUSE_USE_VERSION 30
 #include <config.h>
 #include <grub/types.h>
 #include <grub/emu/misc.h>
@@ -34,7 +34,7 @@
 #include <grub/command.h>
 #include <grub/zfs/zfs.h>
 #include <grub/i18n.h>
-#include <fuse/fuse.h>
+#include <fuse3/fuse.h>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -147,7 +147,7 @@ fuse_getattr_find_file (const char *cur_filename,
 }
 
 static int
-fuse_getattr (const char *path, struct stat *st)
+fuse_getattr (const char *path, struct stat *st, struct fuse_file_info *fi)
 {
   struct fuse_getattr_ctx ctx;
   char *pathname, *path2;
@@ -330,13 +330,13 @@ fuse_readdir_call_fill (const char *filename,
   st.st_blocks = (st.st_size + 511) >> 9;
   st.st_atime = st.st_mtime = st.st_ctime
     = info->mtimeset ? info->mtime : 0;
-  ctx->fill (ctx->buf, filename, &st, 0);
+  ctx->fill (ctx->buf, filename, &st, 0, 0);
   return 0;
 }
 
 static int 
 fuse_readdir (const char *path, void *buf,
-	      fuse_fill_dir_t fill, off_t off, struct fuse_file_info *fi)
+	      fuse_fill_dir_t fill, off_t off, struct fuse_file_info *fi, enum fuse_readdir_flags fl)
 {
   struct fuse_readdir_ctx ctx = {
     .path = path,

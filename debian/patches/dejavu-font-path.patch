@@ -1,4 +1,3 @@
-From 973e040bdeddcf366a7a45bb5d9f77e06f4784c7 Mon Sep 17 00:00:00 2001
 From: Fabian Greffrath <fabian@greffrath.com>
 Date: Tue, 19 May 2020 12:19:26 +0200
 Subject: add /u/s/fonts/truetype/dejavu to the DejaVu fonts search paths
@@ -9,7 +8,7 @@ Patch-Name: dejavu-font-path.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index b3fb7437e..22c6cf7ac 100644
+index b3fb743..22c6cf7 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1719,7 +1719,7 @@ fi

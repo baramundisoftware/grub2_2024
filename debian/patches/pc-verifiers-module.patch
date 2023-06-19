@@ -1,4 +1,3 @@
-From 4a6abe501f39c4c8afe4ed7405ff99aff8559a13 Mon Sep 17 00:00:00 2001
 From: Michael Chang <mchang@suse.com>
 Date: Thu, 18 Mar 2021 19:30:26 +0800
 Subject: i386-pc: build verifiers API as module
@@ -39,7 +38,7 @@ Patch-Name: pc-verifiers-module.patch
  5 files changed, 39 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/Makefile.am b/grub-core/Makefile.am
-index ee88e44e9..b6872d20f 100644
+index ee88e44..b6872d2 100644
 --- a/grub-core/Makefile.am
 +++ b/grub-core/Makefile.am
 @@ -93,7 +93,9 @@ KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/partition.h
@@ -53,7 +52,7 @@ index ee88e44e9..b6872d20f 100644
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/net.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/memory.h
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 2ff266806..da3269899 100644
+index 2ff2668..da32698 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -141,7 +141,7 @@ kernel = {
@@ -79,7 +78,7 @@ index 2ff266806..da3269899 100644
    name = hdparm;
    common = commands/hdparm.c;
 diff --git a/grub-core/kern/main.c b/grub-core/kern/main.c
-index 2879d644a..c6fb66853 100644
+index 2879d64..c6fb668 100644
 --- a/grub-core/kern/main.c
 +++ b/grub-core/kern/main.c
 @@ -29,7 +29,9 @@
@@ -104,7 +103,7 @@ index 2879d644a..c6fb66853 100644
    grub_load_config ();
  
 diff --git a/grub-core/kern/verifiers.c b/grub-core/kern/verifiers.c
-index 75d7994cf..1245d0d9e 100644
+index 75d7994..1245d0d 100644
 --- a/grub-core/kern/verifiers.c
 +++ b/grub-core/kern/verifiers.c
 @@ -221,8 +221,25 @@ grub_verify_string (char *str, enum grub_verify_string_type type)
@@ -134,7 +133,7 @@ index 75d7994cf..1245d0d9e 100644
 +}
 +#endif
 diff --git a/include/grub/verify.h b/include/grub/verify.h
-index cd129c398..6fde244fc 100644
+index cd129c3..6fde244 100644
 --- a/include/grub/verify.h
 +++ b/include/grub/verify.h
 @@ -64,10 +64,14 @@ struct grub_file_verifier

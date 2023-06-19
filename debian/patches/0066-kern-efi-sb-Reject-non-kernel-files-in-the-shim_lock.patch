@@ -1,4 +1,3 @@
-From 24e6d59ac676791507ff5267bf3bef6cbaff6aef Mon Sep 17 00:00:00 2001
 From: Julian Andres Klode <julian.klode@canonical.com>
 Date: Thu, 2 Dec 2021 15:03:53 +0100
 Subject: kern/efi/sb: Reject non-kernel files in the shim_lock verifier
@@ -23,7 +22,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  2 files changed, 37 insertions(+), 3 deletions(-)
 
 diff --git a/grub-core/kern/efi/sb.c b/grub-core/kern/efi/sb.c
-index c52ec6226..89c4bb3fd 100644
+index c52ec62..89c4bb3 100644
 --- a/grub-core/kern/efi/sb.c
 +++ b/grub-core/kern/efi/sb.c
 @@ -119,10 +119,11 @@ shim_lock_verifier_init (grub_file_t io __attribute__ ((unused)),
@@ -86,7 +85,7 @@ index c52ec6226..89c4bb3fd 100644
  }
  
 diff --git a/include/grub/verify.h b/include/grub/verify.h
-index 6fde244fc..67448165f 100644
+index 6fde244..6744816 100644
 --- a/include/grub/verify.h
 +++ b/include/grub/verify.h
 @@ -24,6 +24,7 @@

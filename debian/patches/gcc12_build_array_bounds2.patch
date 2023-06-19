@@ -1,3 +1,7 @@
+From: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Date: Mon, 19 Jun 2023 17:23:25 +0200
+Subject: gcc12_build_array_bounds2
+
 commit 3ce13d974b887338ae972c79b41ff6fc0eee6388
 Author: Michael Chang <mchang@suse.com>
 Date:   Mon Mar 28 15:00:54 2022 +0800
@@ -16,9 +20,12 @@ Date:   Mon Mar 28 15:00:54 2022 +0800
     
     Signed-off-by: Michael Chang <mchang@suse.com>
     Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/lib/reed_solomon.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/grub-core/lib/reed_solomon.c b/grub-core/lib/reed_solomon.c
-index 82779a296..562bd2e3e 100644
+index 467305b..817db6a 100644
 --- a/grub-core/lib/reed_solomon.c
 +++ b/grub-core/lib/reed_solomon.c
 @@ -102,6 +102,11 @@ static gf_single_t errvals[256];

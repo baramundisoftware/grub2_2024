@@ -1,4 +1,3 @@
-From afda8b60ba0712abe01ae1e64c5f7a067a0e6492 Mon Sep 17 00:00:00 2001
 From: Zhang Boyang <zhangboyang.id@gmail.com>
 Date: Mon, 15 Aug 2022 02:04:58 +0800
 Subject: [PATCH 07/14] font: Fix integer overflow in BMP index
@@ -23,7 +22,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/grub-core/font/font.c b/grub-core/font/font.c
-index 9e3e0a94e..e4cb0d867 100644
+index d0e6340..b208a28 100644
 --- a/grub-core/font/font.c
 +++ b/grub-core/font/font.c
 @@ -300,6 +300,8 @@ load_font_index (grub_file_t file, grub_uint32_t sect_length, struct
@@ -60,6 +59,3 @@ index 9e3e0a94e..e4cb0d867 100644
      }
  
    /* Do a binary search in `char_index', which is ordered by code point.  */
--- 
-2.30.2
-

@@ -1,4 +1,3 @@
-From f8382052a32839fbc3715d1c5076f1b6bbcbcb63 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Sat, 3 Jan 2015 12:04:59 +0000
 Subject: Generate alternative init entries in advanced menu
@@ -18,7 +17,7 @@ Patch-Name: mkconfig-other-inits.patch
  2 files changed, 21 insertions(+)
 
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 635c609d6..4e09797f8 100644
+index 635c609..4e09797 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -32,6 +32,7 @@ export TEXTDOMAIN=@PACKAGE@
@@ -53,7 +52,7 @@ index 635c609d6..4e09797f8 100644
      linux_entry "${OS}" "${version}" recovery \
                  "${GRUB_CMDLINE_LINUX_RECOVERY} ${GRUB_CMDLINE_LINUX}"
 diff --git a/util/grub.d/20_linux_xen.in b/util/grub.d/20_linux_xen.in
-index 64e26e4b4..d99751a94 100644
+index 64e26e4..d99751a 100644
 --- a/util/grub.d/20_linux_xen.in
 +++ b/util/grub.d/20_linux_xen.in
 @@ -27,6 +27,7 @@ export TEXTDOMAIN=@PACKAGE@

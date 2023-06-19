@@ -1,4 +1,3 @@
-From 589500ad3777d1335c8e5cb139f7c0c6089112a8 Mon Sep 17 00:00:00 2001
 From: Darren Kenny <darren.kenny@oracle.com>
 Date: Thu, 7 Apr 2022 15:18:12 +0000
 Subject: fs/btrfs: Fix more fuzz issues related to chunks
@@ -25,7 +24,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 24 insertions(+)
 
 diff --git a/grub-core/fs/btrfs.c b/grub-core/fs/btrfs.c
-index b3d71cd9e..54a46b8f8 100644
+index b3d71cd..54a46b8 100644
 --- a/grub-core/fs/btrfs.c
 +++ b/grub-core/fs/btrfs.c
 @@ -918,6 +918,17 @@ grub_btrfs_read_logical (struct grub_btrfs_data *data, grub_disk_addr_t addr,

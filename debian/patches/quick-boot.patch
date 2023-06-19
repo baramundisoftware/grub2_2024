@@ -1,4 +1,3 @@
-From e760841d961fc46c5f7a82830d2e0eb6d4b53e8d Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:28 +0000
 Subject: Add configure option to bypass boot menu if possible
@@ -23,17 +22,17 @@ Last-Update: 2015-09-04
 
 Patch-Name: quick-boot.patch
 ---
- configure.ac                | 11 ++++++
- docs/grub.texi              | 14 +++++++
- grub-core/normal/menu.c     | 24 ++++++++++++
+ configure.ac                | 11 +++++++
+ docs/grub.texi              | 14 +++++++++
+ grub-core/normal/menu.c     | 24 ++++++++++++++
  util/grub-mkconfig.in       |  3 +-
- util/grub.d/00_header.in    | 77 +++++++++++++++++++++++++++++++------
- util/grub.d/10_linux.in     |  4 ++
- util/grub.d/30_os-prober.in | 21 ++++++++++
+ util/grub.d/00_header.in    | 77 ++++++++++++++++++++++++++++++++++++++-------
+ util/grub.d/10_linux.in     |  4 +++
+ util/grub.d/30_os-prober.in | 21 +++++++++++++
  7 files changed, 141 insertions(+), 13 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 256fc44ef..c42e4c784 100644
+index 256fc44..c42e4c7 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1926,6 +1926,17 @@ else
@@ -55,7 +54,7 @@ index 256fc44ef..c42e4c784 100644
  
  AC_SUBST([FONT_SOURCE])
 diff --git a/docs/grub.texi b/docs/grub.texi
-index f8b4b3b21..0b58dafb2 100644
+index f8b4b3b..0b58daf 100644
 --- a/docs/grub.texi
 +++ b/docs/grub.texi
 @@ -1563,6 +1563,20 @@ This option may be set to a list of GRUB module names separated by spaces.
@@ -80,7 +79,7 @@ index f8b4b3b21..0b58dafb2 100644
  
  The following options are still accepted for compatibility with existing
 diff --git a/grub-core/normal/menu.c b/grub-core/normal/menu.c
-index e9d8444b5..0440340b8 100644
+index e9d8444..0440340 100644
 --- a/grub-core/normal/menu.c
 +++ b/grub-core/normal/menu.c
 @@ -603,6 +603,30 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
@@ -115,7 +114,7 @@ index e9d8444b5..0440340b8 100644
  	{
  	  pos = grub_term_save_pos ();
 diff --git a/util/grub-mkconfig.in b/util/grub-mkconfig.in
-index 0265a5a66..fa9c53a92 100644
+index 0265a5a..fa9c53a 100644
 --- a/util/grub-mkconfig.in
 +++ b/util/grub-mkconfig.in
 @@ -256,7 +256,8 @@ export GRUB_DEFAULT \
@@ -129,7 +128,7 @@ index 0265a5a66..fa9c53a92 100644
  if test "x${grub_cfg}" != "x"; then
    rm -f "${grub_cfg}.new"
 diff --git a/util/grub.d/00_header.in b/util/grub.d/00_header.in
-index 93a90233e..674a76140 100644
+index 93a9023..674a761 100644
 --- a/util/grub.d/00_header.in
 +++ b/util/grub.d/00_header.in
 @@ -21,6 +21,8 @@ prefix="@prefix@"
@@ -258,7 +257,7 @@ index 93a90233e..674a76140 100644
  EOF
  }
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 869a7eec5..80315a31b 100644
+index 869a7ee..80315a3 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -22,6 +22,7 @@ exec_prefix="@exec_prefix@"
@@ -280,7 +279,7 @@ index 869a7eec5..80315a31b 100644
        save_default_entry | grub_add_tab
    fi
 diff --git a/util/grub.d/30_os-prober.in b/util/grub.d/30_os-prober.in
-index 98aee403e..225a3baf7 100644
+index 98aee40..225a3ba 100644
 --- a/util/grub.d/30_os-prober.in
 +++ b/util/grub.d/30_os-prober.in
 @@ -20,12 +20,26 @@ set -e

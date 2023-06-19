@@ -2,6 +2,7 @@ From: Josselin Poiret <dev@jpoiret.xyz>
 Date: Thu, 12 Jan 2023 17:05:09 -0600
 Subject: osdep/devmapper/getroot: Set up cheated LUKS2 cryptodisk mount from
  DM parameters
+
 Origin: https://git.savannah.gnu.org/cgit/grub.git/commit/?id=aa5172a55cfabdd0bed3161ad44fc228b9d019f7
 Bug-Debian: https://bugs.debian.org/1028301
 
@@ -17,10 +18,10 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 106 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/osdep/devmapper/getroot.c b/grub-core/osdep/devmapper/getroot.c
-index 2bf4264..cc3f7da 100644
+index e9708a3..a9e70be 100644
 --- a/grub-core/osdep/devmapper/getroot.c
 +++ b/grub-core/osdep/devmapper/getroot.c
-@@ -51,6 +51,8 @@
+@@ -56,6 +56,8 @@
  #include <grub/emu/misc.h>
  #include <grub/emu/hostdisk.h>
  
@@ -29,7 +30,7 @@ index 2bf4264..cc3f7da 100644
  static int
  grub_util_open_dm (const char *os_dev, struct dm_tree **tree,
  		   struct dm_tree_node **node)
-@@ -186,7 +188,6 @@ grub_util_pull_devmapper (const char *os_dev)
+@@ -191,7 +193,6 @@ grub_util_pull_devmapper (const char *os_dev)
        && lastsubdev)
      {
        char *grdev = grub_util_get_grub_dev (lastsubdev);
@@ -37,7 +38,7 @@ index 2bf4264..cc3f7da 100644
        if (grdev)
  	{
  	  grub_err_t err;
-@@ -194,7 +195,111 @@ grub_util_pull_devmapper (const char *os_dev)
+@@ -199,7 +200,111 @@ grub_util_pull_devmapper (const char *os_dev)
  	  if (err)
  	    grub_util_error (_("can't mount encrypted volume `%s': %s"),
  			     lastsubdev, grub_errmsg);
@@ -149,6 +150,3 @@ index 2bf4264..cc3f7da 100644
        grub_free (grdev);
      }
    else
--- 
-cgit v1.1
-

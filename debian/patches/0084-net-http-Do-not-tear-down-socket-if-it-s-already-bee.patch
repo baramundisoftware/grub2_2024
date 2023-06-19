@@ -1,4 +1,3 @@
-From 6df718714dea5043243e367750b5c6abebcf79fe Mon Sep 17 00:00:00 2001
 From: Daniel Axtens <dja@axtens.net>
 Date: Tue, 1 Mar 2022 23:14:15 +1100
 Subject: net/http: Do not tear down socket if it's already been torn down
@@ -16,7 +15,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/grub-core/net/http.c b/grub-core/net/http.c
-index 3fe155f1b..ef6eaff0d 100644
+index 3fe155f..ef6eaff 100644
 --- a/grub-core/net/http.c
 +++ b/grub-core/net/http.c
 @@ -422,7 +422,7 @@ http_establish (struct grub_file *file, grub_off_t offset, int initial)

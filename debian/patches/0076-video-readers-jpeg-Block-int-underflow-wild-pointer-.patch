@@ -1,4 +1,3 @@
-From a10c2350a766f9b315735931a49499a7e2c77bf3 Mon Sep 17 00:00:00 2001
 From: Daniel Axtens <dja@axtens.net>
 Date: Wed, 7 Jul 2021 15:38:19 +1000
 Subject: video/readers/jpeg: Block int underflow -> wild pointer write
@@ -36,7 +35,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/video/readers/jpeg.c b/grub-core/video/readers/jpeg.c
-index 1df1171d7..97a533b24 100644
+index 1df1171..97a533b 100644
 --- a/grub-core/video/readers/jpeg.c
 +++ b/grub-core/video/readers/jpeg.c
 @@ -23,6 +23,7 @@

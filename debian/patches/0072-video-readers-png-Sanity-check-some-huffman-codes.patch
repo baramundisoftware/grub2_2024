@@ -1,4 +1,3 @@
-From e1c0a986e39ab93954436bcf6e6a9a7ea465e4e7 Mon Sep 17 00:00:00 2001
 From: Daniel Axtens <dja@axtens.net>
 Date: Tue, 6 Jul 2021 19:19:11 +1000
 Subject: video/readers/png: Sanity check some huffman codes
@@ -14,7 +13,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/grub-core/video/readers/png.c b/grub-core/video/readers/png.c
-index d7ed5aa6c..7f2ba7849 100644
+index d7ed5aa..7f2ba78 100644
 --- a/grub-core/video/readers/png.c
 +++ b/grub-core/video/readers/png.c
 @@ -753,6 +753,9 @@ grub_png_read_dynamic_block (struct grub_png_data *data)

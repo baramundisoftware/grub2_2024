@@ -1,7 +1,7 @@
-From a85714545fe57a86d14ee231a4cd312158101d43 Mon Sep 17 00:00:00 2001
 From: Alec Brown <alec.r.brown@oracle.com>
 Date: Wed, 26 Oct 2022 20:16:44 -0400
-Subject: [PATCH 01/14] video/readers: Add artificial limit to image dimensions
+Subject: [PATCH 01/14] video/readers: Add artificial limit to image
+ dimensions
 
 In grub-core/video/readers/jpeg.c, the height and width of a JPEG image don't
 have an upper limit for how big the JPEG image can be. In Coverity, this is
@@ -26,10 +26,10 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  5 files changed, 21 insertions(+), 3 deletions(-)
 
 diff --git a/docs/grub.texi b/docs/grub.texi
-index 0dbbdc374..2d6cd8358 100644
+index 86e46f3..11bd9ea 100644
 --- a/docs/grub.texi
 +++ b/docs/grub.texi
-@@ -1515,7 +1515,8 @@ resolution.  @xref{gfxmode}.
+@@ -1500,7 +1500,8 @@ resolution.  @xref{gfxmode}.
  Set a background image for use with the @samp{gfxterm} graphical terminal.
  The value of this option must be a file readable by GRUB at boot time, and
  it must end with @file{.png}, @file{.tga}, @file{.jpg}, or @file{.jpeg}.
@@ -40,10 +40,10 @@ index 0dbbdc374..2d6cd8358 100644
  @item GRUB_THEME
  Set a theme for use with the @samp{gfxterm} graphical terminal.
 diff --git a/grub-core/video/readers/jpeg.c b/grub-core/video/readers/jpeg.c
-index 09596fbf5..ae634fd41 100644
+index 97a533b..62b6aa7 100644
 --- a/grub-core/video/readers/jpeg.c
 +++ b/grub-core/video/readers/jpeg.c
-@@ -346,7 +346,11 @@ grub_jpeg_decode_sof (struct grub_jpeg_data *data)
+@@ -340,7 +340,11 @@ grub_jpeg_decode_sof (struct grub_jpeg_data *data)
    data->image_height = grub_jpeg_get_word (data);
    data->image_width = grub_jpeg_get_word (data);
  
@@ -57,7 +57,7 @@ index 09596fbf5..ae634fd41 100644
  
    cc = grub_jpeg_get_byte (data);
 diff --git a/grub-core/video/readers/png.c b/grub-core/video/readers/png.c
-index 7f2ba7849..3163e97bf 100644
+index 7f2ba78..3163e97 100644
 --- a/grub-core/video/readers/png.c
 +++ b/grub-core/video/readers/png.c
 @@ -264,7 +264,11 @@ grub_png_decode_image_header (struct grub_png_data *data)
@@ -74,7 +74,7 @@ index 7f2ba7849..3163e97bf 100644
  
    color_bits = grub_png_get_byte (data);
 diff --git a/grub-core/video/readers/tga.c b/grub-core/video/readers/tga.c
-index a9ec3a1b6..9c35bf29d 100644
+index 7cb9d1d..c9a3974 100644
 --- a/grub-core/video/readers/tga.c
 +++ b/grub-core/video/readers/tga.c
 @@ -340,6 +340,13 @@ grub_video_reader_tga (struct grub_video_bitmap **bitmap,
@@ -92,7 +92,7 @@ index a9ec3a1b6..9c35bf29d 100644
    switch (data.hdr.image_type)
      {
 diff --git a/include/grub/bitmap.h b/include/grub/bitmap.h
-index 5728f8ca3..149d37bfe 100644
+index 5728f8c..149d37b 100644
 --- a/include/grub/bitmap.h
 +++ b/include/grub/bitmap.h
 @@ -24,6 +24,8 @@
@@ -104,6 +104,3 @@ index 5728f8ca3..149d37bfe 100644
  struct grub_video_bitmap
  {
    /* Bitmap format description.  */
--- 
-2.30.2
-

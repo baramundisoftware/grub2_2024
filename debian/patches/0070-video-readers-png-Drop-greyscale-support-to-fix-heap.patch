@@ -1,4 +1,3 @@
-From 558c69b5d36d14d55bff21e6570205fe73a02ca2 Mon Sep 17 00:00:00 2001
 From: Daniel Axtens <dja@axtens.net>
 Date: Tue, 6 Jul 2021 18:51:35 +1000
 Subject: video/readers/png: Drop greyscale support to fix heap out-of-bounds
@@ -33,11 +32,11 @@ Fixes: CVE-2021-3695
 Signed-off-by: Daniel Axtens <dja@axtens.net>
 Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
 ---
- grub-core/video/readers/png.c | 87 +++--------------------------------
+ grub-core/video/readers/png.c | 87 ++++---------------------------------------
  1 file changed, 7 insertions(+), 80 deletions(-)
 
 diff --git a/grub-core/video/readers/png.c b/grub-core/video/readers/png.c
-index 8955b8ecf..a3161e25b 100644
+index 8955b8e..a3161e2 100644
 --- a/grub-core/video/readers/png.c
 +++ b/grub-core/video/readers/png.c
 @@ -100,7 +100,7 @@ struct grub_png_data

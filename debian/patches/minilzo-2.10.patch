@@ -1,4 +1,3 @@
-From dbcbb3e5b9fac665b92d630eb24de7bd8c43652e Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Sun, 28 Nov 2021 23:42:30 +0000
 Subject: minilzo: Update to minilzo-2.10
@@ -30,14 +29,14 @@ Last-Update: 2021-11-29
 Patch-Name: minilzo-2.10.patch
 ---
  docs/grub-dev.texi              |  10 +-
- grub-core/lib/minilzo/lzoconf.h |  41 ++-
- grub-core/lib/minilzo/lzodefs.h | 416 +++++++++++++++++++-----
- grub-core/lib/minilzo/minilzo.c | 542 +++++++++++++++++++++++++-------
+ grub-core/lib/minilzo/lzoconf.h |  41 +--
+ grub-core/lib/minilzo/lzodefs.h | 416 ++++++++++++++++++++++++------
+ grub-core/lib/minilzo/minilzo.c | 542 +++++++++++++++++++++++++++++++---------
  grub-core/lib/minilzo/minilzo.h |  22 +-
  5 files changed, 817 insertions(+), 214 deletions(-)
 
 diff --git a/docs/grub-dev.texi b/docs/grub-dev.texi
-index 6c629a23e..eb755d998 100644
+index 6c629a2..eb755d9 100644
 --- a/docs/grub-dev.texi
 +++ b/docs/grub-dev.texi
 @@ -575,12 +575,12 @@ To upgrade to a new version of the miniLZO library, download the release
@@ -59,7 +58,7 @@ index 6c629a23e..eb755d998 100644
  
  @node Porting
 diff --git a/grub-core/lib/minilzo/lzoconf.h b/grub-core/lib/minilzo/lzoconf.h
-index 61be29c5d..f9a8bdbee 100644
+index 61be29c..f9a8bdb 100644
 --- a/grub-core/lib/minilzo/lzoconf.h
 +++ b/grub-core/lib/minilzo/lzoconf.h
 @@ -2,7 +2,7 @@
@@ -192,7 +191,7 @@ index 61be29c5d..f9a8bdbee 100644
  #if defined(LZO_CFG_COMPAT)
  
 diff --git a/grub-core/lib/minilzo/lzodefs.h b/grub-core/lib/minilzo/lzodefs.h
-index f4ae9487e..c3e2bcf5d 100644
+index f4ae948..c3e2bcf 100644
 --- a/grub-core/lib/minilzo/lzodefs.h
 +++ b/grub-core/lib/minilzo/lzodefs.h
 @@ -2,7 +2,7 @@
@@ -1177,7 +1176,7 @@ index f4ae9487e..c3e2bcf5d 100644
  LZO_COMPILE_TIME_ASSERT_HEADER(sizeof(lzo_int_fast64_t) == sizeof(lzo_uint_fast64_t))
  #endif
 diff --git a/grub-core/lib/minilzo/minilzo.c b/grub-core/lib/minilzo/minilzo.c
-index ab2be5f4f..8fd866450 100644
+index ab2be5f..8fd8664 100644
 --- a/grub-core/lib/minilzo/minilzo.c
 +++ b/grub-core/lib/minilzo/minilzo.c
 @@ -2,7 +2,7 @@
@@ -2489,7 +2488,7 @@ index ab2be5f4f..8fd866450 100644
  #else
  static void
 diff --git a/grub-core/lib/minilzo/minilzo.h b/grub-core/lib/minilzo/minilzo.h
-index 793745467..c1c229757 100644
+index 7937454..c1c2297 100644
 --- a/grub-core/lib/minilzo/minilzo.h
 +++ b/grub-core/lib/minilzo/minilzo.h
 @@ -2,7 +2,7 @@

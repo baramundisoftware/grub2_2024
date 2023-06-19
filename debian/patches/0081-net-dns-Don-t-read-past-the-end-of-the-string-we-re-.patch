@@ -1,7 +1,7 @@
-From 968febf3a4de5df0f91cc13bc6b6053fc22575e1 Mon Sep 17 00:00:00 2001
 From: Daniel Axtens <dja@axtens.net>
 Date: Mon, 20 Dec 2021 21:55:43 +1100
-Subject: net/dns: Don't read past the end of the string we're checking against
+Subject: net/dns: Don't read past the end of the string we're checking
+ against
 
 I don't really understand what's going on here but fuzzing found
 a bug where we read past the end of check_with. That's a C string,
@@ -14,7 +14,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 16 insertions(+), 3 deletions(-)
 
 diff --git a/grub-core/net/dns.c b/grub-core/net/dns.c
-index 135faac03..17961a9f1 100644
+index 135faac..17961a9 100644
 --- a/grub-core/net/dns.c
 +++ b/grub-core/net/dns.c
 @@ -146,11 +146,18 @@ check_name_real (const grub_uint8_t *name_at, const grub_uint8_t *head,

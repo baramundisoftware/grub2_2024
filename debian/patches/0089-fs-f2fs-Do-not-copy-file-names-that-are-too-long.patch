@@ -1,4 +1,3 @@
-From 998bd74c11c0e00f69fe2f37a8200381faf51061 Mon Sep 17 00:00:00 2001
 From: Sudhakar Kuppusamy <sudhakar@linux.ibm.com>
 Date: Wed, 6 Apr 2022 18:17:43 +0530
 Subject: fs/f2fs: Do not copy file names that are too long
@@ -21,7 +20,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/grub-core/fs/f2fs.c b/grub-core/fs/f2fs.c
-index 8898b235e..df6beb544 100644
+index cad4a5d..855e246 100644
 --- a/grub-core/fs/f2fs.c
 +++ b/grub-core/fs/f2fs.c
 @@ -1003,6 +1003,10 @@ grub_f2fs_check_dentries (struct grub_f2fs_dir_iter_ctx *ctx)

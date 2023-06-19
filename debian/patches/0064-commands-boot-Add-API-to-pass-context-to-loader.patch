@@ -1,4 +1,3 @@
-From bb35dbb9bf213bc9dde9a5a653e93b4c4d2bbf22 Mon Sep 17 00:00:00 2001
 From: Chris Coulson <chris.coulson@canonical.com>
 Date: Fri, 29 Apr 2022 21:16:02 +0100
 Subject: commands/boot: Add API to pass context to loader
@@ -19,12 +18,12 @@ global context.
 Signed-off-by: Chris Coulson <chris.coulson@canonical.com>
 (cherry picked from commit 4322a64dde7e8fedb58e50b79408667129d45dd3)
 ---
- grub-core/commands/boot.c | 66 ++++++++++++++++++++++++++++++++++-----
- include/grub/loader.h     |  5 +++
+ grub-core/commands/boot.c | 66 +++++++++++++++++++++++++++++++++++++++++------
+ include/grub/loader.h     |  5 ++++
  2 files changed, 63 insertions(+), 8 deletions(-)
 
 diff --git a/grub-core/commands/boot.c b/grub-core/commands/boot.c
-index bbca81e94..53691a62d 100644
+index bbca81e..53691a6 100644
 --- a/grub-core/commands/boot.c
 +++ b/grub-core/commands/boot.c
 @@ -27,10 +27,20 @@
@@ -141,7 +140,7 @@ index bbca81e94..53691a62d 100644
    for (cur = preboots_tail; cur; cur = cur->prev)
      if (! err)
 diff --git a/include/grub/loader.h b/include/grub/loader.h
-index b20864282..1846fa6c5 100644
+index b208642..1846fa6 100644
 --- a/include/grub/loader.h
 +++ b/include/grub/loader.h
 @@ -40,6 +40,11 @@ void EXPORT_FUNC (grub_loader_set) (grub_err_t (*boot) (void),

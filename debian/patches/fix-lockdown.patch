@@ -1,4 +1,3 @@
-From b2c4515a832f82a4fe4ee8d32faa16b48de63d12 Mon Sep 17 00:00:00 2001
 From: Luca Boccassi <bluca@debian.org>
 Date: Tue, 15 May 2018 11:36:46 +0100
 Subject: Do not overwrite sentinel byte in boot_params, breaks lockdown
@@ -21,7 +20,7 @@ Patch-Name: fix-lockdown.patch
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
-index 45b68c05a..532e4e512 100644
+index 45b68c0..532e4e5 100644
 --- a/grub-core/loader/i386/efi/linux.c
 +++ b/grub-core/loader/i386/efi/linux.c
 @@ -29,6 +29,7 @@

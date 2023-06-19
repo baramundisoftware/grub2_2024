@@ -1,4 +1,3 @@
-From fc550c31c25dcf9eb58ca1e987f3ce2be8ebac28 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg@redhat.com>
 Date: Mon, 13 Jan 2014 12:13:15 +0000
 Subject: Add "linuxefi" loader which avoids ExitBootServices
@@ -13,15 +12,15 @@ Last-Update: 2021-09-24
 Patch-Name: linuxefi.patch
 ---
  grub-core/Makefile.core.def       |   7 +
- grub-core/kern/efi/mm.c           |  32 +++
- grub-core/loader/i386/efi/linux.c | 383 ++++++++++++++++++++++++++++++
+ grub-core/kern/efi/mm.c           |  32 ++++
+ grub-core/loader/i386/efi/linux.c | 383 ++++++++++++++++++++++++++++++++++++++
  grub-core/loader/i386/linux.c     |  41 ++++
  include/grub/efi/efi.h            |   3 +
  5 files changed, 466 insertions(+)
  create mode 100644 grub-core/loader/i386/efi/linux.c
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 8022e1c0a..e5b3d27f5 100644
+index 8022e1c..e5b3d27 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -1874,6 +1874,13 @@ module = {
@@ -39,7 +38,7 @@ index 8022e1c0a..e5b3d27f5 100644
    name = chain;
    efi = loader/efi/chainloader.c;
 diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
-index 9838fb2f5..f6aef0ef6 100644
+index 9838fb2..f6aef0e 100644
 --- a/grub-core/kern/efi/mm.c
 +++ b/grub-core/kern/efi/mm.c
 @@ -113,6 +113,38 @@ grub_efi_drop_alloc (grub_efi_physical_address_t address,
@@ -83,7 +82,7 @@ index 9838fb2f5..f6aef0ef6 100644
  grub_efi_allocate_pages_real (grub_efi_physical_address_t address,
 diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
 new file mode 100644
-index 000000000..45b68c05a
+index 0000000..45b68c0
 --- /dev/null
 +++ b/grub-core/loader/i386/efi/linux.c
 @@ -0,0 +1,383 @@
@@ -471,7 +470,7 @@ index 000000000..45b68c05a
 +  grub_unregister_command (cmd_initrd);
 +}
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index 9f74a96b1..be37a1640 100644
+index 9f74a96..be37a16 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
 @@ -78,6 +78,8 @@ static grub_size_t maximal_cmdline_size;
@@ -537,7 +536,7 @@ index 9f74a96b1..be37a1640 100644
      {
        grub_error (GRUB_ERR_BAD_ARGUMENT, N_("filename expected"));
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 83d958f99..08f6ee00a 100644
+index 83d958f..08f6ee0 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
 @@ -47,6 +47,9 @@ EXPORT_FUNC(grub_efi_allocate_fixed) (grub_efi_physical_address_t address,

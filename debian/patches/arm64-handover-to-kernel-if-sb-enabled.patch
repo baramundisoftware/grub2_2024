@@ -9,11 +9,13 @@ Signed-off-by: Emanuele Rocca <ema@debian.org>
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/2786ab864cf00c15123320671f653e9a36ba12b4
 ---
+ grub-core/loader/arm64/linux.c | 73 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 72 insertions(+), 1 deletion(-)
 
-Index: grub.git/grub-core/loader/arm64/linux.c
-===================================================================
---- grub.git.orig/grub-core/loader/arm64/linux.c
-+++ grub.git/grub-core/loader/arm64/linux.c
+diff --git a/grub-core/loader/arm64/linux.c b/grub-core/loader/arm64/linux.c
+index 4c92e48..66880ec 100644
+--- a/grub-core/loader/arm64/linux.c
++++ b/grub-core/loader/arm64/linux.c
 @@ -16,6 +16,7 @@
   *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
   */
@@ -54,7 +56,7 @@ Index: grub.git/grub-core/loader/arm64/linux.c
  grub_err_t
  grub_arch_efi_linux_check_image (struct linux_arch_kernel_header * lh)
  {
-@@ -64,7 +76,8 @@ grub_arch_efi_linux_check_image (struct
+@@ -64,7 +76,8 @@ grub_arch_efi_linux_check_image (struct linux_arch_kernel_header * lh)
  static grub_err_t
  finalize_params_linux (void)
  {
@@ -92,7 +94,7 @@ Index: grub.git/grub-core/loader/arm64/linux.c
    return GRUB_ERR_NONE;
  
  failure:
-@@ -116,6 +150,39 @@ grub_arch_efi_linux_boot_image (grub_add
+@@ -116,6 +150,39 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
    grub_efi_loaded_image_t *loaded_image;
    int len;
  
@@ -132,7 +134,7 @@ Index: grub.git/grub-core/loader/arm64/linux.c
    mempath = grub_malloc (2 * sizeof (grub_efi_memory_mapped_device_path_t));
    if (!mempath)
      return grub_errno;
-@@ -285,6 +352,7 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -285,6 +352,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  {
    grub_file_t file = 0;
    struct linux_arch_kernel_header lh;
@@ -140,7 +142,7 @@ Index: grub.git/grub-core/loader/arm64/linux.c
    grub_err_t err;
  
    grub_dl_ref (my_mod);
-@@ -330,6 +398,9 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -330,6 +398,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    grub_dprintf ("linux", "kernel @ %p\n", kernel_addr);
  
