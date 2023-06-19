@@ -1,4 +1,3 @@
-From b2740b7e4a03bb8331d48b54b119afea76bb9d5f Mon Sep 17 00:00:00 2001
 From: Zhang Boyang <zhangboyang.id@gmail.com>
 Date: Fri, 5 Aug 2022 02:27:05 +0800
 Subject: [PATCH 06/14] font: Fix integer overflow in ensure_comb_space()
@@ -16,7 +15,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/grub-core/font/font.c b/grub-core/font/font.c
-index a8576ffec..9e3e0a94e 100644
+index a115a63..d0e6340 100644
 --- a/grub-core/font/font.c
 +++ b/grub-core/font/font.c
 @@ -1468,14 +1468,18 @@ ensure_comb_space (const struct grub_unicode_glyph *glyph_id)
@@ -43,6 +42,3 @@ index a8576ffec..9e3e0a94e 100644
  }
  
  int
--- 
-2.30.2
-

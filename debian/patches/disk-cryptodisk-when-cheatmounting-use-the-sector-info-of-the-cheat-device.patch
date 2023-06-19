@@ -1,7 +1,8 @@
 From: Fabian Vogt <fvogt@suse.de>
 Date: Thu, 12 Jan 2023 17:05:07 -0600
-Subject: disk/cryptodisk: When cheatmounting, use the sector info of the cheat
- device
+Subject: disk/cryptodisk: When cheatmounting,
+ use the sector info of the cheat device
+
 Origin: https://git.savannah.gnu.org/cgit/grub.git/commit/?id=efc9c363b2aab222586b420508eb46fc13242739
 Bug-Debian: https://bugs.debian.org/1028301
 
@@ -26,9 +27,11 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  grub-core/disk/cryptodisk.c | 20 ++++++++++++++++++--
  1 file changed, 18 insertions(+), 2 deletions(-)
 
+diff --git a/grub-core/disk/cryptodisk.c b/grub-core/disk/cryptodisk.c
+index 90f82b2..821d54c 100644
 --- a/grub-core/disk/cryptodisk.c
 +++ b/grub-core/disk/cryptodisk.c
-@@ -694,16 +694,31 @@ grub_cryptodisk_open (const char *name,
+@@ -694,16 +694,31 @@ grub_cryptodisk_open (const char *name, grub_disk_t disk)
    if (!dev)
      return grub_error (GRUB_ERR_UNKNOWN_DEVICE, "No such device");
  
@@ -62,7 +65,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
      }
  #endif
  
-@@ -717,6 +732,7 @@ grub_cryptodisk_open (const char *name,
+@@ -717,6 +732,7 @@ grub_cryptodisk_open (const char *name, grub_disk_t disk)
      }
  
    disk->data = dev;

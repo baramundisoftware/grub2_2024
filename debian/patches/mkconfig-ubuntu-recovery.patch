@@ -1,9 +1,8 @@
-From 13c9a7101d2611bbc02b464ef4e32b02cfc7860b Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:06 +0000
 Subject: "single" -> "recovery" when friendly-recovery is installed
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 If configured with --enable-ubuntu-recovery, also set nomodeset for
@@ -23,7 +22,7 @@ Patch-Name: mkconfig-ubuntu-recovery.patch
  3 files changed, 26 insertions(+), 3 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 7517fc49d..74778a6f8 100644
+index 7517fc4..74778a6 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1904,6 +1904,17 @@ fi
@@ -45,7 +44,7 @@ index 7517fc49d..74778a6f8 100644
  
  AC_SUBST([FONT_SOURCE])
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 46696dd66..f215e3213 100644
+index 46696dd..f215e32 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -20,6 +20,7 @@ set -e
@@ -93,7 +92,7 @@ index 46696dd66..f215e3213 100644
  
    list=`echo $list | tr ' ' '\n' | fgrep -vx "$linux" | tr '\n' ' '`
 diff --git a/util/grub.d/30_os-prober.in b/util/grub.d/30_os-prober.in
-index 5984e92d2..37d5f05b5 100644
+index 5984e92..37d5f05 100644
 --- a/util/grub.d/30_os-prober.in
 +++ b/util/grub.d/30_os-prober.in
 @@ -223,7 +223,7 @@ EOF

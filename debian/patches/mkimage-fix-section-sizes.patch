@@ -1,4 +1,3 @@
-From e5be30174c7ed596ca2fd28d636a4fbc26a0199a Mon Sep 17 00:00:00 2001
 From: Javier Martinez Canillas <javierm@redhat.com>
 Date: Fri, 16 Apr 2021 21:37:23 +0200
 Subject: util/mkimage: Some fixes to PE binaries section size calculation
@@ -30,7 +29,7 @@ Patch-Name: mkimage-fix-section-sizes.patch
  1 file changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/util/mkimage.c b/util/mkimage.c
-index a26cf76f7..b84311f1f 100644
+index a26cf76..b84311f 100644
 --- a/util/mkimage.c
 +++ b/util/mkimage.c
 @@ -841,7 +841,7 @@ init_pe_section(const struct grub_install_image_target_desc *image_target,

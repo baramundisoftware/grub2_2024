@@ -18,6 +18,11 @@ HOST_CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
 HOST_CFLAGS := -Wall -Wno-error=unused-result $(shell dpkg-buildflags --get CFLAGS | perl -pe 's/-O3\b/-O2/')
 HOST_LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 
+include /usr/share/dpkg/pkg-info.mk
+
+# to get new minilzo, with CVE fixes, patched to build with our compiler
+BUILT_USING=$(shell dpkg-query -f '$${source:Package} (= $${source:Version}), \n' -W liblzo2-dev)
+
 export DEB_HOST_ARCH
 export HOST_CPPFLAGS
 export HOST_CFLAGS
@@ -140,6 +145,9 @@ override_dh_auto_build: $(patsubst %,build/%,$(BUILD_PACKAGES))
 
 override_dh_auto_install: $(patsubst %,install/%,$(BUILD_PACKAGES))
 
+override_dh_installdirs: $(patsubst %,install/%,$(BUILD_PACKAGES))
+	dh_installdirs
+
 $(patsubst %,configure/%,$(REAL_PACKAGES)) :: configure/% : debian/stamps/configure-%
 $(patsubst %,build/%,$(REAL_PACKAGES) $(EXTRA_PACKAGES)) :: build/% : debian/stamps/build-%
 
@@ -166,6 +174,7 @@ override_dh_autoreconf:
 	env -u DH_OPTIONS GRUB_CONTRIB=$(CURDIR)/debian/grub-extras-enabled \
 		PYTHON=python3 \
 		dh_autoreconf -- ./autogen.sh
+	cp /usr/share/lzo/minilzo/*.c /usr/share/lzo/minilzo/*.h grub-core/lib/minilzo/
 
 debian/stamps/configure-grub-common: debian/stamps/configure-grub-$(COMMON_PLATFORM)
 	touch $@
@@ -530,6 +539,8 @@ endif
 override_dh_installdocs:
 	dh_installdocs $(patsubst %,-p%,$(filter grub-common grub-rescue-pc grub-firmware-qemu grub-xen-host,$(BUILD_PACKAGES))) -A AUTHORS NEWS README THANKS TODO
 	dh_installdocs $(patsubst %,-p%,$(filter grub-efi-%-signed-template,$(BUILD_PACKAGES)))
+	dh_installdocs -pgrub-efi-amd64 -pgrub-efi-amd64-bin -pgrub-efi-amd64-dbg --link-doc=grub-efi-amd64-bin
+	dh_installdocs -pgrub-efi-arm64 -pgrub-efi-arm64-bin -pgrub-efi-arm64-dbg --link-doc=grub-efi-arm64-bin
 	dh_installdocs --remaining-packages --link-doc=grub-common
 
 ifeq ($(FLICKER_FREE_BOOT),yes)
@@ -556,7 +567,7 @@ LEGACY_DOC_BR := grub-doc (<< 0.97-32), grub-legacy-doc (<< 0.97-59)
 endif
 
 override_dh_gencontrol:
-	dh_gencontrol -- -Vlegacy-doc-br="$(LEGACY_DOC_BR)" -V"efi:Vendor=$(SB_EFI_VENDOR)" $(substvars)
+	dh_gencontrol -- -Vlegacy-doc-br="$(LEGACY_DOC_BR)" -V"efi:Vendor=$(SB_EFI_VENDOR)" -VBuilt-Using="$(BUILT_USING)" $(substvars)
 
 TARNAME := grub2_$(deb_version)_$(DEB_HOST_ARCH).tar.gz
 
@@ -569,7 +580,7 @@ ifneq (,$(SB_PACKAGE))
 endif
 
 override_dh_auto_clean:
-	-rm -rf debian/grub-extras-enabled debian/stamps obj
+	-rm -rf debian/grub-extras-enabled debian/stamps obj grub-core/lib/minilzo/*.c grub-core/lib/minilzo/*.h
 	-rm -f contrib grub-core/contrib
 
 override_dh_clean:

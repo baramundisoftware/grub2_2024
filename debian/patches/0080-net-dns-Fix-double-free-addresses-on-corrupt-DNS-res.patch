@@ -1,4 +1,3 @@
-From 21158c5dfb5e0c5015277346128903397d498da4 Mon Sep 17 00:00:00 2001
 From: Daniel Axtens <dja@axtens.net>
 Date: Thu, 16 Sep 2021 01:29:54 +1000
 Subject: net/dns: Fix double-free addresses on corrupt DNS response
@@ -36,7 +35,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/grub-core/net/dns.c b/grub-core/net/dns.c
-index 906ec7d67..135faac03 100644
+index 906ec7d..135faac 100644
 --- a/grub-core/net/dns.c
 +++ b/grub-core/net/dns.c
 @@ -667,9 +667,11 @@ grub_cmd_nslookup (struct grub_command *cmd __attribute__ ((unused)),

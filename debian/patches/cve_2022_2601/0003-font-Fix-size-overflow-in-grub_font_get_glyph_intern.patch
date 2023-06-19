@@ -1,4 +1,3 @@
-From 941d10ad6f1dcbd12fb613002249e29ba035f985 Mon Sep 17 00:00:00 2001
 From: Zhang Boyang <zhangboyang.id@gmail.com>
 Date: Fri, 5 Aug 2022 00:51:20 +0800
 Subject: [PATCH 03/14] font: Fix size overflow in
@@ -25,7 +24,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  3 files changed, 33 insertions(+), 4 deletions(-)
 
 diff --git a/grub-core/font/font.c b/grub-core/font/font.c
-index 2f09a4a55..6a3fbebbd 100644
+index 2f09a4a..6a3fbeb 100644
 --- a/grub-core/font/font.c
 +++ b/grub-core/font/font.c
 @@ -739,7 +739,8 @@ grub_font_get_glyph_internal (grub_font_t font, grub_uint32_t code)
@@ -60,7 +59,7 @@ index 2f09a4a55..6a3fbebbd 100644
  	  remove_font (font);
  	  return 0;
 diff --git a/include/grub/bitmap.h b/include/grub/bitmap.h
-index 149d37bfe..431048936 100644
+index 149d37b..4310489 100644
 --- a/include/grub/bitmap.h
 +++ b/include/grub/bitmap.h
 @@ -23,6 +23,7 @@
@@ -96,7 +95,7 @@ index 149d37bfe..431048936 100644
  						    struct grub_video_mode_info *mode_info);
  
 diff --git a/include/grub/safemath.h b/include/grub/safemath.h
-index c17b89bba..bb0f826de 100644
+index c17b89b..bb0f826 100644
 --- a/include/grub/safemath.h
 +++ b/include/grub/safemath.h
 @@ -30,6 +30,8 @@

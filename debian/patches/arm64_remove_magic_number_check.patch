@@ -1,3 +1,7 @@
+From: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Date: Mon, 19 Jun 2023 17:23:25 +0200
+Subject: arm64_remove_magic_number_check
+
 commit 69edb31205602c29293a8c6e67363bba2a4a1e66
 Author: Ard Biesheuvel <ardb@kernel.org>
 Date:   Thu Aug 11 16:51:57 2022 +0200
@@ -20,9 +24,12 @@ Date:   Thu Aug 11 16:51:57 2022 +0200
     
     Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
     Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/loader/arm64/linux.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/grub-core/loader/arm64/linux.c b/grub-core/loader/arm64/linux.c
-index ef3e9f944..4c92e48ac 100644
+index ef3e9f9..4c92e48 100644
 --- a/grub-core/loader/arm64/linux.c
 +++ b/grub-core/loader/arm64/linux.c
 @@ -51,9 +51,6 @@ static grub_addr_t initrd_end;

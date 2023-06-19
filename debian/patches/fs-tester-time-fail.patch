@@ -1,3 +1,7 @@
+From: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Date: Mon, 19 Jun 2023 17:23:24 +0200
+Subject: fs-tester-time-fail
+
 Explicitly unset SOURCE_DATE_EPOCH before running fs tests. In some
 filesystem utils like mksquashfs, it will silently change behaviour
 and cause timestamps to unexpectedly change. Reproducible builds are
@@ -12,7 +16,7 @@ Patch-Name: fs-tester-time-fail.patch
  1 file changed, 3 insertions(+)
 
 diff --git a/tests/util/grub-fs-tester.in b/tests/util/grub-fs-tester.in
-index bfc425e1f..660691302 100644
+index bfc425e..6606913 100644
 --- a/tests/util/grub-fs-tester.in
 +++ b/tests/util/grub-fs-tester.in
 @@ -4,6 +4,9 @@ set -e

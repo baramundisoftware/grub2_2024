@@ -1,3 +1,9 @@
+From: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Date: Mon, 19 Jun 2023 17:23:25 +0200
+Subject: gcc12_build_array_bounds
+
+Borrowed and tweaked fix from:
+
 Borrowed and tweaked fix from:
 
 commit acffb81485e35e1f28152949a1c6e1d4dbf5172e
@@ -5,9 +11,29 @@ Author: Michael Chang <mchang@suse.com>
 Date:   Mon Mar 28 15:00:53 2022 +0800
 
 build: Fix -Werror=array-bounds array subscript 0 is outside array bounds
+---
+ grub-core/bus/cs5536.c                |  5 +++--
+ grub-core/commands/acpi.c             |  4 ++--
+ grub-core/commands/efi/loadbios.c     |  9 +++++----
+ grub-core/commands/i386/pc/drivemap.c |  8 +++++---
+ grub-core/commands/i386/pc/sendkey.c  | 12 ++++++------
+ grub-core/disk/i386/pc/biosdisk.c     |  4 ++--
+ grub-core/fs/cbfs.c                   |  2 +-
+ grub-core/kern/i386/pc/acpi.c         |  4 ++--
+ grub-core/kern/i386/pc/mmap.c         |  2 +-
+ grub-core/loader/i386/multiboot_mbi.c |  2 +-
+ grub-core/loader/multiboot_mbi2.c     |  4 ++--
+ grub-core/mmap/i386/pc/mmap.c         | 26 +++++++++++++-------------
+ grub-core/net/drivers/i386/pc/pxe.c   | 12 ++++++------
+ grub-core/term/i386/pc/console.c      |  5 ++---
+ grub-core/term/i386/pc/vga_text.c     |  6 +++---
+ grub-core/term/ns8250.c               |  7 ++++++-
+ grub-core/video/i386/pc/vbe.c         |  6 +++---
+ include/grub/types.h                  | 24 ++++++++++++++++++++++++
+ 18 files changed, 87 insertions(+), 55 deletions(-)
 
 diff --git a/grub-core/bus/cs5536.c b/grub-core/bus/cs5536.c
-index 8c90ed598..cd0a45e58 100644
+index bb9aa27..ee43428 100644
 --- a/grub-core/bus/cs5536.c
 +++ b/grub-core/bus/cs5536.c
 @@ -331,8 +331,9 @@ grub_cs5536_init_geode (grub_pci_device_t dev)
@@ -23,7 +49,7 @@ index 8c90ed598..cd0a45e58 100644
      oc[GRUB_CS5536_USB_OPTION_REG_UOCMUX] =
        (oc[GRUB_CS5536_USB_OPTION_REG_UOCMUX]
 diff --git a/grub-core/commands/acpi.c b/grub-core/commands/acpi.c
-index 1215f2a62..fda62f4ea 100644
+index 1215f2a..fda62f4 100644
 --- a/grub-core/commands/acpi.c
 +++ b/grub-core/commands/acpi.c
 @@ -168,7 +168,7 @@ grub_acpi_create_ebda (void)
@@ -45,7 +71,7 @@ index 1215f2a62..fda62f4ea 100644
  
    return GRUB_ERR_NONE;
 diff --git a/grub-core/commands/efi/loadbios.c b/grub-core/commands/efi/loadbios.c
-index 5c7725f8b..574e41046 100644
+index 5c7725f..574e410 100644
 --- a/grub-core/commands/efi/loadbios.c
 +++ b/grub-core/commands/efi/loadbios.c
 @@ -46,7 +46,7 @@ enable_rom_area (void)
@@ -79,7 +105,7 @@ index 5c7725f8b..574e41046 100644
    if (acpi)
      grub_memcpy ((char *) ((FAKE_EBDA_SEG << 4) + 16), acpi, 1024 - 16);
 diff --git a/grub-core/commands/i386/pc/drivemap.c b/grub-core/commands/i386/pc/drivemap.c
-index 3fb22dc46..a7ee4c9bd 100644
+index 7f7f2d4..a4b8cd9 100644
 --- a/grub-core/commands/i386/pc/drivemap.c
 +++ b/grub-core/commands/i386/pc/drivemap.c
 @@ -31,9 +31,6 @@
@@ -111,8 +137,45 @@ index 3fb22dc46..a7ee4c9bd 100644
    if (! grub_drivemap_oldhandler)
      return GRUB_ERR_NONE;
  
+diff --git a/grub-core/commands/i386/pc/sendkey.c b/grub-core/commands/i386/pc/sendkey.c
+index 26d9acd..9fbd8cb 100644
+--- a/grub-core/commands/i386/pc/sendkey.c
++++ b/grub-core/commands/i386/pc/sendkey.c
+@@ -216,12 +216,12 @@ static grub_err_t
+ grub_sendkey_postboot (void)
+ {
+   /* For convention: pointer to flags.  */
+-  grub_uint32_t *flags = (grub_uint32_t *) 0x417;
++  grub_uint32_t *flags = grub_absolute_pointer (0x417);
+ 
+   *flags = oldflags;
+ 
+-  *((char *) 0x41a) = 0x1e;
+-  *((char *) 0x41c) = 0x1e;
++  *((volatile char *) grub_absolute_pointer (0x41a)) = 0x1e;
++  *((volatile char *) grub_absolute_pointer (0x41c)) = 0x1e;
+ 
+   return GRUB_ERR_NONE;
+ }
+@@ -231,13 +231,13 @@ static grub_err_t
+ grub_sendkey_preboot (int noret __attribute__ ((unused)))
+ {
+   /* For convention: pointer to flags.  */
+-  grub_uint32_t *flags = (grub_uint32_t *) 0x417;
++  grub_uint32_t *flags = grub_absolute_pointer (0x417);
+ 
+   oldflags = *flags;
+   
+   /* Set the sendkey.  */
+-  *((char *) 0x41a) = 0x1e;
+-  *((char *) 0x41c) = keylen + 0x1e;
++  *((volatile char *) grub_absolute_pointer (0x41a)) = 0x1e;
++  *((volatile char *) grub_absolute_pointer (0x41c)) = keylen + 0x1e;
+   grub_memcpy ((char *) 0x41e, sendkey, 0x20);
+ 
+   /* Transform "any ctrl" to "right ctrl" flag.  */
 diff --git a/grub-core/disk/i386/pc/biosdisk.c b/grub-core/disk/i386/pc/biosdisk.c
-index 81fd4e832..49e4e8a14 100644
+index 8ca250c..89746ed 100644
 --- a/grub-core/disk/i386/pc/biosdisk.c
 +++ b/grub-core/disk/i386/pc/biosdisk.c
 @@ -367,7 +367,7 @@ grub_biosdisk_open (const char *name, grub_disk_t disk)
@@ -134,7 +197,7 @@ index 81fd4e832..49e4e8a14 100644
  
    if (grub_disk_firmware_is_tainted)
 diff --git a/grub-core/fs/cbfs.c b/grub-core/fs/cbfs.c
-index 581215ef1..8ab7106af 100644
+index 581215e..8ab7106 100644
 --- a/grub-core/fs/cbfs.c
 +++ b/grub-core/fs/cbfs.c
 @@ -342,7 +342,7 @@ init_cbfsdisk (void)
@@ -147,7 +210,7 @@ index 581215ef1..8ab7106af 100644
    grub_dprintf ("cbfs", "head=%p\n", head);
  
 diff --git a/grub-core/kern/i386/pc/acpi.c b/grub-core/kern/i386/pc/acpi.c
-index 297f5d05f..0a69eba7b 100644
+index 297f5d0..0a69eba 100644
 --- a/grub-core/kern/i386/pc/acpi.c
 +++ b/grub-core/kern/i386/pc/acpi.c
 @@ -27,7 +27,7 @@ grub_machine_acpi_get_rsdpv1 (void)
@@ -169,7 +232,7 @@ index 297f5d05f..0a69eba7b 100644
    if (! ebda_len) /* FIXME do we really need this check? */
      goto scan_bios;
 diff --git a/grub-core/kern/i386/pc/mmap.c b/grub-core/kern/i386/pc/mmap.c
-index ef2faa2ab..53fcf45af 100644
+index c0c3c35..a4a1a75 100644
 --- a/grub-core/kern/i386/pc/mmap.c
 +++ b/grub-core/kern/i386/pc/mmap.c
 @@ -143,7 +143,7 @@ grub_machine_mmap_iterate (grub_memory_hook_t hook, void *hook_data)
@@ -181,8 +244,21 @@ index ef2faa2ab..53fcf45af 100644
    int e820_works = 0;
  
    while (1)
+diff --git a/grub-core/loader/i386/multiboot_mbi.c b/grub-core/loader/i386/multiboot_mbi.c
+index a67d9d0..434e694 100644
+--- a/grub-core/loader/i386/multiboot_mbi.c
++++ b/grub-core/loader/i386/multiboot_mbi.c
+@@ -293,7 +293,7 @@ fill_vbe_info (struct multiboot_info *mbi, grub_uint8_t *ptrorig,
+   struct grub_vbe_mode_info_block *mode_info;
+ #if GRUB_MACHINE_HAS_VBE
+   grub_vbe_status_t status;
+-  void *scratch = (void *) GRUB_MEMORY_MACHINE_SCRATCH_ADDR;
++  void *scratch = grub_absolute_pointer (GRUB_MEMORY_MACHINE_SCRATCH_ADDR);
+     
+   status = grub_vbe_bios_get_controller_info (scratch);
+   if (status != GRUB_VBE_STATUS_OK)
 diff --git a/grub-core/loader/multiboot_mbi2.c b/grub-core/loader/multiboot_mbi2.c
-index 6d680d671..00a48413c 100644
+index 9a943d7..2ad210e 100644
 --- a/grub-core/loader/multiboot_mbi2.c
 +++ b/grub-core/loader/multiboot_mbi2.c
 @@ -504,7 +504,7 @@ static void
@@ -204,7 +280,7 @@ index 6d680d671..00a48413c 100644
  	vbe_mode = *(grub_uint32_t *) scratch;
  	if (status != GRUB_VBE_STATUS_OK)
 diff --git a/grub-core/mmap/i386/pc/mmap.c b/grub-core/mmap/i386/pc/mmap.c
-index 6ab4f6730..b9c5b0a00 100644
+index 6ab4f67..b9c5b0a 100644
 --- a/grub-core/mmap/i386/pc/mmap.c
 +++ b/grub-core/mmap/i386/pc/mmap.c
 @@ -80,13 +80,13 @@ preboot (int noreturn __attribute__ ((unused)))
@@ -258,7 +334,7 @@ index 6ab4f6730..b9c5b0a00 100644
    return GRUB_ERR_NONE;
  }
 diff --git a/grub-core/net/drivers/i386/pc/pxe.c b/grub-core/net/drivers/i386/pc/pxe.c
-index 997010cf1..db17186ee 100644
+index 3f4152d..313ed25 100644
 --- a/grub-core/net/drivers/i386/pc/pxe.c
 +++ b/grub-core/net/drivers/i386/pc/pxe.c
 @@ -174,7 +174,7 @@ grub_pxe_recv (struct grub_net_card *dev __attribute__ ((unused)))
@@ -304,7 +380,7 @@ index 997010cf1..db17186ee 100644
    grub_pxe_call (GRUB_PXENV_UNDI_GET_INFORMATION, ui, pxe_rm_entry);
  
 diff --git a/grub-core/term/i386/pc/console.c b/grub-core/term/i386/pc/console.c
-index d44937c30..9403390f1 100644
+index f6142a2..d70ee4a 100644
 --- a/grub-core/term/i386/pc/console.c
 +++ b/grub-core/term/i386/pc/console.c
 @@ -238,12 +238,11 @@ grub_console_getkey (struct grub_term_input *term __attribute__ ((unused)))
@@ -323,7 +399,7 @@ index d44937c30..9403390f1 100644
    return bios_data_area->keyboard_flag_lower & ~0x80;
  }
 diff --git a/grub-core/term/i386/pc/vga_text.c b/grub-core/term/i386/pc/vga_text.c
-index 88fecc5ea..669d06fad 100644
+index 88fecc5..669d06f 100644
 --- a/grub-core/term/i386/pc/vga_text.c
 +++ b/grub-core/term/i386/pc/vga_text.c
 @@ -45,15 +45,15 @@ GRUB_MOD_LICENSE ("GPLv3+");
@@ -346,7 +422,7 @@ index 88fecc5ea..669d06fad 100644
  #define cr_write grub_vga_cr_write
  #endif
 diff --git a/grub-core/term/ns8250.c b/grub-core/term/ns8250.c
-index 59801839b..83b25990c 100644
+index 39809d0..622670d 100644
 --- a/grub-core/term/ns8250.c
 +++ b/grub-core/term/ns8250.c
 @@ -28,7 +28,6 @@
@@ -378,7 +454,7 @@ index 59801839b..83b25990c 100644
        && !(dead_ports & (1 << unit)))
      return serial_hw_io_addr[unit];
 diff --git a/grub-core/video/i386/pc/vbe.c b/grub-core/video/i386/pc/vbe.c
-index 0e65b5206..a0bb9af09 100644
+index 4b1bd7d..3c17f92 100644
 --- a/grub-core/video/i386/pc/vbe.c
 +++ b/grub-core/video/i386/pc/vbe.c
 @@ -514,7 +514,7 @@ grub_vbe_probe (struct grub_vbe_info_block *info_block)
@@ -409,7 +485,7 @@ index 0e65b5206..a0bb9af09 100644
  
  	  /* Make sure that the BIOS can reach the palette.  */
 diff --git a/include/grub/types.h b/include/grub/types.h
-index 0a3ff1591..5ae0ced38 100644
+index 0a3ff15..5ae0ced 100644
 --- a/include/grub/types.h
 +++ b/include/grub/types.h
 @@ -340,4 +340,28 @@ static inline void grub_set_unaligned64 (void *ptr, grub_uint64_t val)
@@ -441,53 +517,3 @@ index 0a3ff1591..5ae0ced38 100644
 +#endif
 +
  #endif /* ! GRUB_TYPES_HEADER */
-diff --git a/grub-core/loader/i386/multiboot_mbi.c b/grub-core/loader/i386/multiboot_mbi.c
-index a67d9d0a8..434e694ff 100644
---- a/grub-core/loader/i386/multiboot_mbi.c
-+++ b/grub-core/loader/i386/multiboot_mbi.c
-@@ -293,7 +293,7 @@ fill_vbe_info (struct multiboot_info *mbi, grub_uint8_t *ptrorig,
-   struct grub_vbe_mode_info_block *mode_info;
- #if GRUB_MACHINE_HAS_VBE
-   grub_vbe_status_t status;
--  void *scratch = (void *) GRUB_MEMORY_MACHINE_SCRATCH_ADDR;
-+  void *scratch = grub_absolute_pointer (GRUB_MEMORY_MACHINE_SCRATCH_ADDR);
-     
-   status = grub_vbe_bios_get_controller_info (scratch);
-   if (status != GRUB_VBE_STATUS_OK)
-diff --git a/grub-core/commands/i386/pc/sendkey.c b/grub-core/commands/i386/pc/sendkey.c
-index 26d9acd3d..9fbd8cb2c 100644
---- a/grub-core/commands/i386/pc/sendkey.c
-+++ b/grub-core/commands/i386/pc/sendkey.c
-@@ -216,12 +216,12 @@ static grub_err_t
- grub_sendkey_postboot (void)
- {
-   /* For convention: pointer to flags.  */
--  grub_uint32_t *flags = (grub_uint32_t *) 0x417;
-+  grub_uint32_t *flags = grub_absolute_pointer (0x417);
- 
-   *flags = oldflags;
- 
--  *((char *) 0x41a) = 0x1e;
--  *((char *) 0x41c) = 0x1e;
-+  *((volatile char *) grub_absolute_pointer (0x41a)) = 0x1e;
-+  *((volatile char *) grub_absolute_pointer (0x41c)) = 0x1e;
- 
-   return GRUB_ERR_NONE;
- }
-@@ -231,13 +231,13 @@ static grub_err_t
- grub_sendkey_preboot (int noret __attribute__ ((unused)))
- {
-   /* For convention: pointer to flags.  */
--  grub_uint32_t *flags = (grub_uint32_t *) 0x417;
-+  grub_uint32_t *flags = grub_absolute_pointer (0x417);
- 
-   oldflags = *flags;
-   
-   /* Set the sendkey.  */
--  *((char *) 0x41a) = 0x1e;
--  *((char *) 0x41c) = keylen + 0x1e;
-+  *((volatile char *) grub_absolute_pointer (0x41a)) = 0x1e;
-+  *((volatile char *) grub_absolute_pointer (0x41c)) = keylen + 0x1e;
-   grub_memcpy ((char *) 0x41e, sendkey, 0x20);
- 
-   /* Transform "any ctrl" to "right ctrl" flag.  */

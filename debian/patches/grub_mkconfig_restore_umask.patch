@@ -1,3 +1,7 @@
+From: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Date: Mon, 19 Jun 2023 17:23:25 +0200
+Subject: grub_mkconfig_restore_umask
+
 commit 0adec29674561034771c13e446069b41ef41e4d4
 Author: Michael Chang <mchang@suse.com>
 Date:   Fri Dec 3 16:13:28 2021 +0800
@@ -18,12 +22,15 @@ Date:   Fri Dec 3 16:13:28 2021 +0800
     
     Signed-off-by: Michael Chang <mchang@suse.com>
     Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ util/grub-mkconfig.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/util/grub-mkconfig.in b/util/grub-mkconfig.in
-index c3ea7612e..62335d027 100644
+index 0d39c8f..c141538 100644
 --- a/util/grub-mkconfig.in
 +++ b/util/grub-mkconfig.in
-@@ -301,7 +301,10 @@ and /etc/grub.d/* files or please file a bug report with
+@@ -315,7 +315,10 @@ and /etc/grub.d/* files or please file a bug report with
      exit 1
    else
      # none of the children aborted with error, install the new grub.cfg

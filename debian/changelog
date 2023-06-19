@@ -1,3 +1,27 @@
+grub2 (2.06-14) experimental; urgency=medium
+
+  [ Julian Andres Klode ]
+  * "Upstreaming" Ubuntu changes, part 1.
+  * Fixup filename for debian/patches/gcc12_build_dangling_pointer.patch
+  * Disable os-prober for ppc64el on the PowerNV platform (for Petitboot)
+  * Build with FUSE3 (LP: #1935659)
+  * build-efi-images: Add http to netboot images
+  * Bundle unicode.pf2 in a squashfs memdisk attached to the signed EFI binary
+  * Automatic patch queue rebase
+
+  [ Dimitri John Ledkov ]
+  * minilzo: built using the distribution's minilzo
+  * dirs.in: create var/lib/grub/ucf in grub-efi-amd64 (and similar)
+  * grub-common.service: port init.d script to systemd unit. Add warning
+    message, when initrdless boot fails triggering fallback. LP: #1901553
+  * Make prebuilt netboot image look for grub.cfg-$deb_arch
+  * Link grub-efi-{amd64,arm64}-bin docs directory
+
+  [ Jeffery To ]
+  * Add hibernation resumption support to grub-common.service
+
+ -- Julian Andres Klode <jak@debian.org>  Mon, 19 Jun 2023 17:26:49 +0200
+
 grub2 (2.06-13) unstable; urgency=medium
 
   [ Steve McIntyre ]

@@ -1,4 +1,3 @@
-From 1a1c93cd19a9ec67d6237d5a537976ff9297ab78 Mon Sep 17 00:00:00 2001
 From: Marius Bakke <marius@gnu.org>
 Date: Sun, 13 Jun 2021 15:11:51 +0200
 Subject: tests/ahci: Change "ide-drive" deprecated QEMU device name to
@@ -20,7 +19,7 @@ Patch-Name: tests-ahci-update-qemu-device-name.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tests/ahci_test.in b/tests/ahci_test.in
-index 7df560462..d844fe680 100644
+index 7df5604..d844fe6 100644
 --- a/tests/ahci_test.in
 +++ b/tests/ahci_test.in
 @@ -41,7 +41,7 @@ echo "hello" > "$outfile"

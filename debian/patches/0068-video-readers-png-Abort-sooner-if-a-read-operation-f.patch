@@ -1,4 +1,3 @@
-From 907f100c841f39e37e4801f726f6b47c2aa9191f Mon Sep 17 00:00:00 2001
 From: Daniel Axtens <dja@axtens.net>
 Date: Tue, 6 Jul 2021 14:02:55 +1000
 Subject: video/readers/png: Abort sooner if a read operation fails
@@ -11,11 +10,11 @@ Try to catch I/O errors sooner and bail out.
 Signed-off-by: Daniel Axtens <dja@axtens.net>
 Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
 ---
- grub-core/video/readers/png.c | 55 ++++++++++++++++++++++++++++++-----
+ grub-core/video/readers/png.c | 55 ++++++++++++++++++++++++++++++++++++-------
  1 file changed, 47 insertions(+), 8 deletions(-)
 
 diff --git a/grub-core/video/readers/png.c b/grub-core/video/readers/png.c
-index 0157ff742..e2a6b1cf3 100644
+index 0157ff7..e2a6b1c 100644
 --- a/grub-core/video/readers/png.c
 +++ b/grub-core/video/readers/png.c
 @@ -142,6 +142,7 @@ static grub_uint8_t

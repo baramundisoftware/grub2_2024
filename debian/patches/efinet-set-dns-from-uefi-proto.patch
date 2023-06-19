@@ -1,4 +1,3 @@
-From 5a2c53dd059351cf385575fa99d5763bc07e0de2 Mon Sep 17 00:00:00 2001
 From: Michael Chang <mchang@suse.com>
 Date: Thu, 27 Oct 2016 17:43:21 -0400
 Subject: efinet: Setting DNS server from UEFI protocol
@@ -32,12 +31,12 @@ Last-Update: 2021-09-24
 
 Patch-Name: efinet-set-dns-from-uefi-proto.patch
 ---
- grub-core/net/drivers/efi/efinet.c | 163 +++++++++++++++++++++++++++++
- include/grub/efi/api.h             |  76 ++++++++++++++
+ grub-core/net/drivers/efi/efinet.c | 163 +++++++++++++++++++++++++++++++++++++
+ include/grub/efi/api.h             |  76 +++++++++++++++++
  2 files changed, 239 insertions(+)
 
 diff --git a/grub-core/net/drivers/efi/efinet.c b/grub-core/net/drivers/efi/efinet.c
-index 2d3b00f0e..82a28fb6e 100644
+index 2d3b00f..82a28fb 100644
 --- a/grub-core/net/drivers/efi/efinet.c
 +++ b/grub-core/net/drivers/efi/efinet.c
 @@ -30,6 +30,8 @@ GRUB_MOD_LICENSE ("GPLv3+");
@@ -246,7 +245,7 @@ index 2d3b00f0e..82a28fb6e 100644
      }
  
 diff --git a/include/grub/efi/api.h b/include/grub/efi/api.h
-index 4b4652ca5..9cab1a51d 100644
+index 4b4652c..9cab1a5 100644
 --- a/include/grub/efi/api.h
 +++ b/include/grub/efi/api.h
 @@ -354,6 +354,16 @@

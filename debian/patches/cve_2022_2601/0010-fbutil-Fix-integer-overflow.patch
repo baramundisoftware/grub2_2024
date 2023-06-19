@@ -1,4 +1,3 @@
-From 50a11a81bc842c58962244a2dc86bbd31a426e12 Mon Sep 17 00:00:00 2001
 From: Zhang Boyang <zhangboyang.id@gmail.com>
 Date: Tue, 6 Sep 2022 03:03:21 +0800
 Subject: [PATCH 10/14] fbutil: Fix integer overflow
@@ -31,7 +30,7 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
  2 files changed, 11 insertions(+), 6 deletions(-)
 
 diff --git a/grub-core/video/fb/fbutil.c b/grub-core/video/fb/fbutil.c
-index b98bb51fe..25ef39f47 100644
+index b98bb51..25ef39f 100644
 --- a/grub-core/video/fb/fbutil.c
 +++ b/grub-core/video/fb/fbutil.c
 @@ -67,7 +67,7 @@ get_pixel (struct grub_video_fbblit_info *source,
@@ -53,7 +52,7 @@ index b98bb51fe..25ef39f47 100644
            int bit_pos = 7 - bit_index % 8;
            *ptr = (*ptr & ~(1 << bit_pos)) | ((color & 0x01) << bit_pos);
 diff --git a/include/grub/fbutil.h b/include/grub/fbutil.h
-index 4205eb917..78a1ab3b4 100644
+index 4205eb9..78a1ab3 100644
 --- a/include/grub/fbutil.h
 +++ b/include/grub/fbutil.h
 @@ -31,14 +31,19 @@ struct grub_video_fbblit_info
@@ -80,6 +79,3 @@ index 4205eb917..78a1ab3b4 100644
  }
  
  /* Advance pointer by VAL bytes. If there is no unaligned access available,
--- 
-2.30.2
-

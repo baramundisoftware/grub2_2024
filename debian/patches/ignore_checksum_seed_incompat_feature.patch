@@ -1,3 +1,7 @@
+From: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Date: Mon, 19 Jun 2023 17:23:25 +0200
+Subject: ignore_checksum_seed_incompat_feature
+
 commit 7fd5feff97c4b1f446f8fcf6d37aca0c64e7c763
 Author: Javier Martinez Canillas <javierm@redhat.com>
 Date:   Fri Jun 11 21:36:16 2021 +0200
@@ -21,9 +25,12 @@ Date:   Fri Jun 11 21:36:16 2021 +0200
     Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
     Reviewed-by: Lukas Czerner <lczerner@redhat.com>
     Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/fs/ext2.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
-index e7dd78e66..4953a1591 100644
+index e7dd78e..4953a15 100644
 --- a/grub-core/fs/ext2.c
 +++ b/grub-core/fs/ext2.c
 @@ -103,6 +103,7 @@ GRUB_MOD_LICENSE ("GPLv3+");

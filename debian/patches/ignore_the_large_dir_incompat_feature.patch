@@ -1,3 +1,7 @@
+From: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Date: Mon, 19 Jun 2023 17:23:25 +0200
+Subject: ignore_the_large_dir_incompat_feature
+
 commit 2e9fa73a040462b81bfbfe56c0bc7ad2d30b446b
 Author: Theodore Ts'o <tytso@mit.edu>
 Date:   Tue Aug 30 22:41:59 2022 -0400
@@ -19,9 +23,12 @@ Date:   Tue Aug 30 22:41:59 2022 -0400
     
     Signed-off-by: Theodore Ts'o <tytso@mit.edu>
     Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/fs/ext2.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
-index 0989e26e1..e1cc5e62a 100644
+index 4953a15..79d3a18 100644
 --- a/grub-core/fs/ext2.c
 +++ b/grub-core/fs/ext2.c
 @@ -104,6 +104,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
