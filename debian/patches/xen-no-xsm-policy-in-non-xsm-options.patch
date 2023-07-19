@@ -20,12 +20,12 @@ Patch-Name: xen-no-xsm-policy-in-non-xsm-options.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/util/grub.d/20_linux_xen.in b/util/grub.d/20_linux_xen.in
-index d99751a..a12780e 100644
+index 00788a5..5830da5 100644
 --- a/util/grub.d/20_linux_xen.in
 +++ b/util/grub.d/20_linux_xen.in
-@@ -173,7 +173,7 @@ EOF
- 	${module_loader}	--nounzip   $(echo $initrd_path)
+@@ -176,7 +176,7 @@ EOF
  EOF
+     done
    fi
 -  if test -n "${xenpolicy}" ; then
 +  if ${xsm} && test -n "${xenpolicy}" ; then

@@ -18,20 +18,23 @@
 
 #include <grub/net/netbuff.h>
 #include <grub/dl.h>
+#include <grub/env.h>
 #include <grub/net.h>
 #include <grub/time.h>
 #include <grub/efi/api.h>
 #include <grub/efi/efi.h>
 #include <grub/i18n.h>
+#include <grub/lib/hexdump.h>
+#include <grub/types.h>
 #include <grub/net/netbuff.h>
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
 /* GUID.  */
-static grub_efi_guid_t net_io_guid = GRUB_EFI_SIMPLE_NETWORK_GUID;
-static grub_efi_guid_t pxe_io_guid = GRUB_EFI_PXE_GUID;
-static grub_efi_guid_t ip4_config_guid = GRUB_EFI_IP4_CONFIG2_PROTOCOL_GUID;
-static grub_efi_guid_t ip6_config_guid = GRUB_EFI_IP6_CONFIG_PROTOCOL_GUID;
+static grub_guid_t net_io_guid = GRUB_EFI_SIMPLE_NETWORK_GUID;
+static grub_guid_t pxe_io_guid = GRUB_EFI_PXE_GUID;
+static grub_guid_t ip4_config_guid = GRUB_EFI_IP4_CONFIG2_PROTOCOL_GUID;
+static grub_guid_t ip6_config_guid = GRUB_EFI_IP6_CONFIG_PROTOCOL_GUID;
 
 static grub_err_t
 send_card_buffer (struct grub_net_card *dev,
@@ -42,11 +45,14 @@ send_card_buffer (struct grub_net_card *dev,
   grub_uint64_t limit_time = grub_get_time_ms () + 4000;
   void *txbuf;
 
+  if (net == NULL)
+    return grub_error (GRUB_ERR_IO,
+		       N_("network protocol not available, can't send packet"));
   if (dev->txbusy)
     while (1)
       {
 	txbuf = NULL;
-	st = efi_call_3 (net->get_status, net, 0, &txbuf);
+	st = net->get_status (net, 0, &txbuf);
 	if (st != GRUB_EFI_SUCCESS)
 	  return grub_error (GRUB_ERR_IO,
 			     N_("couldn't send network packet"));
@@ -74,8 +80,8 @@ send_card_buffer (struct grub_net_card *dev,
 
   grub_memcpy (dev->txbuf, pack->data, dev->last_pkt_size);
 
-  st = efi_call_7 (net->transmit, net, 0, dev->last_pkt_size,
-		   dev->txbuf, NULL, NULL, NULL);
+  st = net->transmit (net, 0, dev->last_pkt_size,
+		      dev->txbuf, NULL, NULL, NULL);
   if (st != GRUB_EFI_SUCCESS)
     return grub_error (GRUB_ERR_IO, N_("couldn't send network packet"));
 
@@ -88,7 +94,7 @@ send_card_buffer (struct grub_net_card *dev,
      Perhaps a timeout in the FW has discarded the recycle buffer.
    */
   txbuf = NULL;
-  st = efi_call_3 (net->get_status, net, 0, &txbuf);
+  st = net->get_status (net, 0, &txbuf);
   dev->txbusy = !(st == GRUB_EFI_SUCCESS && txbuf);
 
   return GRUB_ERR_NONE;
@@ -104,6 +110,9 @@ get_card_packet (struct grub_net_card *dev)
   struct grub_net_buff *nb;
   int i;
 
+  if (net == NULL)
+    return NULL;
+
   for (i = 0; i < 2; i++)
     {
       if (!dev->rcvbuf)
@@ -111,8 +120,8 @@ get_card_packet (struct grub_net_card *dev)
       if (!dev->rcvbuf)
 	return NULL;
 
-      st = efi_call_7 (net->receive, net, NULL, &bufsize,
-		       dev->rcvbuf, NULL, NULL, NULL);
+      st = net->receive (net, NULL, &bufsize,
+		         dev->rcvbuf, NULL, NULL, NULL);
       if (st != GRUB_EFI_BUFFER_TOO_SMALL)
 	break;
       dev->rcvbufsize = 2 * ALIGN_UP (dev->rcvbufsize > bufsize
@@ -151,15 +160,21 @@ open_card (struct grub_net_card *dev)
 {
   grub_efi_simple_network_t *net;
 
-  /* Try to reopen SNP exlusively to close any active MNP protocol instance
-     that may compete for packet polling
+  if (dev->efi_net != NULL)
+    {
+      grub_efi_close_protocol (dev->efi_handle, &net_io_guid);
+      dev->efi_net = NULL;
+    }
+  /*
+   * Try to reopen SNP exlusively to close any active MNP protocol instance
+   * that may compete for packet polling.
    */
   net = grub_efi_open_protocol (dev->efi_handle, &net_io_guid,
 				GRUB_EFI_OPEN_PROTOCOL_BY_EXCLUSIVE);
-  if (net)
+  if (net != NULL)
     {
       if (net->mode->state == GRUB_EFI_NETWORK_STOPPED
-	  && efi_call_1 (net->start, net) != GRUB_EFI_SUCCESS)
+	  && net->start (net) != GRUB_EFI_SUCCESS)
 	return grub_error (GRUB_ERR_NET_NO_CARD, "%s: net start failed",
 			   dev->name);
 
@@ -168,7 +183,7 @@ open_card (struct grub_net_card *dev)
 			   dev->name);
 
       if (net->mode->state == GRUB_EFI_NETWORK_STARTED
-	  && efi_call_3 (net->initialize, net, 0, 0) != GRUB_EFI_SUCCESS)
+	  && net->initialize (net, 0, 0) != GRUB_EFI_SUCCESS)
 	return grub_error (GRUB_ERR_NET_NO_CARD, "%s: net initialize failed",
 			   dev->name);
 
@@ -192,27 +207,24 @@ open_card (struct grub_net_card *dev)
 	    filters |= (net->mode->receive_filter_mask &
 			GRUB_EFI_SIMPLE_NETWORK_RECEIVE_PROMISCUOUS);
 
-	  efi_call_6 (net->receive_filters, net, filters, 0, 0, 0, NULL);
+	  net->receive_filters (net, filters, 0, 0, 0, NULL);
 	}
 
-      efi_call_4 (grub_efi_system_table->boot_services->close_protocol,
-		  dev->efi_net, &net_io_guid,
-		  grub_efi_image_handle, dev->efi_handle);
       dev->efi_net = net;
+    } else {
+      return grub_error (GRUB_ERR_NET_NO_CARD, "%s: can't open protocol",
+			 dev->name);
     }
 
-  /* If it failed we just try to run as best as we can */
   return GRUB_ERR_NONE;
 }
 
 static void
 close_card (struct grub_net_card *dev)
 {
-  efi_call_1 (dev->efi_net->shutdown, dev->efi_net);
-  efi_call_1 (dev->efi_net->stop, dev->efi_net);
-  efi_call_4 (grub_efi_system_table->boot_services->close_protocol,
-	      dev->efi_net, &net_io_guid,
-	      grub_efi_image_handle, dev->efi_handle);
+  dev->efi_net->shutdown (dev->efi_net);
+  dev->efi_net->stop (dev->efi_net);
+  grub_efi_close_protocol (dev->efi_handle, &net_io_guid);
 }
 
 static struct grub_net_card_driver efidriver =
@@ -280,14 +292,14 @@ grub_efinet_findcards (void)
 	continue;
 
       if (net->mode->state == GRUB_EFI_NETWORK_STOPPED
-	  && efi_call_1 (net->start, net) != GRUB_EFI_SUCCESS)
+	  && net->start (net) != GRUB_EFI_SUCCESS)
 	continue;
 
       if (net->mode->state == GRUB_EFI_NETWORK_STOPPED)
 	continue;
 
       if (net->mode->state == GRUB_EFI_NETWORK_STARTED
-	  && efi_call_3 (net->initialize, net, 0, 0) != GRUB_EFI_SUCCESS)
+	  && net->initialize (net, 0, 0) != GRUB_EFI_SUCCESS)
 	continue;
 
       card = grub_zalloc (sizeof (struct grub_net_card));
@@ -314,7 +326,15 @@ grub_efinet_findcards (void)
 
       card->name = grub_xasprintf ("efinet%d", i++);
       card->driver = &efidriver;
-      card->flags = 0;
+      /*
+       * EFI network devices are abstract SNP protocol instances, and the
+       * firmware is in charge of ensuring that they will be torn down when the
+       * OS loader hands off to the OS proper. Closing them as part of the
+       * preboot cleanup is therefore unnecessary, and undesirable, as it
+       * prevents us from using the network connection in a protocal callback
+       * such as LoadFile2 for initrd loading.
+       */
+      card->flags = GRUB_NET_CARD_NO_CLOSE_ON_FINI_HW;
       card->default_address.type = GRUB_NET_LINK_LEVEL_PROTOCOL_ETHERNET;
       grub_memcpy (card->default_address.mac,
 		   net->mode->current_address,
@@ -328,14 +348,14 @@ grub_efinet_findcards (void)
 }
 
 static grub_efi_handle_t
-grub_efi_locate_device_path (grub_efi_guid_t *protocol, grub_efi_device_path_t *device_path,
+grub_efi_locate_device_path (grub_guid_t *protocol, grub_efi_device_path_t *device_path,
 			    grub_efi_device_path_t **r_device_path)
 {
   grub_efi_handle_t handle;
   grub_efi_status_t status;
 
-  status = efi_call_3 (grub_efi_system_table->boot_services->locate_device_path,
-		      protocol, &device_path, &handle);
+  status = grub_efi_system_table->boot_services->locate_device_path(
+                       protocol, &device_path, &handle);
 
   if (status != GRUB_EFI_SUCCESS)
     return 0;
@@ -356,13 +376,11 @@ grub_dns_server_ip4_address (grub_efi_device_path_t *dp, grub_efi_uintn_t *num_d
   grub_efi_uintn_t data_size = 1 * sizeof (grub_efi_ipv4_address_t);
 
   hnd = grub_efi_locate_device_path (&ip4_config_guid, dp, NULL);
-
   if (!hnd)
     return 0;
 
   conf = grub_efi_open_protocol (hnd, &ip4_config_guid,
-				GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
-
+                                 GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
   if (!conf)
     return 0;
 
@@ -370,20 +388,20 @@ grub_dns_server_ip4_address (grub_efi_device_path_t *dp, grub_efi_uintn_t *num_d
   if (!addrs)
     return 0;
 
-  status = efi_call_4 (conf->get_data, conf,
-		      GRUB_EFI_IP4_CONFIG2_DATA_TYPE_DNSSERVER,
-		      &data_size, addrs);
+  status = conf->get_data(conf,
+                       GRUB_EFI_IP4_CONFIG2_DATA_TYPE_DNSSERVER,
+                       &data_size, addrs);
 
   if (status == GRUB_EFI_BUFFER_TOO_SMALL)
     {
       grub_free (addrs);
-      addrs  = grub_malloc (data_size);
+      addrs = grub_malloc (data_size);
       if (!addrs)
 	return 0;
 
-      status = efi_call_4 (conf->get_data,  conf,
-			  GRUB_EFI_IP4_CONFIG2_DATA_TYPE_DNSSERVER,
-			  &data_size, addrs);
+      status = conf->get_data(conf,
+                           GRUB_EFI_IP4_CONFIG2_DATA_TYPE_DNSSERVER,
+                           &data_size, addrs);
     }
 
   if (status != GRUB_EFI_SUCCESS)
@@ -406,34 +424,33 @@ grub_dns_server_ip6_address (grub_efi_device_path_t *dp, grub_efi_uintn_t *num_d
   grub_efi_uintn_t data_size = 1 * sizeof (grub_efi_ipv6_address_t);
 
   hnd = grub_efi_locate_device_path (&ip6_config_guid, dp, NULL);
-
   if (!hnd)
     return 0;
 
   conf = grub_efi_open_protocol (hnd, &ip6_config_guid,
-				GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+                                 GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
 
   if (!conf)
     return 0;
 
-  addrs  = grub_malloc (data_size);
+  addrs = grub_malloc (data_size);
   if (!addrs)
     return 0;
 
-  status = efi_call_4 (conf->get_data, conf,
-		      GRUB_EFI_IP6_CONFIG_DATA_TYPE_DNSSERVER,
-		      &data_size, addrs);
+  status = conf->get_data(conf,
+                       GRUB_EFI_IP6_CONFIG_DATA_TYPE_DNSSERVER,
+                       &data_size, addrs);
 
   if (status == GRUB_EFI_BUFFER_TOO_SMALL)
     {
       grub_free (addrs);
-      addrs  = grub_malloc (data_size);
+      addrs = grub_malloc (data_size);
       if (!addrs)
 	return 0;
 
-      status = efi_call_4 (conf->get_data,  conf,
-			  GRUB_EFI_IP6_CONFIG_DATA_TYPE_DNSSERVER,
-			  &data_size, addrs);
+      status = conf->get_data(conf,
+                           GRUB_EFI_IP6_CONFIG_DATA_TYPE_DNSSERVER,
+                           &data_size, addrs);
     }
 
   if (status != GRUB_EFI_SUCCESS)
@@ -456,8 +473,10 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
   grub_err_t err;
 
   ddp = grub_efi_duplicate_device_path (dp);
-  ldp = grub_efi_find_last_device_path (ddp);
+  if (!ddp)
+    return NULL;
 
+  ldp = grub_efi_find_last_device_path (ddp);
   if (GRUB_EFI_DEVICE_PATH_TYPE (ldp) != GRUB_EFI_MESSAGING_DEVICE_PATH_TYPE
       || GRUB_EFI_DEVICE_PATH_SUBTYPE (ldp) != GRUB_EFI_URI_DEVICE_PATH_SUBTYPE)
     {
@@ -480,7 +499,6 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
   ldp->length = sizeof (*ldp);
 
   ldp = grub_efi_find_last_device_path (ddp);
-
   if (GRUB_EFI_DEVICE_PATH_TYPE (ldp) != GRUB_EFI_MESSAGING_DEVICE_PATH_TYPE
       || (GRUB_EFI_DEVICE_PATH_SUBTYPE (ldp) != GRUB_EFI_IPV4_DEVICE_PATH_SUBTYPE
           && GRUB_EFI_DEVICE_PATH_SUBTYPE (ldp) != GRUB_EFI_IPV6_DEVICE_PATH_SUBTYPE))
@@ -491,7 +509,10 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
 
   nb = grub_netbuff_alloc (512);
   if (!nb)
-    return NULL;
+    {
+      grub_free (ddp);
+      return NULL;
+    }
 
   if (GRUB_EFI_DEVICE_PATH_SUBTYPE (ldp) == GRUB_EFI_IPV4_DEVICE_PATH_SUBTYPE)
     {
@@ -510,7 +531,7 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
 	  return NULL;
 	}
 
-      if (sizeof(bp->boot_file) < uri_len)
+      if (sizeof (bp->boot_file) < uri_len)
 	{
 	  grub_free (ddp);
 	  grub_netbuff_free (nb);
@@ -625,7 +646,7 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
 	}
       d6p->message_type = GRUB_NET_DHCP6_REPLY;
 
-      opt = (struct grub_net_dhcp6_option *)nb->tail;
+      opt = (struct grub_net_dhcp6_option *) nb->tail;
       err = grub_netbuff_put (nb, sizeof(*opt));
       if (err)
 	{
@@ -634,9 +655,9 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
 	  return NULL;
 	}
       opt->code = grub_cpu_to_be16_compile_time (GRUB_NET_DHCP6_OPTION_IA_NA);
-      opt->len = grub_cpu_to_be16_compile_time (sizeof(*iana) + sizeof(*opt) + sizeof(*iaaddr));
+      opt->len = grub_cpu_to_be16_compile_time (sizeof (*iana) + sizeof (*opt) + sizeof (*iaaddr));
 
-      err = grub_netbuff_put (nb, sizeof(*iana));
+      err = grub_netbuff_put (nb, sizeof (*iana));
       if (err)
 	{
 	  grub_free (ddp);
@@ -644,8 +665,8 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
 	  return NULL;
 	}
 
-      opt = (struct grub_net_dhcp6_option *)nb->tail;
-      err = grub_netbuff_put (nb, sizeof(*opt));
+      opt = (struct grub_net_dhcp6_option *) nb->tail;
+      err = grub_netbuff_put (nb, sizeof (*opt));
       if (err)
 	{
 	  grub_free (ddp);
@@ -655,18 +676,18 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
       opt->code = grub_cpu_to_be16_compile_time (GRUB_NET_DHCP6_OPTION_IAADDR);
       opt->len = grub_cpu_to_be16_compile_time (sizeof (*iaaddr));
 
-      iaaddr = (struct grub_net_dhcp6_option_iaaddr *)nb->tail;
-      err = grub_netbuff_put (nb, sizeof(*iaaddr));
+      iaaddr = (struct grub_net_dhcp6_option_iaaddr *) nb->tail;
+      err = grub_netbuff_put (nb, sizeof (*iaaddr));
       if (err)
 	{
 	  grub_free (ddp);
 	  grub_netbuff_free (nb);
 	  return NULL;
 	}
-      grub_memcpy (iaaddr->addr, ipv6->local_ip_address, sizeof(ipv6->local_ip_address));
+      grub_memcpy (iaaddr->addr, ipv6->local_ip_address, sizeof (ipv6->local_ip_address));
 
       opt = (struct grub_net_dhcp6_option *)nb->tail;
-      err = grub_netbuff_put (nb, sizeof(*opt) + uri_len);
+      err = grub_netbuff_put (nb, sizeof (*opt) + uri_len);
       if (err)
 	{
 	  grub_free (ddp);
@@ -682,14 +703,14 @@ grub_efinet_create_dhcp_ack_from_device_path (grub_efi_device_path_t *dp, int *u
 	{
 	  grub_efi_uintn_t size_dns = sizeof (*dns) * num_dns;
 
-	  opt = (struct grub_net_dhcp6_option *)nb->tail;
-	  err = grub_netbuff_put (nb, sizeof(*opt) + size_dns);
+	  opt = (struct grub_net_dhcp6_option *) nb->tail;
+	  err = grub_netbuff_put (nb, sizeof (*opt) + size_dns);
 	  if (err)
-	  {
-	    grub_free (ddp);
-	    grub_netbuff_free (nb);
-	    return NULL;
-	  }
+            {
+              grub_free (ddp);
+              grub_netbuff_free (nb);
+              return NULL;
+            }
 	  opt->code = grub_cpu_to_be16_compile_time (GRUB_NET_DHCP6_OPTION_DNS_SERVERS);
 	  opt->len = grub_cpu_to_be16 (size_dns);
 	  grub_memcpy (opt->data, dns, size_dns);
@@ -708,7 +729,11 @@ grub_efi_net_config_real (grub_efi_handle_t hnd, char **device,
 			  char **path)
 {
   struct grub_net_card *card;
-  grub_efi_device_path_t *dp;
+  grub_efi_device_path_t *dp, *ldp = NULL;
+  struct grub_net_network_level_interface *inter = NULL;
+  grub_efi_device_path_t *vlan_dp;
+  grub_efi_uint16_t vlan_dp_len;
+  grub_efi_vlan_device_path_t *vlan;
 
   dp = grub_efi_get_device_path (hnd);
   if (! dp)
@@ -718,7 +743,7 @@ grub_efi_net_config_real (grub_efi_handle_t hnd, char **device,
   {
     grub_efi_device_path_t *cdp;
     struct grub_efi_pxe *pxe;
-    struct grub_efi_pxe_mode *pxe_mode;
+    struct grub_efi_pxe_mode *pxe_mode = NULL;
     grub_uint8_t *packet_buf;
     grub_size_t packet_bufsz ;
     int ipv6;
@@ -726,12 +751,16 @@ grub_efi_net_config_real (grub_efi_handle_t hnd, char **device,
 
     if (card->driver != &efidriver)
       continue;
+
     cdp = grub_efi_get_device_path (card->efi_handle);
     if (! cdp)
       continue;
+
+    ldp = grub_efi_find_last_device_path (dp);
+
     if (grub_efi_compare_device_paths (dp, cdp) != 0)
       {
-	grub_efi_device_path_t *ldp, *dup_dp, *dup_ldp;
+	grub_efi_device_path_t *dup_dp, *dup_ldp;
 	int match;
 
 	/* EDK2 UEFI PXE driver creates pseudo devices with type IPv4/IPv6
@@ -740,7 +769,6 @@ grub_efi_net_config_real (grub_efi_handle_t hnd, char **device,
 	   devices. We skip them when enumerating cards, so here we need to
 	   find matching MAC device.
          */
-	ldp = grub_efi_find_last_device_path (dp);
 	if (GRUB_EFI_DEVICE_PATH_TYPE (ldp) != GRUB_EFI_MESSAGING_DEVICE_PATH_TYPE
 	    || (GRUB_EFI_DEVICE_PATH_SUBTYPE (ldp) != GRUB_EFI_IPV4_DEVICE_PATH_SUBTYPE
 		&& GRUB_EFI_DEVICE_PATH_SUBTYPE (ldp) != GRUB_EFI_IPV6_DEVICE_PATH_SUBTYPE
@@ -767,6 +795,7 @@ grub_efi_net_config_real (grub_efi_handle_t hnd, char **device,
 	if (!match)
 	  continue;
       }
+
     pxe = grub_efi_open_protocol (hnd, &pxe_io_guid,
 				  GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     if (!pxe)
@@ -790,26 +819,57 @@ grub_efi_net_config_real (grub_efi_handle_t hnd, char **device,
 
     if (ipv6)
       {
-	grub_net_configure_by_dhcpv6_reply (card->name, card, 0,
-					    (struct grub_net_dhcp6_packet *)
-					    packet_buf,
-					    packet_bufsz,
-					    1, device, path);
+	grub_dprintf ("efinet", "using ipv6 and dhcpv6\n");
+	if (pxe_mode)
+	  grub_dprintf ("efinet", "dhcp_ack_received: %s%s\n",
+			pxe_mode->dhcp_ack_received ? "yes" : "no",
+			pxe_mode->dhcp_ack_received ? "" : " cannot continue");
+
+	inter = grub_net_configure_by_dhcpv6_reply (card->name, card, 0,
+                                                    (struct grub_net_dhcp6_packet *)
+                                                    packet_buf,
+                                                    packet_bufsz,
+                                                    1, device, path);
+	if (grub_errno)
+	  grub_print_error ();
+	if (device && path)
+	  grub_dprintf ("efinet", "device: `%s' path: `%s'\n", *device, *path);
 	if (grub_errno)
 	  grub_print_error ();
       }
     else
       {
-	grub_net_configure_by_dhcp_ack (card->name, card, 0,
-					(struct grub_net_bootp_packet *)
-					packet_buf,
-					packet_bufsz,
-					1, device, path);
+	grub_dprintf ("efinet", "using ipv4 and dhcp\n");
+	inter = grub_net_configure_by_dhcp_ack (card->name, card, 0,
+                                                (struct grub_net_bootp_packet *)
+                                                packet_buf,
+                                                packet_bufsz,
+                                                1, device, path);
+	grub_dprintf ("efinet", "device: `%s' path: `%s'\n", *device, *path);
       }
 
-    if (nb)
-      grub_netbuff_free (nb);
+    if (inter != NULL)
+      {
+	/*
+	 * Search the device path for any VLAN subtype and use it
+	 * to configure the interface.
+	 */
+	vlan_dp = dp;
 
+	while (!GRUB_EFI_END_ENTIRE_DEVICE_PATH (vlan_dp))
+	  {
+	    if (GRUB_EFI_DEVICE_PATH_TYPE (vlan_dp) == GRUB_EFI_MESSAGING_DEVICE_PATH_TYPE &&
+		GRUB_EFI_DEVICE_PATH_SUBTYPE (vlan_dp) == GRUB_EFI_VLAN_DEVICE_PATH_SUBTYPE)
+	      {
+		vlan = (grub_efi_vlan_device_path_t *) vlan_dp;
+		inter->vlantag = vlan->vlan_id;
+		break;
+	      }
+
+	    vlan_dp_len = GRUB_EFI_DEVICE_PATH_LENGTH (vlan_dp);
+	    vlan_dp = (grub_efi_device_path_t *) ((grub_efi_uint8_t *) vlan_dp + vlan_dp_len);
+	  }
+      }
     return;
   }
 }
@@ -824,7 +884,7 @@ GRUB_MOD_FINI(efinet)
 {
   struct grub_net_card *card, *next;
 
-  FOR_NET_CARDS_SAFE (card, next) 
+  FOR_NET_CARDS_SAFE (card, next)
     if (card->driver == &efidriver)
       grub_net_card_unregister (card);
 }

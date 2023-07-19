@@ -38,7 +38,7 @@ Patch-Name: pc-verifiers-module.patch
  5 files changed, 39 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/Makefile.am b/grub-core/Makefile.am
-index ee88e44..b6872d2 100644
+index f0cb2f2..7a5a878 100644
 --- a/grub-core/Makefile.am
 +++ b/grub-core/Makefile.am
 @@ -93,7 +93,9 @@ KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/partition.h
@@ -52,10 +52,10 @@ index ee88e44..b6872d2 100644
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/net.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/memory.h
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 2ff2668..da32698 100644
+index b0bd361..d8149a4 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -141,7 +141,7 @@ kernel = {
+@@ -152,7 +152,7 @@ kernel = {
    common = kern/rescue_parser.c;
    common = kern/rescue_reader.c;
    common = kern/term.c;
@@ -64,7 +64,7 @@ index 2ff2668..da32698 100644
  
    noemu = kern/compiler-rt.c;
    noemu = kern/mm.c;
-@@ -946,6 +946,12 @@ module = {
+@@ -975,6 +975,12 @@ module = {
    cppflags = '-I$(srcdir)/lib/posix_wrap';
  };
  
@@ -78,7 +78,7 @@ index 2ff2668..da32698 100644
    name = hdparm;
    common = commands/hdparm.c;
 diff --git a/grub-core/kern/main.c b/grub-core/kern/main.c
-index 2879d64..c6fb668 100644
+index f21376e..71ca62e 100644
 --- a/grub-core/kern/main.c
 +++ b/grub-core/kern/main.c
 @@ -29,7 +29,9 @@
@@ -91,8 +91,8 @@ index 2879d64..c6fb668 100644
  
  #ifdef GRUB_MACHINE_PCBIOS
  #include <grub/machine/memory.h>
-@@ -285,8 +287,10 @@ grub_main (void)
-   grub_setcolorstate (GRUB_TERM_COLOR_STANDARD);
+@@ -288,8 +290,10 @@ grub_main (void)
+ #endif
  #endif
  
 +#ifndef GRUB_MACHINE_PCBIOS
@@ -133,10 +133,10 @@ index 75d7994..1245d0d 100644
 +}
 +#endif
 diff --git a/include/grub/verify.h b/include/grub/verify.h
-index cd129c3..6fde244 100644
+index 672ae16..6744816 100644
 --- a/include/grub/verify.h
 +++ b/include/grub/verify.h
-@@ -64,10 +64,14 @@ struct grub_file_verifier
+@@ -65,10 +65,14 @@ struct grub_file_verifier
    grub_err_t (*verify_string) (char *str, enum grub_verify_string_type type);
  };
  
@@ -151,7 +151,7 @@ index cd129c3..6fde244 100644
  
  static inline void
  grub_verifier_register (struct grub_file_verifier *ver)
-@@ -81,7 +85,12 @@ grub_verifier_unregister (struct grub_file_verifier *ver)
+@@ -82,7 +86,12 @@ grub_verifier_unregister (struct grub_file_verifier *ver)
    grub_list_remove (GRUB_AS_LIST (ver));
  }
  

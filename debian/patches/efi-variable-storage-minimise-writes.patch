@@ -1,5 +1,5 @@
 From: Colin Watson <cjwatson@ubuntu.com>
-Date: Mon, 11 Mar 2019 11:17:43 +0000
+Date: Wed, 19 Jul 2023 12:33:26 +0200
 Subject: Minimise writes to EFI variable storage
 
 Some UEFI firmware is easily provoked into running out of space in its
@@ -59,10 +59,10 @@ Patch-Name: efi-variable-storage-minimise-writes.patch
  create mode 100644 grub-core/osdep/unix/efivar.c
 
 diff --git a/INSTALL b/INSTALL
-index 79a0af7..590b524 100644
+index b93fe9c..ba64b7d 100644
 --- a/INSTALL
 +++ b/INSTALL
-@@ -23,6 +23,11 @@ configuring the GRUB.
+@@ -28,6 +28,11 @@ configuring the GRUB.
  * Other standard GNU/Unix tools
  * a libc with large file support (e.g. glibc 2.1 or later)
  
@@ -75,10 +75,10 @@ index 79a0af7..590b524 100644
  
  * libdevmapper 1.02.34 or later (recommended)
 diff --git a/Makefile.util.def b/Makefile.util.def
-index 27f9482..a3d134b 100644
+index 61d9f62..4a02d9b 100644
 --- a/Makefile.util.def
 +++ b/Makefile.util.def
-@@ -570,6 +570,8 @@ program = {
+@@ -579,6 +579,8 @@ program = {
    common = grub-core/osdep/compress.c;
    extra_dist = grub-core/osdep/unix/compress.c;
    extra_dist = grub-core/osdep/basic/compress.c;
@@ -87,7 +87,7 @@ index 27f9482..a3d134b 100644
    common = util/editenv.c;
    common = grub-core/osdep/blocklist.c;
    common = grub-core/osdep/config.c;
-@@ -583,12 +585,15 @@ program = {
+@@ -592,12 +594,15 @@ program = {
    common = grub-core/kern/emu/argp_common.c;
    common = grub-core/osdep/init.c;
  
@@ -103,7 +103,7 @@ index 27f9482..a3d134b 100644
  
    condition = COND_HAVE_EXEC;
  };
-@@ -617,6 +622,8 @@ program = {
+@@ -626,6 +631,8 @@ program = {
    extra_dist = grub-core/osdep/basic/no_platform.c;
    extra_dist = grub-core/osdep/unix/platform.c;
    common = grub-core/osdep/compress.c;
@@ -112,7 +112,7 @@ index 27f9482..a3d134b 100644
    common = util/editenv.c;
    common = grub-core/osdep/blocklist.c;
    common = grub-core/osdep/config.c;
-@@ -630,12 +637,15 @@ program = {
+@@ -639,12 +646,15 @@ program = {
    common = grub-core/kern/emu/argp_common.c;
    common = grub-core/osdep/init.c;
  
@@ -128,7 +128,7 @@ index 27f9482..a3d134b 100644
  };
  
  program = {
-@@ -657,6 +667,8 @@ program = {
+@@ -666,6 +676,8 @@ program = {
    common = grub-core/osdep/platform.c;
    common = grub-core/osdep/platform_unix.c;
    common = grub-core/osdep/compress.c;
@@ -137,7 +137,7 @@ index 27f9482..a3d134b 100644
    common = util/editenv.c;
    common = grub-core/osdep/blocklist.c;
    common = grub-core/osdep/config.c;
-@@ -669,12 +681,15 @@ program = {
+@@ -678,12 +690,15 @@ program = {
    common = grub-core/kern/emu/argp_common.c;
    common = grub-core/osdep/init.c;
  
@@ -153,7 +153,7 @@ index 27f9482..a3d134b 100644
  };
  
  program = {
-@@ -696,6 +711,8 @@ program = {
+@@ -705,6 +720,8 @@ program = {
    common = grub-core/osdep/platform.c;
    common = grub-core/osdep/platform_unix.c;
    common = grub-core/osdep/compress.c;
@@ -162,7 +162,7 @@ index 27f9482..a3d134b 100644
    common = util/editenv.c;
    common = grub-core/osdep/blocklist.c;
    common = grub-core/osdep/config.c;
-@@ -705,12 +722,15 @@ program = {
+@@ -714,12 +731,15 @@ program = {
    common = grub-core/kern/emu/argp_common.c;
    common = grub-core/osdep/init.c;
  
@@ -179,10 +179,10 @@ index 27f9482..a3d134b 100644
  
  script = {
 diff --git a/configure.ac b/configure.ac
-index e11df6b..b3fb743 100644
+index a65a9b1..6b9807f 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -452,6 +452,18 @@ AC_CHECK_HEADER([util.h], [
+@@ -461,6 +461,18 @@ AC_CHECK_HEADER([util.h], [
  ])
  AC_SUBST([LIBUTIL])
  
@@ -725,7 +725,7 @@ index 0000000..4a58328
 +
 +#endif /* HAVE_EFIVAR */
 diff --git a/grub-core/osdep/unix/platform.c b/grub-core/osdep/unix/platform.c
-index 9c43932..b561174 100644
+index 035a99f..302446b 100644
 --- a/grub-core/osdep/unix/platform.c
 +++ b/grub-core/osdep/unix/platform.c
 @@ -19,15 +19,12 @@
@@ -841,13 +841,13 @@ index 9c43932..b561174 100644
 -    ret = grub_util_exec ((const char * []){ "efibootmgr", "-q",
 -	  "-c", "-d", efidir_disk,
 -	  "-p", efidir_part_str, "-w",
--	  "-L", efi_distributor, "-l", 
+-	  "-L", efi_distributor, "-l",
 -	  efifile_path, NULL });
 -  else
 -    ret = grub_util_exec ((const char * []){ "efibootmgr",
 -	  "-c", "-d", efidir_disk,
 -	  "-p", efidir_part_str, "-w",
--	  "-L", efi_distributor, "-l", 
+-	  "-L", efi_distributor, "-l",
 -	  efifile_path, NULL });
 -  free (efidir_part_str);
 -  return ret;
@@ -855,10 +855,10 @@ index 9c43932..b561174 100644
  
  void
 diff --git a/include/grub/util/install.h b/include/grub/util/install.h
-index 135ba48..134b862 100644
+index ca102b4..af929aa 100644
 --- a/include/grub/util/install.h
 +++ b/include/grub/util/install.h
-@@ -226,6 +226,11 @@ grub_install_get_default_x86_platform (void);
+@@ -227,6 +227,11 @@ grub_install_get_default_x86_platform (void);
  const char *
  grub_install_get_default_powerpc_machtype (void);
  
@@ -871,10 +871,10 @@ index 135ba48..134b862 100644
  grub_install_register_efi (grub_device_t efidir_grub_dev,
  			   const char *efifile_path,
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 0371782..4c09b19 100644
+index 1e8a773..8484a56 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -2083,7 +2083,7 @@ main (int argc, char *argv[])
+@@ -2129,7 +2129,7 @@ main (int argc, char *argv[])
  					       "\\System\\Library\\CoreServices",
  					       efi_distributor);
  	      if (ret)
@@ -883,7 +883,7 @@ index 0371782..4c09b19 100644
  				 strerror (ret));
  	    }
  
-@@ -2201,7 +2201,7 @@ main (int argc, char *argv[])
+@@ -2248,7 +2248,7 @@ main (int argc, char *argv[])
  	  ret = grub_install_register_efi (efidir_grub_dev,
  					   efifile_path, efi_distributor);
  	  if (ret)

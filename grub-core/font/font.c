@@ -131,6 +131,11 @@ ascii_glyph_lookup (grub_uint32_t code)
 	{
 	  ascii_font_glyph[current] =
 	    grub_malloc (sizeof (struct grub_font_glyph) + ASCII_BITMAP_SIZE);
+	  if (ascii_font_glyph[current] == NULL)
+	    {
+	      ascii_font_glyph[current] = unknown_glyph;
+	      continue;
+	    }
 
 	  ascii_font_glyph[current]->width = 8;
 	  ascii_font_glyph[current]->height = 16;
@@ -172,6 +177,7 @@ grub_font_loader_init (void)
   unknown_glyph->offset_x = 0;
   unknown_glyph->offset_y = -3;
   unknown_glyph->device_width = 8;
+  unknown_glyph->font = &null_font;
   grub_memcpy (unknown_glyph->bitmap,
 	       unknown_glyph_bitmap, sizeof (unknown_glyph_bitmap));
 
@@ -418,12 +424,12 @@ try_open_from_prefix (const char *prefix, const char *filename)
   fullname = grub_malloc (grub_strlen (prefix) + grub_strlen (filename) + 1
 			  + sizeof ("/fonts/") + sizeof (".pf2"));
   if (!fullname)
-    return 0;
+    return NULL;
   ptr = grub_stpcpy (fullname, prefix);
   ptr = grub_stpcpy (ptr, "/fonts/");
   ptr = grub_stpcpy (ptr, filename);
   ptr = grub_stpcpy (ptr, ".pf2");
-  *ptr = 0;
+  *ptr = '\0';
 
   file = grub_buffile_open (fullname, GRUB_FILE_TYPE_FONT, 1024);
   grub_free (fullname);
@@ -452,10 +458,10 @@ grub_font_load (const char *filename)
       if (!file)
 	{
 	  const char *prefix = grub_env_get ("prefix");
+
 	  if (!prefix)
 	    {
-	      grub_error (GRUB_ERR_FILE_NOT_FOUND, N_("variable `%s' isn't set"),
-			  "prefix");
+	      grub_error (GRUB_ERR_FILE_NOT_FOUND, N_("variable `%s' isn't set"), "prefix");
 	      goto fail;
 	    }
 	  file = try_open_from_prefix (prefix, filename);
@@ -652,8 +658,8 @@ grub_font_load (const char *filename)
 	       font->max_char_width, font->max_char_height, font->num_chars);
 #endif
 
-  if (font->max_char_width == 0
-      || font->max_char_height == 0
+  if (font->max_char_width <= 0
+      || font->max_char_height <= 0
       || font->num_chars == 0
       || font->char_index == 0 || font->ascent == 0 || font->descent == 0)
     {
@@ -970,7 +976,7 @@ grub_font_get_height (grub_font_t font)
 }
 
 /* Get the glyph for FONT corresponding to the Unicode code point CODE.
-   Returns the ASCII glyph for the code if no other fonts are available. 
+   Returns the ASCII glyph for the code if no other fonts are available.
    The glyphs are cached once loaded.  */
 struct grub_font_glyph *
 grub_font_get_glyph (grub_font_t font, grub_uint32_t code)

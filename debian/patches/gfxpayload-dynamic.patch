@@ -21,10 +21,10 @@ Patch-Name: gfxpayload-dynamic.patch
  create mode 100644 grub-core/commands/i386/pc/hwmatch.c
 
 diff --git a/configure.ac b/configure.ac
-index c42e4c7..947fd52 100644
+index 73948d1..a793eea 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1937,6 +1937,17 @@ else
+@@ -2025,6 +2025,17 @@ else
  fi
  AC_SUBST([QUICK_BOOT])
  
@@ -43,10 +43,10 @@ index c42e4c7..947fd52 100644
  
  AC_SUBST([FONT_SOURCE])
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index e5b3d27..2ff2668 100644
+index d2cf295..b0bd361 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -964,6 +964,14 @@ module = {
+@@ -993,6 +993,14 @@ module = {
    common = lib/hexdump.c;
  };
  
@@ -214,10 +214,10 @@ index 0000000..6de07ce
 +  grub_unregister_command (cmd);
 +}
 diff --git a/include/grub/file.h b/include/grub/file.h
-index 3156748..e3c4cae 100644
+index a5bf3a7..59d53f6 100644
 --- a/include/grub/file.h
 +++ b/include/grub/file.h
-@@ -122,6 +122,7 @@ enum grub_file_type
+@@ -126,6 +126,7 @@ enum grub_file_type
      GRUB_FILE_TYPE_FS_SEARCH,
      GRUB_FILE_TYPE_AUDIO,
      GRUB_FILE_TYPE_VBE_DUMP,
@@ -226,7 +226,7 @@ index 3156748..e3c4cae 100644
      GRUB_FILE_TYPE_LOADENV,
      GRUB_FILE_TYPE_SAVEENV,
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 80315a3..d46d785 100644
+index fa0fd93..137382b 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -23,6 +23,7 @@ datarootdir="@datarootdir@"
@@ -237,7 +237,7 @@ index 80315a3..d46d785 100644
  
  . "$pkgdatadir/grub-mkconfig_lib"
  
-@@ -145,9 +146,10 @@ linux_entry ()
+@@ -147,9 +148,10 @@ linux_entry ()
        if [ "x$GRUB_GFXPAYLOAD_LINUX" != xtext ]; then
  	  echo "	load_video" | sed "s/^/$submenu_indentation/"
        fi
@@ -251,7 +251,7 @@ index 80315a3..d46d785 100644
    fi
  
    echo "	insmod gzio" | sed "s/^/$submenu_indentation/"
-@@ -226,6 +228,35 @@ prepare_root_cache=
+@@ -228,6 +230,35 @@ prepare_root_cache=
  boot_device_id=
  title_correction_code=
  

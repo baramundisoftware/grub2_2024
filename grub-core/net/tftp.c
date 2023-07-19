@@ -157,7 +157,7 @@ tftp_receive (grub_net_udp_socket_t sock __attribute__ ((unused)),
     {
     case TFTP_OACK:
       data->block_size = TFTP_DEFAULTSIZE_PACKET;
-      data->have_oack = 1; 
+      data->have_oack = 1;
       for (ptr = nb->data + sizeof (tftph->opcode); ptr < nb->tail;)
 	{
 	  if (grub_memcmp (ptr, "tsize\0", sizeof ("tsize\0") - 1) == 0)
@@ -359,21 +359,24 @@ tftp_open (struct grub_file *file, const char *filename)
   file->not_easily_seekable = 1;
   file->data = data;
 
+  grub_dprintf("tftp", "resolving address for %s\n", file->device->net->server);
   err = grub_net_resolve_address (file->device->net->server, &addr);
   if (err)
     {
-      grub_dprintf ("tftp", "file_size is %llu, block_size is %llu\n",
-		    (unsigned long long)data->file_size,
-		    (unsigned long long)data->block_size);
+      grub_dprintf ("tftp", "Address resolution failed: %d\n", err);
+      grub_dprintf ("tftp", "file_size is %" PRIuGRUB_UINT64_T ", block_size is %" PRIuGRUB_UINT32_T "\n",
+		    data->file_size, data->block_size);
       grub_free (data);
       return err;
     }
 
+  grub_dprintf("tftp", "opening connection\n");
   data->sock = grub_net_udp_open (addr,
 				  port ? port : TFTP_SERVER_PORT, tftp_receive,
 				  file);
   if (!data->sock)
     {
+      grub_dprintf("tftp", "connection failed\n");
       grub_free (data);
       return grub_errno;
     }
@@ -465,7 +468,7 @@ tftp_packets_pulled (struct grub_file *file)
   return ack (data, data->block);
 }
 
-static struct grub_net_app_protocol grub_tftp_protocol = 
+static struct grub_net_app_protocol grub_tftp_protocol =
   {
     .name = "tftp",
     .open = tftp_open,

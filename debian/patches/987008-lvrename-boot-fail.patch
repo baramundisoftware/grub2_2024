@@ -32,7 +32,7 @@ Last-Update: 2023-02-25
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/grub-core/disk/lvm.c b/grub-core/disk/lvm.c
-index 8257159..263238e 100644
+index 7942485..8535d5a 100644
 --- a/grub-core/disk/lvm.c
 +++ b/grub-core/disk/lvm.c
 @@ -290,7 +290,7 @@ grub_lvm_detect (grub_disk_t disk,

@@ -40,12 +40,7 @@
 #include <limits.h>
 #endif
 
-#if defined(MAJOR_IN_MKDEV)
-#include <sys/mkdev.h>
-#elif defined(MAJOR_IN_SYSMACROS)
-#include <sys/sysmacros.h>
-#endif
-
+#include <grub/osdep/major.h>
 #include <libdevmapper.h>
 
 #include <grub/types.h>
@@ -267,7 +262,7 @@ grub_util_pull_devmapper (const char *os_dev)
                                  params);
               cipher = grub_strndup (c, seek_head - c);
               if (cipher == NULL)
-                grub_util_error (_("could not strndup cipher of length `%lu'"), (unsigned long)(seek_head - c));
+                grub_util_error (_("could not strndup cipher of length `%" PRIuGRUB_SIZE "'"), (grub_size_t) (seek_head - c));
               remaining -= seek_head - c + 1;
               c = seek_head + 1;
 
@@ -278,7 +273,7 @@ grub_util_pull_devmapper (const char *os_dev)
                                  params);
               cipher_mode = grub_strndup (c, seek_head - c);
               if (cipher_mode == NULL)
-                grub_util_error (_("could not strndup cipher_mode of length `%lu'"), (unsigned long)(seek_head - c));
+                grub_util_error (_("could not strndup cipher_mode of length `%" PRIuGRUB_SIZE "'"), (grub_size_t) (seek_head - c));
 
               remaining -= seek_head - c + 1;
               c = seek_head + 1;

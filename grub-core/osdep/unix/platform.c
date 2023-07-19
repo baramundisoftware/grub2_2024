@@ -165,7 +165,7 @@ grub_install_sgi_setup (const char *install_device,
 			const char *imgfile, const char *destname)
 {
   grub_util_exec ((const char * []){ "dvhtool", "-d",
-	install_device, "--unix-to-vh", 
+	install_device, "--unix-to-vh",
 	imgfile, destname, NULL });
   grub_util_warn ("%s", _("You will have to set `SystemPartition' and `OSLoader' manually."));
 }

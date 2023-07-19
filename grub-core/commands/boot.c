@@ -27,8 +27,8 @@
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
-static grub_err_t (*grub_loader_boot_func) (void *);
-static grub_err_t (*grub_loader_unload_func) (void *);
+static grub_err_t (*grub_loader_boot_func) (void *context);
+static grub_err_t (*grub_loader_unload_func) (void *context);
 static void *grub_loader_context;
 static int grub_loader_flags;
 
@@ -38,7 +38,7 @@ struct grub_simple_loader_hooks
   grub_err_t (*unload) (void);
 };
 
-/* Don't heap allocate this to avoid making grub_loader_set fallible. */
+/* Don't heap allocate this to avoid making grub_loader_set() fallible. */
 static struct grub_simple_loader_hooks simple_loader_hooks;
 
 struct grub_preboot
@@ -143,8 +143,8 @@ grub_loader_unregister_preboot_hook (struct grub_preboot *hnd)
 }
 
 void
-grub_loader_set_ex (grub_err_t (*boot) (void *),
-		    grub_err_t (*unload) (void *),
+grub_loader_set_ex (grub_err_t (*boot) (void *context),
+		    grub_err_t (*unload) (void *context),
 		    void *context,
 		    int flags)
 {

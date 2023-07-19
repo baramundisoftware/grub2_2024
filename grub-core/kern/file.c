@@ -66,7 +66,7 @@ grub_file_open (const char *name, enum grub_file_type type)
   const char *file_name;
   grub_file_filter_id_t filter;
 
-  /* Reset grub_errno before we start */
+  /* Reset grub_errno before we start. */
   grub_errno = GRUB_ERR_NONE;
 
   device_name = grub_file_get_device_name (name);
@@ -215,9 +215,9 @@ grub_file_seek (grub_file_t file, grub_off_t offset)
 		  N_("attempt to seek outside of the file"));
       return -1;
     }
-  
+
   old = file->offset;
   file->offset = offset;
-    
+
   return old;
 }

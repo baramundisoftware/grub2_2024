@@ -1,5 +1,5 @@
-From: Colin Watson <cjwatson@ubuntu.com>
-Date: Mon, 13 Jan 2014 12:13:22 +0000
+From: Julian Andres Klode <julian.klode@canonical.com>
+Date: Wed, 19 Jul 2023 12:15:02 +0200
 Subject: Install signed images if UEFI Secure Boot is enabled
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -14,11 +14,11 @@ Last-Update: 2023-01-15
 
 Patch-Name: install-signed.patch
 ---
- util/grub-install.c | 210 +++++++++++++++++++++++++++++++++++++---------------
- 1 file changed, 151 insertions(+), 59 deletions(-)
+ util/grub-install.c | 220 ++++++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 155 insertions(+), 65 deletions(-)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 48e2d37..5992569 100644
+index c71f339..513d67f 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -80,6 +80,7 @@ static char *label_color;
@@ -70,7 +70,7 @@ index 48e2d37..5992569 100644
    {0, 0, 0, 0, 0, 0}
  };
  
-@@ -833,7 +852,8 @@ main (int argc, char *argv[])
+@@ -849,7 +868,8 @@ main (int argc, char *argv[])
  {
    int is_efi = 0;
    const char *efi_distributor = NULL;
@@ -80,7 +80,7 @@ index 48e2d37..5992569 100644
    char **grub_devices;
    grub_fs_t grub_fs;
    grub_device_t grub_dev = NULL;
-@@ -1103,6 +1123,39 @@ main (int argc, char *argv[])
+@@ -1141,6 +1161,43 @@ main (int argc, char *argv[])
        */
        char *t;
        efi_distributor = bootloader_id;
@@ -106,6 +106,10 @@ index 48e2d37..5992569 100644
 +	  efi_suffix = "aa64";
 +	  efi_suffix_upper = "AA64";
 +	  break;
++	case GRUB_INSTALL_PLATFORM_LOONGARCH64_EFI:
++	  efi_suffix = "loongarch64";
++	  efi_suffix_upper = "LOONGARCH64";
++	  break;
 +	case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
 +	  efi_suffix = "riscv32";
 +	  efi_suffix_upper = "RISCV32";
@@ -120,7 +124,7 @@ index 48e2d37..5992569 100644
        if (removable)
  	{
  	  /* The specification makes stricter requirements of removable
-@@ -1111,66 +1164,16 @@ main (int argc, char *argv[])
+@@ -1149,72 +1206,16 @@ main (int argc, char *argv[])
  	     must have a specific file name depending on the architecture.
  	  */
  	  efi_distributor = "BOOT";
@@ -140,6 +144,9 @@ index 48e2d37..5992569 100644
 -	      break;
 -	    case GRUB_INSTALL_PLATFORM_ARM64_EFI:
 -	      efi_file = "BOOTAA64.EFI";
+-	      break;
+-	    case GRUB_INSTALL_PLATFORM_LOONGARCH64_EFI:
+-	      efi_file = "BOOTLOONGARCH64.EFI";
 -	      break;
 -	    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
 -	      efi_file = "BOOTRISCV32.EFI";
@@ -177,6 +184,9 @@ index 48e2d37..5992569 100644
 -	    case GRUB_INSTALL_PLATFORM_ARM64_EFI:
 -	      efi_file = "grubaa64.efi";
 -	      break;
+-	    case GRUB_INSTALL_PLATFORM_LOONGARCH64_EFI:
+-	      efi_file = "grubloongarch64.efi";
+-	      break;
 -	    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
 -	      efi_file = "grubriscv32.efi";
 -	      break;
@@ -191,7 +201,7 @@ index 48e2d37..5992569 100644
  	}
        t = grub_util_path_concat (3, efidir, "EFI", efi_distributor);
        free (efidir);
-@@ -1376,14 +1379,38 @@ main (int argc, char *argv[])
+@@ -1420,14 +1421,38 @@ main (int argc, char *argv[])
  	}
      }
  
@@ -232,7 +242,7 @@ index 48e2d37..5992569 100644
  	{
  	  char *uuid = NULL;
  	  /*  generic method (used on coreboot and ata mod).  */
-@@ -1941,7 +1968,72 @@ main (int argc, char *argv[])
+@@ -1990,7 +2015,72 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_IA64_EFI:
        {
  	char *dst = grub_util_path_concat (2, efidir, efi_file);

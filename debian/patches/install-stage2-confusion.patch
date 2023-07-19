@@ -12,7 +12,7 @@ Patch-Name: install-stage2-confusion.patch
  1 file changed, 14 insertions(+)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 0fbe7f7..48e2d37 100644
+index 1ad04db..c71f339 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -42,6 +42,7 @@
@@ -23,7 +23,7 @@ index 0fbe7f7..48e2d37 100644
  
  #include <string.h>
  
-@@ -1727,6 +1728,19 @@ main (int argc, char *argv[])
+@@ -1774,6 +1775,19 @@ main (int argc, char *argv[])
  
  	    grub_set_install_backup_ponr ();
  	  }

@@ -1522,6 +1522,8 @@ grub_btrfs_extent_read (struct grub_btrfs_data *data,
       grub_size_t csize;
       grub_err_t err;
       grub_off_t extoff;
+      struct grub_btrfs_leaf_descriptor desc;
+
       if (!data->extent || data->extstart > pos || data->extino != ino
 	  || data->exttree != tree || data->extend <= pos)
 	{
@@ -1534,7 +1536,7 @@ grub_btrfs_extent_read (struct grub_btrfs_data *data,
 	  key_in.type = GRUB_BTRFS_ITEM_TYPE_EXTENT_ITEM;
 	  key_in.offset = grub_cpu_to_le64 (pos);
 	  err = lower_bound (data, &key_in, &key_out, tree,
-			     &elemaddr, &elemsize, NULL, 0);
+			     &elemaddr, &elemsize, &desc, 0);
 	  if (err)
 	    return -1;
 	  if (key_out.object_id != ino
@@ -1573,10 +1575,38 @@ grub_btrfs_extent_read (struct grub_btrfs_data *data,
 			PRIxGRUB_UINT64_T "\n",
 			grub_le_to_cpu64 (key_out.offset),
 			grub_le_to_cpu64 (data->extent->size));
+	  /*
+	   * The way of extent item iteration is pretty bad, it completely
+	   * requires all extents are contiguous, which is not ensured.
+	   *
+	   * Features like NO_HOLE and mixed inline/regular extents can cause
+	   * gaps between file extent items.
+	   *
+	   * The correct way is to follow Linux kernel/U-boot to iterate item
+	   * by item, without any assumption on the file offset continuity.
+	   *
+	   * Here we just manually skip to next item and re-do the verification.
+	   *
+	   * TODO: Rework the whole extent item iteration code, if not the
+	   * whole btrfs implementation.
+	   */
 	  if (data->extend <= pos)
 	    {
-	      grub_error (GRUB_ERR_BAD_FS, "extent not found");
-	      return -1;
+	      err = next (data, &desc, &elemaddr, &elemsize, &key_out);
+	      if (err < 0)
+		return -1;
+	      /* No next item for the inode, we hit the end. */
+	      if (err == 0 || key_out.object_id != ino ||
+		  key_out.type != GRUB_BTRFS_ITEM_TYPE_EXTENT_ITEM)
+		      return pos - pos0;
+
+	      csize = grub_le_to_cpu64 (key_out.offset) - pos;
+	      if (csize > len)
+		      csize = len;
+	      buf += csize;
+	      pos += csize;
+	      len -= csize;
+	      continue;
 	    }
 	}
       csize = data->extend - pos;
@@ -1952,7 +1982,12 @@ find_path (struct grub_btrfs_data *data,
 	    {
 	      err = get_root (data, key, tree, type);
 	      if (err)
-		return err;
+		{
+		  grub_free (direl);
+		  grub_free (path_alloc);
+		  grub_free (origpath);
+		  return err;
+		}
 	    }
 	  continue;
 	}
@@ -2264,6 +2299,33 @@ grub_btrfs_label (grub_device_t device, char **label)
 }
 
 #ifdef GRUB_UTIL
+
+struct embed_region {
+  unsigned int start;
+  unsigned int secs;
+};
+
+/*
+ * https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs(5)#BOOTLOADER_SUPPORT
+ * The first 1 MiB on each device is unused with the exception of primary
+ * superblock that is on the offset 64 KiB and spans 4 KiB.
+ */
+
+static const struct {
+  struct embed_region available;
+  struct embed_region used[6];
+} btrfs_head = {
+  .available = {0, GRUB_DISK_KiB_TO_SECTORS (1024)}, /* The first 1 MiB. */
+  .used = {
+    {0, 1},                                                        /* boot.S. */
+    {GRUB_DISK_KiB_TO_SECTORS (64) - 1, 1},                        /* Overflow guard. */
+    {GRUB_DISK_KiB_TO_SECTORS (64), GRUB_DISK_KiB_TO_SECTORS (4)}, /* 4 KiB superblock. */
+    {GRUB_DISK_KiB_TO_SECTORS (68), 1},                            /* Overflow guard. */
+    {GRUB_DISK_KiB_TO_SECTORS (1024) - 1, 1},                      /* Overflow guard. */
+    {0, 0}                                                         /* Array terminator. */
+  }
+};
+
 static grub_err_t
 grub_btrfs_embed (grub_device_t device __attribute__ ((unused)),
 		  unsigned int *nsectors,
@@ -2271,25 +2333,62 @@ grub_btrfs_embed (grub_device_t device __attribute__ ((unused)),
 		  grub_embed_type_t embed_type,
 		  grub_disk_addr_t **sectors)
 {
-  unsigned i;
+  unsigned int i, j, n = 0;
+  const struct embed_region *u;
+  grub_disk_addr_t *map;
 
   if (embed_type != GRUB_EMBED_PCBIOS)
     return grub_error (GRUB_ERR_NOT_IMPLEMENTED_YET,
 		       "BtrFS currently supports only PC-BIOS embedding");
 
-  if (64 * 2 - 1 < *nsectors)
-    return grub_error (GRUB_ERR_OUT_OF_RANGE,
-		       N_("your core.img is unusually large.  "
-			  "It won't fit in the embedding area"));
-
-  *nsectors = 64 * 2 - 1;
-  if (*nsectors > max_nsectors)
-    *nsectors = max_nsectors;
-  *sectors = grub_calloc (*nsectors, sizeof (**sectors));
-  if (!*sectors)
+  map = grub_calloc (btrfs_head.available.secs, sizeof (*map));
+  if (map == NULL)
     return grub_errno;
-  for (i = 0; i < *nsectors; i++)
-    (*sectors)[i] = i + 1;
+
+  /*
+   * Populating the map array so that it can be used to index if a disk
+   * address is available to embed:
+   *   - 0: available,
+   *   - 1: unavailable.
+   */
+  for (u = btrfs_head.used; u->secs; ++u)
+    {
+      unsigned int end = u->start + u->secs;
+
+      if (end > btrfs_head.available.secs)
+        end = btrfs_head.available.secs;
+      for (i = u->start; i < end; ++i)
+        map[i] = 1;
+    }
+
+  /* Adding up n until it matches total size of available embedding area. */
+  for (i = 0; i < btrfs_head.available.secs; ++i)
+    if (map[i] == 0)
+      n++;
+
+  if (n < *nsectors)
+    {
+      grub_free (map);
+      return grub_error (GRUB_ERR_OUT_OF_RANGE,
+		         N_("your core.img is unusually large.  "
+			    "It won't fit in the embedding area"));
+    }
+
+  if (n > max_nsectors)
+    n = max_nsectors;
+
+  /*
+   * Populating the array so that it can used to index disk block address for
+   * an image file's offset to be embedded on disk (the unit is in sectors):
+   *   - i: The disk block address relative to btrfs_head.available.start,
+   *   - j: The offset in image file.
+   */
+  for (i = 0, j = 0; i < btrfs_head.available.secs && j < n; ++i)
+    if (map[i] == 0)
+      map[j++] = btrfs_head.available.start + i;
+
+  *nsectors = n;
+  *sectors = map;
 
   return GRUB_ERR_NONE;
 }

@@ -8,10 +8,10 @@ Patch-Name: grub.cfg-400.patch
  1 file changed, 4 insertions(+)
 
 diff --git a/util/grub-mkconfig.in b/util/grub-mkconfig.in
-index f8cbb8d..0fd618e 100644
+index 32c480d..27e5cda 100644
 --- a/util/grub-mkconfig.in
 +++ b/util/grub-mkconfig.in
-@@ -289,6 +289,10 @@ for i in "${grub_mkconfig_dir}"/* ; do
+@@ -293,6 +293,10 @@ for i in "${grub_mkconfig_dir}"/* ; do
    esac
  done
  

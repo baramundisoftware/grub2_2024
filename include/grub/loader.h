@@ -40,8 +40,8 @@ void EXPORT_FUNC (grub_loader_set) (grub_err_t (*boot) (void),
 				    grub_err_t (*unload) (void),
 				    int flags);
 
-void EXPORT_FUNC (grub_loader_set_ex) (grub_err_t (*boot) (void *),
-				       grub_err_t (*unload) (void *),
+void EXPORT_FUNC (grub_loader_set_ex) (grub_err_t (*boot) (void *context),
+				       grub_err_t (*unload) (void *context),
 				       void *context,
 				       int flags);
 

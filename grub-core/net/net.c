@@ -60,7 +60,7 @@ link_layer_find_entry (const grub_net_network_level_address_t *proto,
     return NULL;
   for (i = 0; i < LINK_LAYER_CACHE_SIZE; i++)
     {
-      if (card->link_layer_table[i].avail == 1 
+      if (card->link_layer_table[i].avail == 1
 	  && grub_net_addr_cmp (&card->link_layer_table[i].nl_address,
 				proto) == 0)
 	return &card->link_layer_table[i];
@@ -180,7 +180,7 @@ grub_net_link_layer_resolve (struct grub_net_network_level_interface *inf,
       *hw_addr = entry->ll_address;
       return GRUB_ERR_NONE;
     }
-  return grub_error (GRUB_ERR_TIMEOUT, 
+  return grub_error (GRUB_ERR_TIMEOUT,
 		     N_("timeout: could not resolve hardware address"));
 }
 
@@ -237,7 +237,7 @@ static void
 grub_net_network_level_interface_register (struct grub_net_network_level_interface *inter);
 
 static struct grub_net_network_level_interface *
-grub_net_add_addr_real (char *name, 
+grub_net_add_addr_real (char *name,
 			struct grub_net_card *card,
 			const grub_net_network_level_address_t *addr,
 			const grub_net_link_level_address_t *hwaddress,
@@ -263,7 +263,7 @@ grub_net_add_addr_real (char *name,
 }
 
 struct grub_net_network_level_interface *
-grub_net_add_addr (const char *name, 
+grub_net_add_addr (const char *name,
 		   struct grub_net_card *card,
 		   const grub_net_network_level_address_t *addr,
 		   const grub_net_link_level_address_t *hwaddress,
@@ -271,7 +271,7 @@ grub_net_add_addr (const char *name,
 {
   char *name_dup = grub_strdup (name);
   struct grub_net_network_level_interface *ret;
- 
+
   if (!name_dup)
     return NULL;
   ret = grub_net_add_addr_real (name_dup, card, addr, hwaddress, flags);
@@ -292,6 +292,7 @@ grub_net_ipv6_get_link_local (struct grub_net_card *card,
   addr.type = GRUB_NET_NETWORK_LEVEL_PROTOCOL_IPV6;
   addr.ipv6[0] = grub_cpu_to_be64_compile_time (0xfe80ULL << 48);
   addr.ipv6[1] = grub_net_ipv6_get_id (hwaddr);
+  addr.option = 0;
 
   FOR_NET_NETWORK_LEVEL_INTERFACES (inf)
   {
@@ -442,12 +443,13 @@ parse_ip6 (const char *val, grub_uint64_t *ip, const char **rest)
   grub_uint16_t newip[8];
   const char *ptr = val;
   int word, quaddot = -1;
-  int bracketed = 0;
+  bool bracketed = false;
 
-  if (ptr[0] == '[') {
-    bracketed = 1;
-    ptr++;
-  }
+  if (ptr[0] == '[')
+    {
+      bracketed = true;
+      ptr++;
+    }
 
   if (ptr[0] == ':' && ptr[1] != ':')
     return 0;
@@ -486,9 +488,8 @@ parse_ip6 (const char *val, grub_uint64_t *ip, const char **rest)
       grub_memset (&newip[quaddot], 0, (7 - word) * sizeof (newip[0]));
     }
   grub_memcpy (ip, newip, 16);
-  if (bracketed && *ptr == ']') {
+  if (bracketed && *ptr == ']')
     ptr++;
-  }
   if (rest)
     *rest = ptr;
   return 1;
@@ -522,7 +523,7 @@ match_net (const grub_net_network_level_netaddress_t *net,
 	    mask[0] = 0xffffffffffffffffULL << (64 - net->ipv6.masksize);
 	    mask[1] = 0;
 	  }
-	else 
+	else
 	  {
 	    mask[0] = 0xffffffffffffffffULL;
 	    mask[1] = 0xffffffffffffffffULL << (128 - net->ipv6.masksize);
@@ -721,7 +722,7 @@ grub_cmd_deladdr (struct grub_command *cmd __attribute__ ((unused)),
   grub_free (inter->name);
   grub_free (inter);
 
-  return GRUB_ERR_NONE;  
+  return GRUB_ERR_NONE;
 }
 
 void
@@ -742,14 +743,14 @@ grub_net_addr_to_str (const grub_net_network_level_address_t *target, char *buf)
 	  {
 	    grub_snprintf (ptr, 6, "%" PRIxGRUB_UINT64_T ":",
 			   (n >> (48 - 16 * i)) & 0xffff);
-	    ptr += grub_strlen (ptr); 
+	    ptr += grub_strlen (ptr);
 	  }
 	n  = grub_be_to_cpu64 (target->ipv6[1]);
 	for (i = 0; i < 3; i++)
 	  {
 	    grub_snprintf (ptr, 6, "%" PRIxGRUB_UINT64_T ":",
 			   (n >> (48 - 16 * i)) & 0xffff);
-	    ptr += grub_strlen (ptr); 
+	    ptr += grub_strlen (ptr);
 	  }
 	grub_snprintf (ptr, 5, "%" PRIxGRUB_UINT64_T, n & 0xffff);
 	return;
@@ -788,6 +789,20 @@ grub_net_hwaddr_to_str (const grub_net_link_level_address_t *addr, char *str)
       }
     }
   grub_printf (_("Unsupported hw address type %d\n"), addr->type);
+}
+
+void
+grub_net_vlan_to_str (grub_uint16_t vlantag, char *str)
+{
+  str[0] = 0;
+
+  /* 12 bits are used to identify the vlan in 802.1Q. */
+  vlantag = vlantag & 0x0fff;
+
+  if (vlantag == 0)
+    return;
+
+  grub_snprintf (str, GRUB_NET_MAX_STR_VLAN_LEN, "vlan%u", vlantag);
 }
 
 int
@@ -937,7 +952,7 @@ grub_net_network_level_interface_register (struct grub_net_network_level_interfa
       return;
     for (ptr = name; *ptr; ptr++)
       if (*ptr == ':')
-	*ptr = '_';    
+	*ptr = '_';
     grub_env_set (name, buf);
     grub_register_variable_hook (name, 0, hwaddr_set_env);
     grub_env_export (name);
@@ -954,7 +969,7 @@ grub_net_network_level_interface_register (struct grub_net_network_level_interfa
       return;
     for (ptr = name; *ptr; ptr++)
       if (*ptr == ':')
-	*ptr = '_';    
+	*ptr = '_';
     grub_env_set (name, buf);
     grub_register_variable_hook (name, 0, addr_set_env);
     grub_env_export (name);
@@ -969,6 +984,78 @@ grub_net_network_level_interface_register (struct grub_net_network_level_interfa
   grub_net_network_level_interfaces = inter;
 }
 
+int
+grub_ipv6_get_masksize (grub_uint16_t be_mask[8])
+{
+  grub_uint8_t *mask;
+  grub_uint16_t mask16[8];
+  int x, y;
+  int ret = 128;
+
+  grub_memcpy (mask16, be_mask, sizeof (mask16));
+  for (x = 0; x < 8; x++)
+    mask16[x] = grub_be_to_cpu16 (mask16[x]);
+
+  mask = (grub_uint8_t *)mask16;
+
+  for (x = 15; x >= 0; x--)
+    {
+      grub_uint8_t octet = mask[x];
+      if (!octet)
+	{
+	  ret -= 8;
+	  continue;
+	}
+      for (y = 0; y < 8; y++)
+	{
+	  if (octet & (1 << y))
+	    break;
+	  else
+	    ret--;
+	}
+      break;
+    }
+
+  return ret;
+}
+
+grub_err_t
+grub_net_add_ipv6_local (struct grub_net_network_level_interface *inter,
+			 int mask)
+{
+  struct grub_net_route *route;
+
+  if (inter->address.type != GRUB_NET_NETWORK_LEVEL_PROTOCOL_IPV6)
+    return 0;
+
+  if (mask == -1)
+      mask = grub_ipv6_get_masksize ((grub_uint16_t *) inter->address.ipv6);
+
+  if (mask == -1)
+    return 0;
+
+  route = grub_zalloc (sizeof (*route));
+  if (!route)
+    return grub_errno;
+
+  route->name = grub_xasprintf ("%s:local", inter->name);
+  if (!route->name)
+    {
+      grub_free (route);
+      return grub_errno;
+    }
+
+  route->target.type = GRUB_NET_NETWORK_LEVEL_PROTOCOL_IPV6;
+  grub_memcpy (route->target.ipv6.base, inter->address.ipv6,
+	       sizeof (inter->address.ipv6));
+  route->target.ipv6.masksize = mask;
+  route->is_gateway = 0;
+  route->interface = inter;
+
+  grub_net_route_register (route);
+
+  return 0;
+}
 
 grub_err_t
 grub_net_add_ipv4_local (struct grub_net_network_level_interface *inter,
@@ -1029,12 +1116,12 @@ grub_cmd_addaddr (struct grub_command *cmd __attribute__ ((unused)),
 
   if (argc != 3)
     return grub_error (GRUB_ERR_BAD_ARGUMENT, N_("three arguments expected"));
-  
+
   FOR_NET_CARDS (card)
     if (grub_strcmp (card->name, args[1]) == 0)
       break;
   if (card == NULL)
-    return grub_error (GRUB_ERR_BAD_ARGUMENT, N_("card not found")); 
+    return grub_error (GRUB_ERR_BAD_ARGUMENT, N_("card not found"));
 
   err = grub_net_resolve_address (args[2], &addr);
   if (err)
@@ -1064,7 +1151,7 @@ grub_cmd_delroute (struct grub_command *cmd __attribute__ ((unused)),
 
   if (argc != 1)
     return grub_error (GRUB_ERR_BAD_ARGUMENT, N_("one argument expected"));
-  
+
   for (prev = &grub_net_routes, route = *prev; route; prev = &((*prev)->next),
 	 route = *prev)
     if (grub_strcmp (route->name, args[0]) == 0)
@@ -1145,7 +1232,7 @@ grub_cmd_addroute (struct grub_command *cmd __attribute__ ((unused)),
 		       N_("three arguments expected"));
 
   grub_net_resolve_net_address  (args[1], &target);
-  
+
   if (grub_strcmp (args[2], "gw") == 0 && argc >= 4)
     {
       grub_err_t err;
@@ -1169,6 +1256,42 @@ grub_cmd_addroute (struct grub_command *cmd __attribute__ ((unused)),
 			   N_("unrecognised network interface `%s'"), args[2]);
       return grub_net_add_route (args[0], target, inter);
     }
+}
+
+static grub_err_t
+grub_cmd_setvlan (struct grub_command *cmd __attribute__ ((unused)),
+		  int argc, char **args)
+{
+  const char *vlan_string, *vlan_string_end;
+  unsigned long vlantag;
+  struct grub_net_network_level_interface *inter;
+
+  if (argc != 2)
+    return grub_error (GRUB_ERR_BAD_ARGUMENT, N_("two arguments expected"));
+
+  vlan_string = args[1];
+  vlantag = grub_strtoul (vlan_string, &vlan_string_end, 10);
+
+  if (*vlan_string == '\0' || *vlan_string_end != '\0')
+    return grub_error (GRUB_ERR_BAD_NUMBER,
+		       N_("non-numeric or invalid number `%s'"), vlan_string);
+
+  if (vlantag > 4094)
+    return grub_error (GRUB_ERR_OUT_OF_RANGE,
+		       N_("vlan id `%s' not in the valid range of 0-4094"),
+		       vlan_string);
+
+  FOR_NET_NETWORK_LEVEL_INTERFACES (inter)
+    {
+      if (grub_strcmp (inter->name, args[0]) != 0)
+	continue;
+
+      inter->vlantag = vlantag;
+      return GRUB_ERR_NONE;
+    }
+
+  return grub_error (GRUB_ERR_BAD_ARGUMENT,
+                     N_("network interface not found"));
 }
 
 static void
@@ -1225,10 +1348,10 @@ grub_cmd_listroutes (struct grub_command *cmd __attribute__ ((unused)),
     if (route->is_gateway)
       {
 	grub_printf ("gw ");
-	print_address (&route->gw);	
+	print_address (&route->gw);
       }
     else
-      grub_printf ("%s", route->interface->name);      
+      grub_printf ("%s", route->interface->name);
     grub_printf ("\n");
   }
   return GRUB_ERR_NONE;
@@ -1259,9 +1382,12 @@ grub_cmd_listaddrs (struct grub_command *cmd __attribute__ ((unused)),
   {
     char bufh[GRUB_NET_MAX_STR_HWADDR_LEN];
     char bufn[GRUB_NET_MAX_STR_ADDR_LEN];
+    char bufv[GRUB_NET_MAX_STR_VLAN_LEN];
+
     grub_net_hwaddr_to_str (&inf->hwaddress, bufh);
     grub_net_addr_to_str (&inf->address, bufn);
-    grub_printf ("%s %s %s\n", inf->name, bufh, bufn);
+    grub_net_vlan_to_str (inf->vlantag, bufv);
+    grub_printf ("%s %s %s %s\n", inf->name, bufh, bufn, bufv);
   }
   return GRUB_ERR_NONE;
 }
@@ -1274,7 +1400,7 @@ grub_net_open_real (const char *name)
 {
   grub_net_app_level_t proto;
   const char *protname, *server;
-  char *host;
+  char *host, *port_start;
   grub_size_t protnamelen;
   int try;
   int port = 0;
@@ -1313,33 +1439,34 @@ grub_net_open_real (const char *name)
       grub_error (GRUB_ERR_NET_BAD_ADDRESS,
 		  N_("no server is specified"));
       return NULL;
-    }  
+    }
 
-  char* port_start;
-  /* ipv6 or port specified? */
+  /* IPv6 or port specified? */
   if ((port_start = grub_strchr (server, ':')))
-  {
-      char* ipv6_begin;
-      if((ipv6_begin = grub_strchr (server, '[')))
+    {
+      char *ipv6_begin;
+
+      if ((ipv6_begin = grub_strchr (server, '[')))
 	{
-	  char* ipv6_end = grub_strchr (server, ']');
-	  if(!ipv6_end)
+	  char *ipv6_end = grub_strchr (server, ']');
+
+	  if (!ipv6_end)
 	    {
-	      grub_error (GRUB_ERR_NET_BAD_ADDRESS,
-		      N_("mismatched [ in address"));
+	      grub_error (GRUB_ERR_NET_BAD_ADDRESS, N_("mismatched [ in address"));
 	      return NULL;
 	    }
-	  /* port number after bracketed ipv6 addr */
-	  if(ipv6_end[1] == ':')
+
+	  /* Port number after bracketed IPv6 addr. */
+	  if (ipv6_end[1] == ':')
 	    {
 	      port = grub_strtoul (ipv6_end + 2, NULL, 10);
-	      if(port > 65535)
+	      if (port == 0 || port > 65535)
 		{
-		  grub_error (GRUB_ERR_NET_BAD_ADDRESS,
-			  N_("bad port number"));
+		  grub_error (GRUB_ERR_NET_BAD_ADDRESS, N_("bad port number"));
 		  return NULL;
 		}
 	    }
+
 	  host = grub_strndup (ipv6_begin, (ipv6_end - ipv6_begin) + 1);
 	}
       else
@@ -1347,12 +1474,12 @@ grub_net_open_real (const char *name)
 	  if (grub_strchr (port_start + 1, ':'))
 	    {
 	      int iplen = grub_strlen (server);
-	      /* bracket bare ipv6 addrs */
+
+	      /* Bracket bare IPv6 addr. */
 	      host = grub_malloc (iplen + 3);
-	      if(!host)
-		{
-		  return NULL;
-		}
+	      if (!host)
+                return NULL;
+
 	      host[0] = '[';
 	      grub_memcpy (host + 1, server, iplen);
 	      host[iplen + 1] = ']';
@@ -1360,26 +1487,22 @@ grub_net_open_real (const char *name)
 	    }
 	  else
 	    {
-	      /* hostname:port or ipv4:port */
+	      /* hostname:port or IPv4:port */
 	      port = grub_strtol (port_start + 1, NULL, 10);
-	      if(port > 65535)
+	      if (port == 0 || port > 65535)
 		{
-		  grub_error (GRUB_ERR_NET_BAD_ADDRESS,
-			  N_("bad port number"));
+		  grub_error (GRUB_ERR_NET_BAD_ADDRESS, N_("bad port number"));
 		  return NULL;
 		}
+
 	      host = grub_strndup (server, port_start - server);
 	    }
 	}
     }
   else
-    {
-      host = grub_strdup (server);
-    }
+    host = grub_strdup (server);
   if (!host)
-    {
-      return NULL;
-    }
+    return NULL;
 
   for (try = 0; try < 2; try++)
     {
@@ -1390,19 +1513,14 @@ grub_net_open_real (const char *name)
 	  {
 	    grub_net_t ret = grub_zalloc (sizeof (*ret));
 	    if (!ret)
-		grub_free (host);
-	    if (host)
 	      {
-		ret->server = grub_strdup (host);
-		if (!ret->server)
-		  {
-		    grub_free (ret);
-		    return NULL;
-		  }
+		grub_free (host);
+		return NULL;
 	      }
-	    ret->fs = &grub_net_fs;
 	    ret->protocol = proto;
 	    ret->port = port;
+	    ret->server = host;
+	    ret->fs = &grub_net_fs;
 	    return ret;
 	  }
       }
@@ -1476,6 +1594,7 @@ grub_net_open_real (const char *name)
   grub_error (GRUB_ERR_UNKNOWN_DEVICE, N_("disk `%s' not found"),
 	      name);
 
+  grub_free (host);
   return NULL;
 }
 
@@ -1575,7 +1694,7 @@ receive_packets (struct grub_net_card *card, int *stop_condition)
   while (received < 100)
     {
       /* Maybe should be better have a fixed number of packets for each card
-	 and just mark them as used and not used.  */ 
+	 and just mark them as used and not used.  */
       struct grub_net_buff *nb;
 
       if (received > 10 && stop_condition && *stop_condition)
@@ -1662,7 +1781,8 @@ grub_net_poll_cards_idle_real (void)
 	|| ctime >= card->last_poll + card->idle_poll_delay_ms)
       receive_packets (card, 0);
   }
-  grub_net_tcp_retransmit ();
+  if (grub_net_cards != NULL)
+    grub_net_tcp_retransmit ();
 }
 
 /*  Read from the packets list*/
@@ -1688,7 +1808,7 @@ grub_net_fs_read_real (grub_file_t file, char *buf, grub_size_t len)
 	  total += amount;
 	  file->device->net->offset += amount;
 	  if (grub_file_progress_hook)
-	    grub_file_progress_hook (0, 0, amount, file);
+	    grub_file_progress_hook (0, 0, amount, NULL, file);
 	  if (buf)
 	    {
 	      grub_memcpy (ptr, nb->data, amount);
@@ -1736,7 +1856,7 @@ have_ahead (struct grub_file *file)
   return ret;
 }
 
-static grub_err_t 
+static grub_err_t
 grub_net_seek_real (struct grub_file *file, grub_off_t offset)
 {
   if (offset == file->device->net->offset)
@@ -1812,8 +1932,8 @@ static grub_err_t
 grub_net_fini_hw (int noreturn __attribute__ ((unused)))
 {
   struct grub_net_card *card;
-  FOR_NET_CARDS (card) 
-    if (card->opened)
+  FOR_NET_CARDS (card)
+    if (card->opened && !(card->flags & GRUB_NET_CARD_NO_CLOSE_ON_FINI_HW))
       {
 	if (card->driver->close)
 	  card->driver->close (card);
@@ -1963,7 +2083,7 @@ grub_net_search_config_file (char *config)
 static struct grub_preboot *fini_hnd;
 
 static grub_command_t cmd_addaddr, cmd_deladdr, cmd_addroute, cmd_delroute;
-static grub_command_t cmd_lsroutes, cmd_lscards;
+static grub_command_t cmd_setvlan, cmd_lsroutes, cmd_lscards;
 static grub_command_t cmd_lsaddr, cmd_slaac;
 
 GRUB_MOD_INIT(net)
@@ -2001,6 +2121,9 @@ GRUB_MOD_INIT(net)
   cmd_delroute = grub_register_command ("net_del_route", grub_cmd_delroute,
 					N_("SHORTNAME"),
 					N_("Delete a network route."));
+  cmd_setvlan = grub_register_command ("net_set_vlan", grub_cmd_setvlan,
+				       N_("SHORTNAME VLANID"),
+				       N_("Set an interface's vlan id."));
   cmd_lsroutes = grub_register_command ("net_ls_routes", grub_cmd_listroutes,
 					"", N_("list network routes"));
   cmd_lscards = grub_register_command ("net_ls_cards", grub_cmd_listcards,
@@ -2036,5 +2159,5 @@ GRUB_MOD_FINI(net)
   grub_net_open = NULL;
   grub_net_fini_hw (0);
   grub_loader_unregister_preboot_hook (fini_hnd);
-  grub_net_poll_cards_idle = grub_net_poll_cards_idle_real;
+  grub_net_poll_cards_idle = NULL;
 }

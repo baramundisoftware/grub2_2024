@@ -30,6 +30,13 @@ export HOST_LDFLAGS
 export TARGET_CPPFLAGS := -Wno-unused-but-set-variable
 export TARGET_LDFLAGS := -no-pie
 
+# upstream changed the tests to hard errors instead of skips when not running as root, so mark them
+# as expected failure.
+ifneq ($(shell id -u), 0)
+export DISABLE_HARD_ERRORS := 1
+export XFAIL_TESTS := ext234_test iso9660_test hfsplus_test ntfs_test reiserfs_test fat_test minixfs_test xfs_test f2fs_test nilfs2_test romfs_test exfat_test udf_test hfs_test jfs_test btrfs_test zfs_test luks1_test luks2_test grub_cmd_cryptomount
+endif
+
 # Ensure that debhelper doesn't try to set these; we need to be careful
 # about HOST_* vs. TARGET_*.
 export CPPFLAGS :=
@@ -409,25 +416,23 @@ install/grub-pc install/grub-efi-ia32 install/grub-efi-amd64 install/grub-efi-ia
 		xargs -0r chmod +x
 	find debian/tmp-$(package)/usr/lib/grub -name gdb_grub -print0 | \
 		xargs -0r chmod -x
-	find debian/tmp-$(package)/usr/lib/grub -name gmodule.pl -print0 | \
-		xargs -0r chmod -x
 
 	mkdir -p debian/$(package_bin)/usr/share/lintian/overrides
-	echo "$(package_bin): unstripped-binary-or-object *.mod" \
+	echo "$(package_bin): unstripped-binary-or-object [*.mod]" \
 		>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin)
 	cd debian/tmp-$(package) && find usr/lib/grub -name kernel.img \
-		| sed -e "s%.*%$(package_bin): statically-linked-binary &%g" \
+		| sed -e "s%.*%$(package_bin): statically-linked-binary [&]%g" \
 	>> $(CURDIR)/debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin)
 	cd debian/tmp-$(package) && find usr/lib/grub -name kernel.img \
-		| sed -e "s%.*%$(package_bin): unstripped-binary-or-object &%g" \
+		| sed -e "s%.*%$(package_bin): unstripped-binary-or-object [&]%g" \
 	>> $(CURDIR)/debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin)
 	if ([ "$@" = "install/grub-efi-amd64" ] && [ "$(DEB_HOST_ARCH_CPU)" = "i386" ]) || \
 	   ([ "$@" != "install/grub-emu" ] && [ "$(DEB_HOST_ARCH_CPU):$(DEB_HOST_ARCH_BITS)" = "amd64:32" ]) || \
 	   [ "$@" = "install/grub-xen" ]; then \
-		echo "$(package_bin): binary-from-other-architecture *.mod" \
+		echo "$(package_bin): binary-from-other-architecture [*.mod]" \
 			>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ; \
 		cd debian/tmp-$(package) && find usr/lib/grub -name kernel.img \
-			| sed -e "s%.*%$(package_bin): binary-from-other-architecture &%g" \
+			| sed -e "s%.*%$(package_bin): binary-from-other-architecture [&]%g" \
 		>> $(CURDIR)/debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ; \
 	fi
 	if ([ "$@" = "install/grub-pc" ] || \
@@ -437,36 +442,36 @@ install/grub-pc install/grub-efi-ia32 install/grub-efi-amd64 install/grub-efi-ia
 	    [ "$@" = "install/grub-emu" ]) && \
 	   [ "$(DEB_HOST_ARCH_OS)" = "linux" ] && \
 	   [ "$(DEB_HOST_ARCH_CPU):$(DEB_HOST_ARCH_BITS)" != "amd64:64" ] ; then \
-		echo "$(package_bin): binary-from-other-architecture *efiemu64.o" \
+		echo "$(package_bin): binary-from-other-architecture [*efiemu64.o]" \
 			>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ; \
 	fi
 	case $@ in \
 		install/grub-efi*) \
 			(echo "# These aren't Windows executables, and these features wouldn't be very useful." \
-			 echo "$(package_bin): portable-executable-missing-security-features *.efi ASLR DEP/NX") \
+			 echo "$(package_bin): portable-executable-missing-security-features [*.efi ASLR DEP/NX") \
 				>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ;; \
 	esac
 	if [ "$@" = "install/grub-emu" ]; then \
 		(echo "# This seems to be due to a readelf bug: https://bugs.debian.org/929585"; \
-		 echo "$(package_bin): binary-or-shlib-defines-rpath usr/lib/grub/*-emu/macho.mod 0x0") \
+		 echo "$(package_bin): binary-or-shlib-defines-rpath [usr/lib/grub/*-emu/macho.mod] 0x0") \
 			>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin); \
 	fi
 
 	mkdir -p debian/$(package_dbg)/usr/share/lintian/overrides
-	echo "$(package_dbg): unstripped-binary-or-object *.module" \
+	echo "$(package_dbg): unstripped-binary-or-object [*.module]" \
 		>> debian/$(package_dbg)/usr/share/lintian/overrides/$(package_dbg)
-	echo "$(package_dbg): statically-linked-binary *.image" \
+	echo "$(package_dbg): statically-linked-binary [*.image]" \
 		>> debian/$(package_dbg)/usr/share/lintian/overrides/$(package_dbg)
 	cd debian/tmp-$(package) && find usr/lib/grub -name kernel.exec \
-		| sed -e "s%.*%$(package_dbg): statically-linked-binary &%g" \
+		| sed -e "s%.*%$(package_dbg): statically-linked-binary [&]%g" \
 	>> $(CURDIR)/debian/$(package_dbg)/usr/share/lintian/overrides/$(package_dbg)
 	if ([ "$@" = "install/grub-efi-amd64" ] && [ "$(DEB_HOST_ARCH_CPU)" = "i386" ]) || \
 	   ([ "$@" != "install/grub-emu" ] && [ "$(DEB_HOST_ARCH_CPU):$(DEB_HOST_ARCH_BITS)" = "amd64:32" ]) || \
 	   [ "$@" = "install/grub-xen" ] ; then \
-		echo "$(package_dbg): binary-from-other-architecture *.module" \
+		echo "$(package_dbg): binary-from-other-architecture [*.module]" \
 			>> debian/$(package_dbg)/usr/share/lintian/overrides/$(package_dbg) ; \
 		cd debian/tmp-$(package) && find usr/lib/grub -name kernel.exec \
-			| sed -e "s%.*%$(package_dbg): binary-from-other-architecture &%g" \
+			| sed -e "s%.*%$(package_dbg): binary-from-other-architecture [&]%g" \
 		>> $(CURDIR)/debian/$(package_dbg)/usr/share/lintian/overrides/$(package_dbg) ; \
 	fi
 

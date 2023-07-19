@@ -7,14 +7,14 @@ Last-Update: 2013-12-25
 
 Patch-Name: mkconfig-signed-kernel.patch
 ---
- util/grub.d/10_linux.in | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ util/grub.d/10_linux.in | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 1603a75..1b8c6e1 100644
+index 889ef0f..850189e 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
-@@ -161,8 +161,16 @@ linux_entry ()
+@@ -163,8 +163,16 @@ linux_entry ()
    message="$(gettext_printf "Loading Linux %s ..." ${version})"
    sed "s/^/$submenu_indentation/" << EOF
  	echo	'$(echo "$message" | grub_quote)'
@@ -31,17 +31,14 @@ index 1603a75..1b8c6e1 100644
    if test -n "${initrd}" ; then
      # TRANSLATORS: ramdisk isn't identifier. Should be translated.
      message="$(gettext_printf "Loading initial ramdisk ...")"
-@@ -214,6 +222,13 @@ submenu_indentation=""
- is_top_level=true
- while [ "x$list" != "x" ] ; do
-   linux=`version_find_latest $list`
-+  case $linux in
-+    *.efi.signed)
-+      # We handle these in linux_entry.
-+      list=`echo $list | tr ' ' '\n' | grep -vx $linux | tr '\n' ' '`
-+      continue
-+      ;;
-+  esac
-   gettext_printf "Found linux image: %s\n" "$linux" >&2
-   basename=`basename $linux`
-   dirname=`dirname $linux`
+@@ -217,8 +225,8 @@ submenu_indentation=""
+ # Temporarily replace the '.old' suffix by ' 1' and append ' 2' for all
+ # other files to order the '.old' files after their non-old counterpart
+ # in reverse-sorted order.
+-
+-reverse_sorted_list=$(echo $list | tr ' ' '\n' | sed -e 's/\.old$/ 1/; / 1$/! s/$/ 2/' | version_sort -r | sed -e 's/ 1$/.old/; s/ 2$//')
++# DEBIAN: We handle .efi.signed in linux_entry
++reverse_sorted_list=$(echo $list | tr ' ' '\n' | grep -v '.efi.signed$' | sed -e 's/\.old$/ 1/; / 1$/! s/$/ 2/' | version_sort -r | sed -e 's/ 1$/.old/; s/ 2$//')
+ 
+ if [ "x$GRUB_TOP_LEVEL" != x ]; then
+   reverse_sorted_list=$(grub_move_to_front "$GRUB_TOP_LEVEL" ${reverse_sorted_list})
