@@ -13,7 +13,7 @@ Patch-Name: default-grub-d.patch
  2 files changed, 112 insertions(+), 21 deletions(-)
 
 diff --git a/grub-core/osdep/unix/config.c b/grub-core/osdep/unix/config.c
-index 7d63251..545d64b 100644
+index 0b1f761..a907364 100644
 --- a/grub-core/osdep/unix/config.c
 +++ b/grub-core/osdep/unix/config.c
 @@ -24,6 +24,9 @@
@@ -191,7 +191,7 @@ index 7d63251..545d64b 100644
 +  free (cfgdir);
  }
 diff --git a/util/grub-mkconfig.in b/util/grub-mkconfig.in
-index 0fd618e..0265a5a 100644
+index 27e5cda..569700b 100644
 --- a/util/grub-mkconfig.in
 +++ b/util/grub-mkconfig.in
 @@ -160,6 +160,11 @@ fi

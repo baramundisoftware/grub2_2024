@@ -1,3 +1,32 @@
+grub2 (2.12~rc1-1) experimental; urgency=medium
+
+  [ Julian Andres Klode ]
+  * New upstream version, 2.12~rc1
+  * build-efi-images: Drop linuxefi, using new loaders now
+  * Do not try to install gmodule.pl, it was rewritten in Python
+  * Rebase patches
+    - Temporarily drop -dpkg-version-comparison.patch, needs to be adjusted
+      for switch from comparison to sort -V
+    - Drop -linuxefi.patch, fix-lockdown.patch, arm64-handover-to-kernel-if-sb-enabled.patch;
+      we will be using the upstream loader now, with an additional compat
+      layer for shim tbd
+    - Apply new network patch set from mailing list (no additional patches yet)
+    - Drop ton of patches applied upstream
+  * Implement an alternative approach to secure boot, using the upstream EFI
+    loader, and temporarily emulating load_image() and friends using Ubuntu's
+    peimage file while a image protocol is being added to shim.
+  * Build-Depend on gawk, it fails to compile with mawk
+  * Fix lzo test and xfail tests requiring root
+  * Fix lintian overrides
+  * Add grub,debian13,1 and grub.peimage,1 SBAT levels, this allows
+    individually revoking the parts affecting only trixie or the new
+    shared peimage loader.
+
+  [ Dimitri John Ledkov ]
+  * Include fdt modules in arm64 EFI images, tpm in all archs (LP: #2008950)
+
+ -- Julian Andres Klode <jak@debian.org>  Wed, 19 Jul 2023 19:21:17 +0200
+
 grub2 (2.06-14) experimental; urgency=medium
 
   [ Julian Andres Klode ]

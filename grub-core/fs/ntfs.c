@@ -17,7 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define grub_fshelp_node grub_ntfs_file 
+#define grub_fshelp_node grub_ntfs_file
 
 #include <grub/file.h>
 #include <grub/mm.h>
@@ -32,7 +32,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
 
 static grub_dl_t my_mod;
 
-#define grub_fshelp_node grub_ntfs_file 
+#define grub_fshelp_node grub_ntfs_file
 
 static inline grub_uint16_t
 u16at (void *ptr, grub_size_t ofs)
@@ -654,7 +654,7 @@ grub_ntfs_read_symlink (grub_fshelp_node_t node)
   struct grub_ntfs_file *mft;
   struct symlink_descriptor symdesc;
   grub_err_t err;
-  grub_uint8_t *buf16;
+  grub_uint8_t *buf16 = NULL;
   char *buf, *end;
   grub_size_t len;
   grub_uint8_t *pa;
@@ -667,20 +667,20 @@ grub_ntfs_read_symlink (grub_fshelp_node_t node)
     return NULL;
 
   if (read_mft (mft->data, mft->buf, mft->ino))
-    return NULL;
+    goto fail;
 
   pa = locate_attr (&mft->attr, mft, GRUB_NTFS_AT_SYMLINK);
   if (pa == NULL)
     {
       grub_error (GRUB_ERR_BAD_FS, "no $SYMLINK in MFT 0x%llx",
 		  (unsigned long long) mft->ino);
-      return NULL;
+      goto fail;
     }
 
   err = read_attr (&mft->attr, (grub_uint8_t *) &symdesc, 0,
 		   sizeof (struct symlink_descriptor), 1, 0, 0);
   if (err)
-    return NULL;
+    goto fail;
 
   switch (grub_cpu_to_le32 (symdesc.type))
     {
@@ -697,23 +697,22 @@ grub_ntfs_read_symlink (grub_fshelp_node_t node)
     default:
       grub_error (GRUB_ERR_BAD_FS, "symlink type invalid (%x)",
 		  grub_cpu_to_le32 (symdesc.type));
-      return NULL;
+      goto fail;
     }
 
   buf16 = grub_malloc (len);
   if (!buf16)
-    return NULL;
+    goto fail;
 
   err = read_attr (&mft->attr, buf16, off, len, 1, 0, 0);
   if (err)
-    return NULL;
+    goto fail;
 
   buf = get_utf8 (buf16, len / 2);
   if (!buf)
-    {
-      grub_free (buf16);
-      return NULL;
-    }
+    goto fail;
+
+  grub_free (mft->buf);
   grub_free (buf16);
 
   for (end = buf; *end; end++)
@@ -725,9 +724,14 @@ grub_ntfs_read_symlink (grub_fshelp_node_t node)
       && grub_isalpha (buf[4]))
     {
       grub_memmove (buf, buf + 6, end - buf + 1 - 6);
-      end -= 6; 
+      end -= 6;
     }
   return buf;
+
+ fail:
+  grub_free (mft->buf);
+  grub_free (buf16);
+  return NULL;
 }
 
 static int
@@ -992,7 +996,7 @@ grub_ntfs_dir_iter (const char *filename, enum grub_fshelp_filetype filetype,
   grub_memset (&info, 0, sizeof (info));
   info.dir = ((filetype & GRUB_FSHELP_TYPE_MASK) == GRUB_FSHELP_DIR);
   info.mtimeset = 1;
-  info.mtime = grub_divmod64 (node->mtime, 10000000, 0) 
+  info.mtime = grub_divmod64 (node->mtime, 10000000, 0)
     - 86400ULL * 365 * (1970 - 1601)
     - 86400ULL * ((1970 - 1601) / 4) + 86400ULL * ((1970 - 1601) / 100);
   grub_free (node);

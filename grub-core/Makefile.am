@@ -288,6 +288,12 @@ KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/disk.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/acpi.h
 endif
 
+if COND_loongarch64_efi
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/efi.h
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/disk.h
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/acpi.h
+endif
+
 if COND_riscv32_efi
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/efi.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/disk.h
@@ -307,7 +313,11 @@ KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/emu/net.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/emu/hostdisk.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/emu/hostfile.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/extcmd.h
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/emu/exec.h
 if COND_GRUB_EMU_SDL
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/sdl.h
+endif
+if COND_GRUB_EMU_SDL2
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/sdl.h
 endif
 if COND_GRUB_EMU_PCI

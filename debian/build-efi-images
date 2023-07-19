@@ -146,6 +146,7 @@ CD_MODULES="
         smbios
 	squash4
 	test
+	tpm
 	true
 	video
 	xfs
@@ -159,9 +160,12 @@ case $platform in
     x86_64-efi|i386-efi)
 	CD_MODULES="$CD_MODULES
 	cpuid
-	linuxefi
 	play
-	tpm
+	"
+	;;
+    arm64-efi)
+	CD_MODULES="$CD_MODULES
+	fdt
 	"
 	;;
 esac
