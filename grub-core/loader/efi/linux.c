@@ -28,6 +28,7 @@
 #include <grub/efi/efi.h>
 #include <grub/efi/fdtload.h>
 #include <grub/efi/memory.h>
+#include <grub/efi/peimage.h>
 #include <grub/efi/pe32.h>
 #include <grub/i18n.h>
 #include <grub/lib/cmdline.h>
@@ -183,7 +184,7 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
 {
   grub_efi_memory_mapped_device_path_t *mempath;
   grub_efi_handle_t image_handle;
-  grub_efi_boot_services_t *b;
+  grub_efi_boot_services_image_t *b;
   grub_efi_status_t status;
   grub_efi_loaded_image_t *loaded_image;
   int len;
@@ -203,7 +204,7 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
   mempath[1].header.subtype = GRUB_EFI_END_ENTIRE_DEVICE_PATH_SUBTYPE;
   mempath[1].header.length = sizeof (grub_efi_device_path_t);
 
-  b = grub_efi_system_table->boot_services;
+  b = &grub_efi_boot_services_peimage;
   status = b->load_image (0, grub_efi_image_handle,
 			  (grub_efi_device_path_t *) mempath,
 			  (void *) addr, size, &image_handle);
