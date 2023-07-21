@@ -1,3 +1,15 @@
+grub2 (2.12~rc1-2) experimental; urgency=medium
+
+  [ Julian Andres Klode ]
+  * Build-Depend on libsdl2-dev instead of libsdl1.2-dev (Closes: #1038035)
+  * Link peimage into arm_efi target, fixes armhf/armel FTBFS
+  * peimage: Add chainloader support
+
+  [ Heinrich Schuchardt ]
+  * Enable building for RISC-V (LP: #1876620) (Closes: #995718)
+
+ -- Julian Andres Klode <jak@debian.org>  Fri, 21 Jul 2023 18:02:28 +0200
+
 grub2 (2.12~rc1-1) experimental; urgency=medium
 
   [ Julian Andres Klode ]
