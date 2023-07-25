@@ -2,6 +2,7 @@
 
 #include <grub/cache.h>
 #include <grub/cpu/efi/memory.h>
+#include <grub/dl.h>
 #include <grub/efi/efi.h>
 #include <grub/efi/pe32.h>
 #include <grub/efi/peimage.h>
@@ -9,6 +10,10 @@
 #include <grub/misc.h>
 #include <grub/mm.h>
 #include <grub/setjmp.h>
+
+GRUB_MOD_LICENSE ("GPLv3+");
+
+static grub_dl_t my_mod;
 
 struct image_info
 {
@@ -21,6 +26,7 @@ struct image_info
   grub_uint64_t image_base;
   grub_uint32_t section_alignment;
   grub_uint32_t image_size;
+  grub_uint32_t header_size;
   void *alloc_addr;
   grub_uint32_t alloc_pages;
   void *image_addr;
@@ -126,7 +132,6 @@ check_pe_header (struct image_info *info)
   struct grub_pe32_coff_header *coff_header;
   struct grub_pe32_optional_header *pe32_header;
   struct grub_pe64_optional_header *pe64_header;
-  grub_uint32_t header_size;
 
   if (info->data_size < sizeof (struct grub_dos_stub))
     {
@@ -173,8 +178,8 @@ check_pe_header (struct image_info *info)
       info->image_base = pe32_header->image_base;
       info->image_size = pe32_header->image_size;
       info->entry_point = (void *)(unsigned long)pe32_header->entry_addr;
-      header_size = pe32_header->header_size;
-      if (info->data_size < header_size)
+      info->header_size = pe32_header->header_size;
+      if (info->data_size < info->header_size)
 	{
 	  grub_error (GRUB_ERR_BAD_OS, "truncated image");
 	  return GRUB_EFI_LOAD_ERROR;
@@ -194,8 +199,8 @@ check_pe_header (struct image_info *info)
       info->image_base = pe64_header->image_base;
       info->image_size = pe64_header->image_size;
       info->entry_point = (void *)(unsigned long)pe64_header->entry_addr;
-      header_size = pe64_header->header_size;
-      if (info->data_size < header_size)
+      info->header_size = pe64_header->header_size;
+      if (info->data_size < info->header_size)
 	{
 	  grub_error (GRUB_ERR_BAD_OS, "truncated image");
 	  return GRUB_EFI_LOAD_ERROR;
@@ -263,9 +268,16 @@ load_sections (struct image_info *info)
   info->image_addr
       = (void *)(((unsigned long)info->alloc_addr + align_mask) & ~align_mask);
 
+  grub_memcpy (info->image_addr, info->data, info->header_size);
   for (section = &info->section[0];
        section < &info->section[info->num_sections]; ++section)
     {
+      if (section->virtual_address < info->header_size
+	  || section->raw_data_offset < info->header_size)
+	{
+	  grub_error (GRUB_ERR_BAD_OS, "section inside header");
+	  return GRUB_EFI_LOAD_ERROR;
+	}
       if (section->raw_data_offset + section->raw_data_size > info->data_size)
 	{
 	  grub_error (GRUB_ERR_BAD_OS, "truncated image");
@@ -752,6 +764,8 @@ do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
       return GRUB_EFI_LOAD_ERROR;
     }
 
+  grub_dl_ref (my_mod);
+
   info = (struct image_info){
     .data = source_buffer,
     .data_size = source_size,
@@ -799,13 +813,25 @@ do_unload_image (grub_efi_handle_t image_handle __attribute__ ((unused)))
   if (info.alloc_addr)
     grub_efi_free_pages ((unsigned long)info.alloc_addr, info.alloc_pages);
 
+  grub_dl_unref (my_mod);
   info = (struct image_info){};
 
   return GRUB_EFI_SUCCESS;
 }
 
-grub_efi_boot_services_image_t grub_efi_boot_services_peimage = {
+static const grub_efi_loader_t peimage_loader = {
   .load_image = do_load_image,
   .start_image = do_start_image,
   .unload_image = do_unload_image,
 };
+
+GRUB_MOD_INIT (peimage)
+{
+  grub_efi_register_loader (&peimage_loader);
+  my_mod = mod;
+}
+
+GRUB_MOD_FINI (peimage)
+{
+  grub_efi_unregister_loader (&peimage_loader);
+}

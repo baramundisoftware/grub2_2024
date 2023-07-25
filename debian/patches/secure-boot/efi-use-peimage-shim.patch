@@ -1,5 +1,5 @@
 From: Julian Andres Klode <julian.klode@canonical.com>
-Date: Wed, 19 Jul 2023 15:59:58 +0200
+Date: Mon, 24 Jul 2023 15:26:10 +0200
 Subject: efi: Provide a shim for load_image, start_image, unload_image
 
 Provide custom implementations of load_image(), start_image(),
@@ -32,196 +32,42 @@ Caveats:
 Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 Signed-off-by: Julian Andres Klode <julian.klode@canonical.com>
 ---
- grub-core/Makefile.core.def        |   7 +
- grub-core/loader/efi/chainloader.c |  31 +-
- grub-core/loader/efi/linux.c       |   5 +-
- grub-core/loader/efi/peimage.c     | 811 +++++++++++++++++++++++++++++++++++++
- include/grub/efi/peimage.h         |  42 ++
- 5 files changed, 881 insertions(+), 15 deletions(-)
+ grub-core/Makefile.core.def    |   7 +
+ grub-core/loader/efi/peimage.c | 837 +++++++++++++++++++++++++++++++++++++++++
+ include/grub/efi/peimage.h     |  23 ++
+ 3 files changed, 867 insertions(+)
  create mode 100644 grub-core/loader/efi/peimage.c
  create mode 100644 include/grub/efi/peimage.h
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index d8149a4..1668193 100644
+index d8149a4..a485af1 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -1863,13 +1863,20 @@ module = {
-   ia64_efi = loader/ia64/efi/linux.c;
-   arm_coreboot = loader/arm/linux.c;
-   arm_efi = loader/efi/linux.c;
-+  arm_efi = loader/efi/peimage.c;
-   arm_uboot = loader/arm/linux.c;
-   arm64 = loader/efi/linux.c;
-+  arm64 = loader/efi/peimage.c;
-   loongarch64 = loader/efi/linux.c;
-+  loongarch64 = loader/efi/peimage.c;
-   riscv32 = loader/efi/linux.c;
-+  riscv32 = loader/efi/peimage.c;
-   riscv64 = loader/efi/linux.c;
-+  riscv64 = loader/efi/peimage.c;
-   i386_efi = loader/efi/linux.c;
-+  i386_efi  = loader/efi/peimage.c;
-   x86_64_efi = loader/efi/linux.c;
-+  x86_64_efi  = loader/efi/peimage.c;
-   emu = loader/emu/linux.c;
-   common = loader/linux.c;
+@@ -1875,6 +1875,13 @@ module = {
    common = lib/cmdline.c;
-diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
-index 1de98f7..5453eca 100644
---- a/grub-core/loader/efi/chainloader.c
-+++ b/grub-core/loader/efi/chainloader.c
-@@ -33,6 +33,7 @@
- #include <grub/efi/efi.h>
- #include <grub/efi/disk.h>
- #include <grub/efi/memory.h>
-+#include <grub/efi/peimage.h>
- #include <grub/command.h>
- #include <grub/i18n.h>
- #include <grub/net.h>
-@@ -50,13 +51,13 @@ grub_chainloader_unload (void *context)
- {
-   grub_efi_handle_t image_handle = (grub_efi_handle_t) context;
-   grub_efi_loaded_image_t *loaded_image;
--  grub_efi_boot_services_t *b;
-+  grub_efi_boot_services_image_t *b;
+ };
  
-   loaded_image = grub_efi_get_loaded_image (image_handle);
-   if (loaded_image != NULL)
-     grub_free (loaded_image->load_options);
- 
--  b = grub_efi_system_table->boot_services;
-+  b = &grub_efi_boot_services_peimage;
-   b->unload_image (image_handle);
- 
-   grub_dl_unref (my_mod);
-@@ -67,13 +68,15 @@ static grub_err_t
- grub_chainloader_boot (void *context)
- {
-   grub_efi_handle_t image_handle = (grub_efi_handle_t) context;
--  grub_efi_boot_services_t *b;
-+  grub_efi_boot_services_image_t *bi;
-+  grub_efi_boot_services_t *bs;
-   grub_efi_status_t status;
-   grub_efi_uintn_t exit_data_size;
-   grub_efi_char16_t *exit_data = NULL;
- 
--  b = grub_efi_system_table->boot_services;
--  status = b->start_image (image_handle, &exit_data_size, &exit_data);
-+  bi = &grub_efi_boot_services_peimage;
-+  bs = grub_efi_system_table->boot_services;
-+  status = bi->start_image (image_handle, &exit_data_size, &exit_data);
-   if (status != GRUB_EFI_SUCCESS)
-     {
-       if (exit_data)
-@@ -95,7 +98,7 @@ grub_chainloader_boot (void *context)
-     }
- 
-   if (exit_data)
--    b->free_pool (exit_data);
-+    bs->free_pool (exit_data);
- 
-   grub_loader_unset ();
- 
-@@ -216,7 +219,8 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
-   grub_file_t file = 0;
-   grub_ssize_t size;
-   grub_efi_status_t status;
--  grub_efi_boot_services_t *b;
-+  grub_efi_boot_services_t *bs;
-+  grub_efi_boot_services_image_t *bi;
-   grub_device_t dev = 0;
-   grub_efi_device_path_t *dp = NULL, *file_path = NULL;
-   grub_efi_loaded_image_t *loaded_image;
-@@ -234,7 +238,8 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
- 
-   grub_dl_ref (my_mod);
- 
--  b = grub_efi_system_table->boot_services;
-+  bi = &grub_efi_boot_services_peimage;
-+  bs = grub_efi_system_table->boot_services;
- 
-   file = grub_file_open (filename, GRUB_FILE_TYPE_EFI_CHAINLOADED_IMAGE);
-   if (! file)
-@@ -286,7 +291,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
-     }
-   pages = (grub_efi_uintn_t) GRUB_EFI_BYTES_TO_PAGES (size);
- 
--  status = b->allocate_pages (GRUB_EFI_ALLOCATE_ANY_PAGES,
-+  status = bs->allocate_pages (GRUB_EFI_ALLOCATE_ANY_PAGES,
- 			      GRUB_EFI_LOADER_CODE,
- 			      pages, &address);
-   if (status != GRUB_EFI_SUCCESS)
-@@ -343,7 +348,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
-     }
- #endif
- 
--  status = b->load_image (0, grub_efi_image_handle, file_path,
-+  status = bi->load_image (0, grub_efi_image_handle, file_path,
- 			  boot_image, size,
- 			  &image_handle);
-   if (status != GRUB_EFI_SUCCESS)
-@@ -401,7 +406,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
-   grub_device_close (dev);
- 
-   /* We're finished with the source image buffer and file path now. */
--  b->free_pages (address, pages);
-+  bs->free_pages (address, pages);
-   grub_free (file_path);
- 
-   grub_loader_set_ex (grub_chainloader_boot, grub_chainloader_unload, image_handle, 0);
-@@ -419,10 +424,10 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
-   grub_free (file_path);
- 
-   if (address)
--    b->free_pages (address, pages);
-+    bs->free_pages (address, pages);
- 
-   if (image_handle != NULL)
--    b->unload_image (image_handle);
-+    bi->unload_image (image_handle);
- 
-   grub_dl_unref (my_mod);
- 
-diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
-index 43c4e2d..7d45873 100644
---- a/grub-core/loader/efi/linux.c
-+++ b/grub-core/loader/efi/linux.c
-@@ -28,6 +28,7 @@
- #include <grub/efi/efi.h>
- #include <grub/efi/fdtload.h>
- #include <grub/efi/memory.h>
-+#include <grub/efi/peimage.h>
- #include <grub/efi/pe32.h>
- #include <grub/i18n.h>
- #include <grub/lib/cmdline.h>
-@@ -183,7 +184,7 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
- {
-   grub_efi_memory_mapped_device_path_t *mempath;
-   grub_efi_handle_t image_handle;
--  grub_efi_boot_services_t *b;
-+  grub_efi_boot_services_image_t *b;
-   grub_efi_status_t status;
-   grub_efi_loaded_image_t *loaded_image;
-   int len;
-@@ -203,7 +204,7 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
-   mempath[1].header.subtype = GRUB_EFI_END_ENTIRE_DEVICE_PATH_SUBTYPE;
-   mempath[1].header.length = sizeof (grub_efi_device_path_t);
- 
--  b = grub_efi_system_table->boot_services;
-+  b = &grub_efi_boot_services_peimage;
-   status = b->load_image (0, grub_efi_image_handle,
- 			  (grub_efi_device_path_t *) mempath,
- 			  (void *) addr, size, &image_handle);
++module = {
++  name = peimage;
++  efi = loader/efi/peimage.c;
++  enable = efi;
++};
++
++
+ module = {
+   name = fdt;
+   efi = loader/efi/fdt.c;
 diff --git a/grub-core/loader/efi/peimage.c b/grub-core/loader/efi/peimage.c
 new file mode 100644
-index 0000000..0a65c8f
+index 0000000..56528b5
 --- /dev/null
 +++ b/grub-core/loader/efi/peimage.c
-@@ -0,0 +1,811 @@
+@@ -0,0 +1,837 @@
 +// SPDX-License-Identifier: GPL-3.0+
 +
 +#include <grub/cache.h>
 +#include <grub/cpu/efi/memory.h>
++#include <grub/dl.h>
 +#include <grub/efi/efi.h>
 +#include <grub/efi/pe32.h>
 +#include <grub/efi/peimage.h>
@@ -229,6 +75,10 @@ index 0000000..0a65c8f
 +#include <grub/misc.h>
 +#include <grub/mm.h>
 +#include <grub/setjmp.h>
++
++GRUB_MOD_LICENSE ("GPLv3+");
++
++static grub_dl_t my_mod;
 +
 +struct image_info
 +{
@@ -241,6 +91,7 @@ index 0000000..0a65c8f
 +  grub_uint64_t image_base;
 +  grub_uint32_t section_alignment;
 +  grub_uint32_t image_size;
++  grub_uint32_t header_size;
 +  void *alloc_addr;
 +  grub_uint32_t alloc_pages;
 +  void *image_addr;
@@ -346,7 +197,6 @@ index 0000000..0a65c8f
 +  struct grub_pe32_coff_header *coff_header;
 +  struct grub_pe32_optional_header *pe32_header;
 +  struct grub_pe64_optional_header *pe64_header;
-+  grub_uint32_t header_size;
 +
 +  if (info->data_size < sizeof (struct grub_dos_stub))
 +    {
@@ -393,8 +243,8 @@ index 0000000..0a65c8f
 +      info->image_base = pe32_header->image_base;
 +      info->image_size = pe32_header->image_size;
 +      info->entry_point = (void *)(unsigned long)pe32_header->entry_addr;
-+      header_size = pe32_header->header_size;
-+      if (info->data_size < header_size)
++      info->header_size = pe32_header->header_size;
++      if (info->data_size < info->header_size)
 +	{
 +	  grub_error (GRUB_ERR_BAD_OS, "truncated image");
 +	  return GRUB_EFI_LOAD_ERROR;
@@ -414,8 +264,8 @@ index 0000000..0a65c8f
 +      info->image_base = pe64_header->image_base;
 +      info->image_size = pe64_header->image_size;
 +      info->entry_point = (void *)(unsigned long)pe64_header->entry_addr;
-+      header_size = pe64_header->header_size;
-+      if (info->data_size < header_size)
++      info->header_size = pe64_header->header_size;
++      if (info->data_size < info->header_size)
 +	{
 +	  grub_error (GRUB_ERR_BAD_OS, "truncated image");
 +	  return GRUB_EFI_LOAD_ERROR;
@@ -483,9 +333,16 @@ index 0000000..0a65c8f
 +  info->image_addr
 +      = (void *)(((unsigned long)info->alloc_addr + align_mask) & ~align_mask);
 +
++  grub_memcpy (info->image_addr, info->data, info->header_size);
 +  for (section = &info->section[0];
 +       section < &info->section[info->num_sections]; ++section)
 +    {
++      if (section->virtual_address < info->header_size
++	  || section->raw_data_offset < info->header_size)
++	{
++	  grub_error (GRUB_ERR_BAD_OS, "section inside header");
++	  return GRUB_EFI_LOAD_ERROR;
++	}
 +      if (section->raw_data_offset + section->raw_data_size > info->data_size)
 +	{
 +	  grub_error (GRUB_ERR_BAD_OS, "truncated image");
@@ -972,6 +829,8 @@ index 0000000..0a65c8f
 +      return GRUB_EFI_LOAD_ERROR;
 +    }
 +
++  grub_dl_ref (my_mod);
++
 +  info = (struct image_info){
 +    .data = source_buffer,
 +    .data_size = source_size,
@@ -1019,22 +878,34 @@ index 0000000..0a65c8f
 +  if (info.alloc_addr)
 +    grub_efi_free_pages ((unsigned long)info.alloc_addr, info.alloc_pages);
 +
++  grub_dl_unref (my_mod);
 +  info = (struct image_info){};
 +
 +  return GRUB_EFI_SUCCESS;
 +}
 +
-+grub_efi_boot_services_image_t grub_efi_boot_services_peimage = {
++static const grub_efi_loader_t peimage_loader = {
 +  .load_image = do_load_image,
 +  .start_image = do_start_image,
 +  .unload_image = do_unload_image,
 +};
++
++GRUB_MOD_INIT (peimage)
++{
++  grub_efi_register_loader (&peimage_loader);
++  my_mod = mod;
++}
++
++GRUB_MOD_FINI (peimage)
++{
++  grub_efi_unregister_loader (&peimage_loader);
++}
 diff --git a/include/grub/efi/peimage.h b/include/grub/efi/peimage.h
 new file mode 100644
-index 0000000..2b61aca
+index 0000000..8ef6579
 --- /dev/null
 +++ b/include/grub/efi/peimage.h
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,23 @@
 +/* SPDX-License-Identifier: GPL-3.0+ */
 +
 +#define GRUB_PE_MAGIC "PE\0"
@@ -1058,22 +929,3 @@ index 0000000..2b61aca
 +  grub_uint32_t linux_arch; /* linux architecture */
 +  grub_uint32_t pe_addr;    /* offset of PE/COFF header */
 +};
-+
-+typedef struct grub_efi_boot_services_image
-+{
-+  grub_efi_status_t (*load_image) (grub_efi_boolean_t boot_policy,
-+				   grub_efi_handle_t parent_image_handle,
-+				   grub_efi_device_path_t *file_path,
-+				   void *source_buffer,
-+				   grub_efi_uintn_t source_size,
-+				   grub_efi_handle_t *image_handle);
-+
-+  grub_efi_status_t (*start_image) (grub_efi_handle_t image_handle,
-+				    grub_efi_uintn_t *exit_data_size,
-+				    grub_efi_char16_t **exit_data);
-+
-+  grub_efi_status_t (*unload_image) (grub_efi_handle_t image_handle);
-+} grub_efi_boot_services_image_t;
-+
-+extern grub_efi_boot_services_image_t
-+    EXPORT_VAR (grub_efi_boot_services_peimage);

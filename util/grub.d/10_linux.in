@@ -32,7 +32,6 @@ export TEXTDOMAIN=@PACKAGE@
 export TEXTDOMAINDIR="@localedir@"
 
 CLASS="--class gnu-linux --class gnu --class os"
-SUPPORTED_INITS="sysvinit:/lib/sysvinit/init systemd:/lib/systemd/systemd upstart:/sbin/upstart"
 
 if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
   OS=GNU/Linux
@@ -130,8 +129,6 @@ linux_entry ()
       case $type in
 	  recovery)
 	      title="$(gettext_printf "%s, with Linux %s (%s)" "${os}" "${version}" "$(gettext "${GRUB_RECOVERY_TITLE}")")" ;;
-	  init-*)
-	      title="$(gettext_printf "%s, with Linux %s (%s)" "${os}" "${version}" "${type#init-}")" ;;
 	  *)
 	      title="$(gettext_printf "%s, with Linux %s" "${os}" "${version}")" ;;
       esac
@@ -186,15 +183,9 @@ linux_entry ()
 	echo	'$(echo "$message" | grub_quote)'
 EOF
   fi
-  if test -d /sys/firmware/efi && test -e "${linux}.efi.signed"; then
-    sed "s/^/$submenu_indentation/" << EOF
-	linux	${rel_dirname}/${basename}.efi.signed root=${linux_root_device_thisversion} ro ${args}
-EOF
-  else
-    sed "s/^/$submenu_indentation/" << EOF
+  sed "s/^/$submenu_indentation/" << EOF
 	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} ro ${args}
 EOF
-  fi
   if test -n "${initrd}" ; then
     # TRANSLATORS: ramdisk isn't identifier. Should be translated.
     if [ x"$quiet_boot" = x0 ] || [ x"$type" != xsimple ]; then
@@ -297,8 +288,8 @@ submenu_indentation=""
 # Temporarily replace the '.old' suffix by ' 1' and append ' 2' for all
 # other files to order the '.old' files after their non-old counterpart
 # in reverse-sorted order.
-# DEBIAN: We handle .efi.signed in linux_entry
-reverse_sorted_list=$(echo $list | tr ' ' '\n' | grep -v '.efi.signed$' | sed -e 's/\.old$/ 1/; / 1$/! s/$/ 2/' | version_sort -r | sed -e 's/ 1$/.old/; s/ 2$//')
+
+reverse_sorted_list=$(echo $list | tr ' ' '\n' | sed -e 's/\.old$/ 1/; / 1$/! s/$/ 2/' | version_sort -r | sed -e 's/ 1$/.old/; s/ 2$//')
 
 if [ "x$GRUB_TOP_LEVEL" != x ]; then
   reverse_sorted_list=$(grub_move_to_front "$GRUB_TOP_LEVEL" ${reverse_sorted_list})
@@ -399,13 +390,6 @@ for linux in ${reverse_sorted_list}; do
 
   linux_entry "${OS}" "${version}" advanced \
               "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
-  for supported_init in ${SUPPORTED_INITS}; do
-    init_path="${supported_init#*:}"
-    if [ -x "${init_path}" ] && [ "$(readlink -f /sbin/init)" != "$(readlink -f "${init_path}")" ]; then
-      linux_entry "${OS}" "${version}" "init-${supported_init%%:*}" \
-		  "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT} init=${init_path}"
-    fi
-  done
   if [ "x${GRUB_DISABLE_RECOVERY}" != "xtrue" ]; then
     linux_entry "${OS}" "${version}" recovery \
                 "${GRUB_CMDLINE_LINUX_RECOVERY} ${GRUB_CMDLINE_LINUX}"

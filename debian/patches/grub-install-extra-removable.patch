@@ -21,7 +21,7 @@ Patch-Name: grub-install-extra-removable.patch
  1 file changed, 108 insertions(+), 2 deletions(-)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index bd48a54..4d44ced 100644
+index a42880b..8484a56 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -56,6 +56,7 @@
@@ -182,7 +182,7 @@ index bd48a54..4d44ced 100644
        /* The EFI specification requires that an EFI System Partition must
  	 contain an "EFI" subdirectory, and that OS loaders are stored in
  	 subdirectories below EFI.  Vendors are expected to pick names that do
-@@ -2093,9 +2193,15 @@ main (int argc, char *argv[])
+@@ -2110,9 +2210,15 @@ main (int argc, char *argv[])
  	    fprintf (config_dst_f, "configfile $prefix/grub.cfg\n");
  	    fclose (config_dst_f);
  	    free (config_dst);

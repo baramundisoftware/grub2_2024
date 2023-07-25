@@ -1863,24 +1863,24 @@ module = {
   ia64_efi = loader/ia64/efi/linux.c;
   arm_coreboot = loader/arm/linux.c;
   arm_efi = loader/efi/linux.c;
-  arm_efi = loader/efi/peimage.c;
   arm_uboot = loader/arm/linux.c;
   arm64 = loader/efi/linux.c;
-  arm64 = loader/efi/peimage.c;
   loongarch64 = loader/efi/linux.c;
-  loongarch64 = loader/efi/peimage.c;
   riscv32 = loader/efi/linux.c;
-  riscv32 = loader/efi/peimage.c;
   riscv64 = loader/efi/linux.c;
-  riscv64 = loader/efi/peimage.c;
   i386_efi = loader/efi/linux.c;
-  i386_efi  = loader/efi/peimage.c;
   x86_64_efi = loader/efi/linux.c;
-  x86_64_efi  = loader/efi/peimage.c;
   emu = loader/emu/linux.c;
   common = loader/linux.c;
   common = lib/cmdline.c;
 };
+
+module = {
+  name = peimage;
+  efi = loader/efi/peimage.c;
+  enable = efi;
+};
+
 
 module = {
   name = fdt;

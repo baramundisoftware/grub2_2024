@@ -28,7 +28,6 @@
 #include <grub/efi/efi.h>
 #include <grub/efi/fdtload.h>
 #include <grub/efi/memory.h>
-#include <grub/efi/peimage.h>
 #include <grub/efi/pe32.h>
 #include <grub/i18n.h>
 #include <grub/lib/cmdline.h>
@@ -184,7 +183,7 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
 {
   grub_efi_memory_mapped_device_path_t *mempath;
   grub_efi_handle_t image_handle;
-  grub_efi_boot_services_image_t *b;
+  grub_efi_boot_services_t *b;
   grub_efi_status_t status;
   grub_efi_loaded_image_t *loaded_image;
   int len;
@@ -204,10 +203,10 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
   mempath[1].header.subtype = GRUB_EFI_END_ENTIRE_DEVICE_PATH_SUBTYPE;
   mempath[1].header.length = sizeof (grub_efi_device_path_t);
 
-  b = &grub_efi_boot_services_peimage;
-  status = b->load_image (0, grub_efi_image_handle,
-			  (grub_efi_device_path_t *) mempath,
-			  (void *) addr, size, &image_handle);
+  b = grub_efi_system_table->boot_services;
+  status = grub_efi_load_image (0, grub_efi_image_handle,
+				(grub_efi_device_path_t *)mempath,
+				(void *)addr, size, &image_handle);
   if (status != GRUB_EFI_SUCCESS)
     return grub_error (GRUB_ERR_BAD_OS, "cannot load image");
 
@@ -232,14 +231,14 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
 			    (grub_uint8_t *) args, len, NULL);
 
   grub_dprintf ("linux", "starting image %p\n", image_handle);
-  status = b->start_image (image_handle, 0, NULL);
+  status = grub_efi_start_image (image_handle, 0, NULL);
 
   /* When successful, not reached */
   grub_error (GRUB_ERR_BAD_OS, "start_image() returned 0x%" PRIxGRUB_EFI_UINTN_T, status);
   grub_efi_free_pages ((grub_addr_t) loaded_image->load_options,
 		       GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
 unload:
-  b->unload_image (image_handle);
+  grub_efi_unload_image (image_handle);
 
   return grub_errno;
 }

@@ -871,10 +871,10 @@ index ca102b4..af929aa 100644
  grub_install_register_efi (grub_device_t efidir_grub_dev,
  			   const char *efifile_path,
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 1e8a773..8484a56 100644
+index bd77e7b..16b5474 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -2129,7 +2129,7 @@ main (int argc, char *argv[])
+@@ -2004,7 +2004,7 @@ main (int argc, char *argv[])
  					       "\\System\\Library\\CoreServices",
  					       efi_distributor);
  	      if (ret)
@@ -883,7 +883,7 @@ index 1e8a773..8484a56 100644
  				 strerror (ret));
  	    }
  
-@@ -2248,7 +2248,7 @@ main (int argc, char *argv[])
+@@ -2052,7 +2052,7 @@ main (int argc, char *argv[])
  	  ret = grub_install_register_efi (efidir_grub_dev,
  					   efifile_path, efi_distributor);
  	  if (ret)

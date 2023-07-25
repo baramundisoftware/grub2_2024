@@ -18,11 +18,11 @@ Patch-Name: uefi-secure-boot-cryptomount.patch
  1 file changed, 17 insertions(+)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 4d44ced..1e8a773 100644
+index 0d7d527..bd77e7b 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -1570,6 +1570,23 @@ main (int argc, char *argv[])
- 	  || uefi_secure_boot)
+@@ -1445,6 +1445,23 @@ main (int argc, char *argv[])
+ 	  || !have_bootdev (platform))
  	{
  	  char *uuid = NULL;
 +
