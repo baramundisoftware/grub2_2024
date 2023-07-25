@@ -1876,6 +1876,13 @@ module = {
 };
 
 module = {
+  name = peimage;
+  efi = loader/efi/peimage.c;
+  enable = efi;
+};
+
+
+module = {
   name = fdt;
   efi = loader/efi/fdt.c;
   common = lib/fdt.c;
