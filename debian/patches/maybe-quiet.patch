@@ -1,5 +1,5 @@
 From: Julian Andres Klode <julian.klode@canonical.com>
-Date: Wed, 19 Jul 2023 12:20:19 +0200
+Date: Tue, 25 Jul 2023 15:35:52 +0200
 Subject: Add configure option to reduce visual clutter at boot time
 
 If this option is enabled, then do all of the following:
@@ -41,8 +41,8 @@ Patch-Name: maybe-quiet.patch
  grub-core/kern/rescue_reader.c    |  2 ++
  grub-core/normal/main.c           | 11 +++++++++++
  grub-core/normal/menu.c           | 12 ++++++++++--
- util/grub.d/10_linux.in           | 15 +++++++++++----
- 9 files changed, 106 insertions(+), 6 deletions(-)
+ util/grub.d/10_linux.in           | 17 +++++++++++++----
+ 9 files changed, 108 insertions(+), 6 deletions(-)
 
 diff --git a/config.h.in b/config.h.in
 index 4d1e50e..10e023e 100644
@@ -335,7 +335,7 @@ index 6a90e09..9d2d3c9 100644
        if (auto_boot)
  	grub_menu_execute_with_fallback (menu, e, autobooted,
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 850189e..5682223 100644
+index 889ef0f..0b1f520 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -21,6 +21,7 @@ prefix="@prefix@"
@@ -346,7 +346,7 @@ index 850189e..5682223 100644
  
  . "$pkgdatadir/grub-mkconfig_lib"
  
-@@ -160,10 +161,12 @@ linux_entry ()
+@@ -160,20 +161,28 @@ linux_entry ()
      fi
      printf '%s\n' "${prepare_boot_cache}" | sed "s/^/$submenu_indentation/"
    fi
@@ -356,13 +356,11 @@ index 850189e..5682223 100644
 +    message="$(gettext_printf "Loading Linux %s ..." ${version})"
 +    sed "s/^/$submenu_indentation/" << EOF
  	echo	'$(echo "$message" | grub_quote)'
- EOF
++EOF
 +  fi
-   if test -d /sys/firmware/efi && test -e "${linux}.efi.signed"; then
-     sed "s/^/$submenu_indentation/" << EOF
- 	linux	${rel_dirname}/${basename}.efi.signed root=${linux_root_device_thisversion} ro ${args}
-@@ -175,13 +178,17 @@ EOF
-   fi
++  sed "s/^/$submenu_indentation/" << EOF
+ 	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} ro ${args}
+ EOF
    if test -n "${initrd}" ; then
      # TRANSLATORS: ramdisk isn't identifier. Should be translated.
 -    message="$(gettext_printf "Loading initial ramdisk ...")"

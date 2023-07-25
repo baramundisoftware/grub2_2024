@@ -17,10 +17,10 @@ Patch-Name: install-efi-adjust-distributor.patch
  1 file changed, 4 insertions(+)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 513d67f..0b0ff2a 100644
+index c71f339..4bff65d 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -1161,6 +1161,10 @@ main (int argc, char *argv[])
+@@ -1141,6 +1141,10 @@ main (int argc, char *argv[])
        */
        char *t;
        efi_distributor = bootloader_id;
@@ -28,6 +28,6 @@ index 513d67f..0b0ff2a 100644
 +	efi_distributor = "ubuntu";
 +      else if (strcmp (efi_distributor, "devuan") == 0)
 +	efi_distributor = "debian";
-       switch (platform)
+       if (removable)
  	{
- 	case GRUB_INSTALL_PLATFORM_I386_EFI:
+ 	  /* The specification makes stricter requirements of removable

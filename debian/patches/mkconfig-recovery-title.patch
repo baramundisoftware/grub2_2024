@@ -36,7 +36,7 @@ index 52e24fc..f7186a9 100644
  
  The following options are still accepted for compatibility with existing
 diff --git a/util/grub-mkconfig.in b/util/grub-mkconfig.in
-index e8aad09..38f6df2 100644
+index 0ecf2a7..13e436b 100644
 --- a/util/grub-mkconfig.in
 +++ b/util/grub-mkconfig.in
 @@ -201,6 +201,10 @@ GRUB_ACTUAL_DEFAULT="$GRUB_DEFAULT"
@@ -89,7 +89,7 @@ index 83e9636..1431673 100644
  	  title="$(gettext_printf "%s, with kFreeBSD %s" "${os}" "${version}")"
        fi
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index be0e6e9..df435d4 100644
+index fd48971..56567b5 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -128,7 +128,7 @@ linux_entry ()

@@ -1,3 +1,14 @@
+grub2 (2.12~rc1-3) experimental; urgency=medium
+
+  * Build peimage as a module and insert into signed images
+  * peimage: Copy the image header and ensure it's not clobbered
+  * Drop grub.cfg-400.patch, world-readable boot config violates several guidelines unfortunately
+  * Drop mkconfig-other-inits.patch (alternative init boot options)
+  * Order patches not used by Ubuntu last to simplify maintenance
+  * Drop mkconfig-signed-kernel.patch, .signed kernels are no longer used
+
+ -- Julian Andres Klode <jak@debian.org>  Tue, 25 Jul 2023 16:44:12 +0200
+
 grub2 (2.12~rc1-2) experimental; urgency=medium
 
   [ Julian Andres Klode ]

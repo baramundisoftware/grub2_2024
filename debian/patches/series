@@ -2,7 +2,6 @@ olpc-prefix-hack.patch
 core-in-fs.patch
 grub-legacy-0-based-partitions.patch
 disable-floppies.patch
-grub.cfg-400.patch
 gfxpayload-keep-default.patch
 install-stage2-confusion.patch
 mkconfig-loopback.patch
@@ -15,8 +14,6 @@ mkconfig-nonexistent-loopback.patch
 default-grub-d.patch
 blacklist-1440x900x32.patch
 mkconfig-ubuntu-distributor.patch
-mkconfig-signed-kernel.patch
-install-signed.patch
 maybe-quiet.patch
 install-efi-adjust-distributor.patch
 quick-boot.patch
@@ -31,8 +28,6 @@ ieee1275-clear-reset.patch
 ppc64el-disable-vsx.patch
 grub-install-pvxen-paths.patch
 insmod-xzio-and-lzopio-on-xen.patch
-grub-install-extra-removable.patch
-mkconfig-other-inits.patch
 zpool-full-device-name.patch
 network/net-http-check-result-of-grub_netbuff_put-in-http_receive.patch
 network/bootp-new-net_bootp6-command.patch
@@ -45,7 +40,6 @@ bash-completion-drop-have-checks.patch
 at_keyboard-module-init.patch
 uefi-secure-boot-cryptomount.patch
 efi-variable-storage-minimise-writes.patch
-grub-install-removable-shim.patch
 dejavu-font-path.patch
 xen-no-xsm-policy-in-non-xsm-options.patch
 pc-verifiers-module.patch
@@ -55,4 +49,8 @@ fs-tester-time-fail.patch
 987008-lvrename-boot-fail.patch
 grub_os-prober.patch
 secure-boot/revert-efi-fallback-to-legacy.patch
+secure-boot/loader-framework.patch
 secure-boot/efi-use-peimage-shim.patch
+install-signed.patch
+grub-install-extra-removable.patch
+grub-install-removable-shim.patch

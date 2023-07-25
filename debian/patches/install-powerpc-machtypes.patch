@@ -195,10 +195,10 @@ index 35cf17a..ca102b4 100644
  grub_install_register_efi (grub_device_t efidir_grub_dev,
  			   const char *efifile_path,
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 0b0ff2a..f76697a 100644
+index 4bff65d..0a71df9 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -1229,7 +1229,18 @@ main (int argc, char *argv[])
+@@ -1228,7 +1228,18 @@ main (int argc, char *argv[])
  
    if (platform == GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275)
      {

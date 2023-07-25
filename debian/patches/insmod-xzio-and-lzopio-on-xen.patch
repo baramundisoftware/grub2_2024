@@ -19,7 +19,7 @@ Patch-Name: insmod-xzio-and-lzopio-on-xen.patch
  1 file changed, 1 insertion(+)
 
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index df435d4..72d90ea 100644
+index 56567b5..d38f5ba 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -164,6 +164,7 @@ linux_entry ()

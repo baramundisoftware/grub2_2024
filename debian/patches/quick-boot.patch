@@ -114,7 +114,7 @@ index 9d2d3c9..7fd1ed2 100644
  	{
  	  pos = grub_term_save_pos ();
 diff --git a/util/grub-mkconfig.in b/util/grub-mkconfig.in
-index 569700b..e8aad09 100644
+index 3e75e33..0ecf2a7 100644
 --- a/util/grub-mkconfig.in
 +++ b/util/grub-mkconfig.in
 @@ -260,7 +260,8 @@ export GRUB_DEFAULT \
@@ -257,7 +257,7 @@ index 6a316a5..f3e04cc 100644
  EOF
  }
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 5682223..fa0fd93 100644
+index 0b1f520..6297ebe 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -22,6 +22,7 @@ exec_prefix="@exec_prefix@"
