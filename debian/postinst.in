@@ -726,15 +726,15 @@ case "$1" in
           kubuntu) bootloader_id=ubuntu ;;
           devuan) bootloader_id=debian ;;
         esac
-        if [ "$bootloader_id" ] && [ -d "/boot/efi/EFI/$bootloader_id" ]; then
-          case @PACKAGE@ in
-            grub-efi-ia32)  target=i386-efi ;;
-            grub-efi-amd64) target=x86_64-efi ;;
-            grub-efi-ia64)  target=ia64-efi ;;
-            grub-efi-arm)   target=arm-efi ;;
-            grub-efi-arm64) target=arm64-efi ;;
-            grub-efi-riscv64) target=riscv64-efi ;;
-          esac
+        case @PACKAGE@ in
+          grub-efi-ia32)  target=i386-efi ;;
+          grub-efi-amd64) target=x86_64-efi ;;
+          grub-efi-ia64)  target=ia64-efi ;;
+          grub-efi-arm)   target=arm-efi ;;
+          grub-efi-arm64) target=arm64-efi ;;
+          grub-efi-riscv64) target=riscv64-efi ;;
+        esac
+        if [ "$bootloader_id" ] && [ -e "/boot/grub/$target/core.efi" ]; then
           db_get grub2/force_efi_extra_removable
           if [ "$RET" = true ]; then
             FORCE_EXTRA_REMOVABLE="--force-extra-removable"

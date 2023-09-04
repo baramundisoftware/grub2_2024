@@ -99,9 +99,9 @@ esac
 title_correction_code=
 
 if [ -x /lib/recovery-mode/recovery-menu ]; then
-    GRUB_CMDLINE_LINUX_RECOVERY=recovery
+    GRUB_CMDLINE_LINUX_RECOVERY="${GRUB_CMDLINE_LINUX_RECOVERY} recovery"
 else
-    GRUB_CMDLINE_LINUX_RECOVERY=single
+    GRUB_CMDLINE_LINUX_RECOVERY="${GRUB_CMDLINE_LINUX_RECOVERY} single"
 fi
 if [ "$ubuntu_recovery" = 1 ]; then
     GRUB_CMDLINE_LINUX_RECOVERY="$GRUB_CMDLINE_LINUX_RECOVERY nomodeset"
@@ -229,6 +229,10 @@ case "$machine" in
     *) GENKERNEL_ARCH="$machine" ;;
 esac
 
+case "$GENKERNEL_ARCH" in
+  x86*) GRUB_CMDLINE_LINUX_RECOVERY="$GRUB_CMDLINE_LINUX_RECOVERY dis_ucode_ldr";;
+esac
+
 prepare_boot_cache=
 prepare_root_cache=
 boot_device_id=
@@ -259,7 +263,9 @@ else
   cat << EOF
 if [ "\${recordfail}" != 1 ]; then
   if [ -e \${prefix}/gfxblacklist.txt ]; then
-    if hwmatch \${prefix}/gfxblacklist.txt 3; then
+    if [ \${grub_platform} != pc ]; then
+      set linux_gfx_mode=keep
+    elif hwmatch \${prefix}/gfxblacklist.txt 3; then
       if [ \${match} = 0 ]; then
         set linux_gfx_mode=keep
       else

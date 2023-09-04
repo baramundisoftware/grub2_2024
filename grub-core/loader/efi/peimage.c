@@ -19,6 +19,7 @@ struct image_info
 {
   void *data;
   grub_efi_uint32_t data_size;
+  grub_efi_device_path_t *file_path;
   grub_efi_uint16_t machine;
   grub_efi_uint16_t num_sections;
   struct grub_pe32_section_table *section;
@@ -712,6 +713,10 @@ start_image (struct image_info *info)
     {
       loaded_image->image_base = info->image_addr;
       loaded_image->image_size = info->image_size;
+      // FIXME: We should be pulling file_path apart into dev_handle and
+      // file_path, however there are no functions to do so, and Windows
+      // chainloads fine this way, so meh?
+      loaded_image->file_path = info->file_path;
     }
   else
     {
@@ -753,7 +758,7 @@ static struct image_info info;
 static grub_efi_status_t
 do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
 	       grub_efi_handle_t parent_image_handle __attribute__ ((unused)),
-	       grub_efi_device_path_t *file_path __attribute__ ((unused)),
+	       grub_efi_device_path_t *file_path,
 	       void *source_buffer, grub_efi_uintn_t source_size,
 	       grub_efi_handle_t *image_handle)
 {
@@ -769,6 +774,7 @@ do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
   info = (struct image_info){
     .data = source_buffer,
     .data_size = source_size,
+    .file_path = grub_efi_duplicate_device_path(file_path),
   };
 
   ret = check_pe_header (&info);
@@ -812,6 +818,8 @@ do_unload_image (grub_efi_handle_t image_handle __attribute__ ((unused)))
     }
   if (info.alloc_addr)
     grub_efi_free_pages ((unsigned long)info.alloc_addr, info.alloc_pages);
+  if (info.file_path)
+    grub_free(info.file_path);
 
   grub_dl_unref (my_mod);
   info = (struct image_info){};

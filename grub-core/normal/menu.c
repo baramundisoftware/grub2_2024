@@ -840,14 +840,17 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot, int *notify_boot)
 static void
 notify_booting (grub_menu_entry_t entry, void *userdata)
 {
-  int *notify_boot = userdata;
 #if !QUIET_BOOT
+  int *notify_boot = userdata;
   if (*notify_boot)
     {
       grub_printf ("  ");
       grub_printf_ (N_("Booting `%s'"), entry->title);
       grub_printf ("\n\n");
     }
+#else
+  (void) userdata;
+  (void) entry;
 #endif
 }
 
