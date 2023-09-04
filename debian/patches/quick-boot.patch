@@ -79,7 +79,7 @@ index b812679..52e24fc 100644
  
  The following options are still accepted for compatibility with existing
 diff --git a/grub-core/normal/menu.c b/grub-core/normal/menu.c
-index 9d2d3c9..7fd1ed2 100644
+index 350ed25..7958bc8 100644
 --- a/grub-core/normal/menu.c
 +++ b/grub-core/normal/menu.c
 @@ -605,6 +605,30 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot, int *notify_boot)
@@ -257,7 +257,7 @@ index 6a316a5..f3e04cc 100644
  EOF
  }
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 0b1f520..6297ebe 100644
+index f908bd5..9fb7c53 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -22,6 +22,7 @@ exec_prefix="@exec_prefix@"

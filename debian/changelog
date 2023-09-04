@@ -1,3 +1,55 @@
+grub2 (2.12~rc1-6) experimental; urgency=medium
+
+  * Use rm_conffile instead of remove-on-upgrade.
+    This works with ftp-master's old lintian version and allows
+    easy backports
+
+ -- Julian Andres Klode <jak@debian.org>  Mon, 04 Sep 2023 16:57:55 +0200
+
+grub2 (2.12~rc1-5) experimental; urgency=medium
+
+  [ Felix Zielcke ]
+  * Add salsa-ci.yml and disable blhc and reprotest pipelines.
+  * remove on upgrades /etc/default/grub.d/init-select.cfg. (Closes: #1042707)
+
+  [ Julian Andres Klode ]
+  * peimage: Set file_path for loaded image (LP: #2030810, #2032294)
+  * Hack up the lintian overrides for stable lintian on ftp-master
+
+ -- Julian Andres Klode <jak@debian.org>  Mon, 04 Sep 2023 14:16:12 +0200
+
+grub2 (2.12~rc1-4) experimental; urgency=medium
+
+  [ Julian Andres Klode ]
+  * Fix quiet boot feature
+  * Drop fs-tester-time-fail.patch, upstream
+  * postinst: look at /boot/grub/$target/core.efi to determine if we ran already
+  * Cherry-pick additional Ubuntu patches
+    - zstd-require-8-byte-buffer.patch: Fix for buffer size in zstd
+    - recovery-dis_ucode_ldr.patch: Pass dis_ucode_ldr to kernel for
+      recovery mode
+    - hwmatch-only-on-grub-pc-platform.patch: Only call hwmatch on grub-pc
+      (Closes: #990836)
+    - fdt-add-debug-output-to-devicetree-command.patch: Debugging output
+      for the devicetree command
+    - fdt-device-tree-fixup-protocol.patch: Support for u-boot device tree
+      fixup protocol
+    - fat-fix-listing-the-root-directory.patch: Fix listing of files with
+      0 timestamps in FAT
+    - efivar-check-that-efivarfs-is-writeable.patch: Do not hard error
+      if we cannot write the EFI variables. Some implementations, like
+      u-boot do not support writing them.
+  * Only build peimage on supported architectures
+  * debian/po: Refresh templates
+
+  [ Felix Zielcke ]
+  * Update mkconfig-ubuntu-recovery.patch to respect
+    GRUB_CMDLINE_LINUX_RECOVERY from /etc/default/grub.
+    (Closes: #766530, #922425)
+  * Strip grub-emu binary.
+
+ -- Julian Andres Klode <jak@debian.org>  Fri, 28 Jul 2023 14:54:14 +0200
+
 grub2 (2.12~rc1-3) experimental; urgency=medium
 
   * Build peimage as a module and insert into signed images
