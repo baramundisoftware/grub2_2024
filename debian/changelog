@@ -1,3 +1,26 @@
+grub2 (2.12~rc1-9) unstable; urgency=medium
+
+  * Correct the Breaks to include the ~rc1 bit of the version
+
+ -- Julian Andres Klode <jak@debian.org>  Tue, 05 Sep 2023 19:13:30 +0200
+
+grub2 (2.12~rc1-8) unstable; urgency=medium
+
+  * Have -bin packages Break pre-2.12 -signed packages.
+    On insecurely booted systems, upgrading the -bin packages with
+    the modules before the -signed packages caused the signed binaries
+    to crash when loading additional modules. (Closes: #1051271)
+  * Revert "In the signed packages, change the version dependency"
+    This reverts commit 680bb22c3308b7ccd0a7eb7923c7d68067b626f9. The
+    signed package needs the modules to be at the same version during
+    boot on insecure systems or it may crash trying to load further
+    modules.
+  * Set Protected: yes for -signed packages so they cannot easily be removed.
+    This ensures that the = depends in grub-efi-amd64-signed does not
+    cause it to be removed when it is out of sync with src:grub2
+
+ -- Julian Andres Klode <jak@debian.org>  Tue, 05 Sep 2023 19:06:05 +0200
+
 grub2 (2.12~rc1-7) unstable; urgency=medium
 
   * Upload to unstable
