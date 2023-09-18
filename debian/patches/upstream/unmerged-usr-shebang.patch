@@ -1,0 +1,34 @@
+From: Oskari Pirhonen <xxc3ncoredxx@gmail.com>
+Date: Mon, 10 Jul 2023 23:55:43 -0500
+Subject: util/grub.d/25_bli.in: Fix shebang on unmerged-usr
+
+On an unmerged-usr system, grub-mkconfig errors out with the following
+error due to /usr/bin/sh not existing:
+
+  /usr/sbin/grub-mkconfig: /etc/grub.d/25_bli: /usr/bin/sh: bad interpreter: No such file or directory
+
+Use a /bin/sh shebang to fix the error as well as match the other
+existing files.
+
+Fixes: 158a6583e (util/grub.d/25_bli.in: Activate bli module on EFI)
+
+Signed-off-by: Oskari Pirhonen <xxc3ncoredxx@gmail.com>
+Reviewed-by: Glenn Washburn <development@efficientek.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+Reviewed-by: Oliver Steffen <osteffen@redhat.com>
+
+Bug-Debian: https://bugs.debian.org/1051251
+---
+ util/grub.d/25_bli.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/util/grub.d/25_bli.in b/util/grub.d/25_bli.in
+index 6e45387..26e27a0 100644
+--- a/util/grub.d/25_bli.in
++++ b/util/grub.d/25_bli.in
+@@ -1,4 +1,4 @@
+-#!/usr/bin/sh
++#! /bin/sh
+ set -e
+ 
+ # grub-mkconfig helper script.

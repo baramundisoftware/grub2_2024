@@ -33,9 +33,9 @@ Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 Signed-off-by: Julian Andres Klode <julian.klode@canonical.com>
 ---
  grub-core/Makefile.core.def    |  12 +
- grub-core/loader/efi/peimage.c | 845 +++++++++++++++++++++++++++++++++++++++++
+ grub-core/loader/efi/peimage.c | 899 +++++++++++++++++++++++++++++++++++++++++
  include/grub/efi/peimage.h     |  23 ++
- 3 files changed, 880 insertions(+)
+ 3 files changed, 934 insertions(+)
  create mode 100644 grub-core/loader/efi/peimage.c
  create mode 100644 include/grub/efi/peimage.h
 
@@ -64,10 +64,10 @@ index d8149a4..3c65627 100644
    efi = loader/efi/fdt.c;
 diff --git a/grub-core/loader/efi/peimage.c b/grub-core/loader/efi/peimage.c
 new file mode 100644
-index 0000000..f199555
+index 0000000..d24871e
 --- /dev/null
 +++ b/grub-core/loader/efi/peimage.c
-@@ -0,0 +1,845 @@
+@@ -0,0 +1,899 @@
 +// SPDX-License-Identifier: GPL-3.0+
 +
 +#include <grub/cache.h>
@@ -82,6 +82,22 @@ index 0000000..f199555
 +#include <grub/setjmp.h>
 +
 +GRUB_MOD_LICENSE ("GPLv3+");
++
++#define GRUB_PEIMAGE_MARKER_GUID                                              \
++  {                                                                           \
++    0xda24567a, 0xf899, 0x4566,                                               \
++    {                                                                         \
++      0xb8, 0x27, 0x9f, 0x66, 0x00, 0xc2, 0x14, 0x39                          \
++    }                                                                         \
++  }
++
++#define GRUB_EFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOL_GUID                       \
++  {                                                                           \
++    0xbc62157e, 0x3e33, 0x4fec,                                               \
++    {                                                                         \
++      0x99, 0x20, 0x2d, 0x3b, 0x36, 0xd7, 0x50, 0xdf                          \
++    }                                                                         \
++  }
 +
 +static grub_dl_t my_mod;
 +
@@ -102,18 +118,12 @@ index 0000000..f199555
 +  grub_uint32_t alloc_pages;
 +  void *image_addr;
 +  grub_efi_entry_point __grub_efi_api entry_point;
-+};
 +
-+static struct
-+{
++  grub_efi_loaded_image_t loaded_image;
++
 +  grub_jmp_buf jmp;
-+  grub_efi_handle_t image_handle;
 +  grub_efi_status_t exit_status;
-+  grub_efi_status_t (__grub_efi_api *exit) (grub_efi_handle_t image_handle,
-+					    grub_efi_status_t exit_status,
-+					    grub_efi_uintn_t exit_data_size,
-+					    grub_efi_char16_t *exit_data);
-+} started_image;
++};
 +
 +static int
 +debug_enabled (const char *condition)
@@ -344,7 +354,8 @@ index 0000000..f199555
 +       section < &info->section[info->num_sections]; ++section)
 +    {
 +      if (section->virtual_address < info->header_size
-+	  || section->raw_data_offset < info->header_size)
++	  || (section->raw_data_size
++	      && section->raw_data_offset < info->header_size))
 +	{
 +	  grub_error (GRUB_ERR_BAD_OS, "section inside header");
 +	  return GRUB_EFI_LOAD_ERROR;
@@ -708,6 +719,11 @@ index 0000000..f199555
 +  return GRUB_EFI_LOAD_ERROR;
 +}
 +
++// Original exit handler
++static grub_efi_status_t (__grub_efi_api *exit_orig) (
++    grub_efi_handle_t image_handle, grub_efi_status_t exit_status,
++    grub_efi_uintn_t exit_data_size, grub_efi_char16_t *exit_data);
++
 +/**
 + * efi_exit() - replacement for EFI_BOOT_SERVICES.Exit()
 + *
@@ -721,22 +737,26 @@ index 0000000..f199555
 + * @exit_data:		null terminated string followed by optional data
 + */
 +static grub_efi_status_t __grub_efi_api
-+efi_exit (grub_efi_handle_t image_handle, grub_efi_status_t exit_status,
-+	  grub_efi_uintn_t exit_data_size, grub_efi_char16_t *exit_data)
++exit_hook (grub_efi_handle_t image_handle, grub_efi_status_t exit_status,
++	   grub_efi_uintn_t exit_data_size, grub_efi_char16_t *exit_data)
 +{
-+  grub_efi_system_table->boot_services->exit = started_image.exit;
++  struct image_info *info;
 +
 +  if (!image_handle)
 +    return GRUB_EFI_INVALID_PARAMETER;
 +
-+  if (image_handle != started_image.image_handle)
++  info = grub_efi_open_protocol (
++      image_handle,
++      &(grub_guid_t)GRUB_PEIMAGE_MARKER_GUID,
++      GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
++  if (!info)
 +    {
 +      grub_dprintf ("linux", "delegating Exit()\n");
-+      return started_image.exit (image_handle, exit_status, exit_data_size,
-+				 (grub_efi_char16_t *)exit_data);
++      return exit_orig (image_handle, exit_status, exit_data_size,
++			(grub_efi_char16_t *)exit_data);
 +    }
 +
-+  started_image.exit_status = exit_status;
++  info->exit_status = exit_status;
 +
 +  if (exit_status != GRUB_EFI_SUCCESS)
 +    {
@@ -756,143 +776,169 @@ index 0000000..f199555
 +      /* exit data must be freed by the caller */
 +      grub_efi_system_table->boot_services->free_pool (exit_data);
 +    }
-+  grub_longjmp (started_image.jmp, 1);
++  grub_longjmp (info->jmp, 1);
 +}
 +
-+/**
-+ * start_image() - our implementation of StartImage()
-+ *
-+ * As we do not load the image via LoadImage() we need our own implementation
-+ * of StartImage() to launch the PE-COFF image.
-+ */
++static grub_efi_status_t do_unload_image (grub_efi_handle_t image_handle
++					  __attribute__ ((unused)));
++
++static grub_efi_status_t __grub_efi_api
++do_unload_image_ms (grub_efi_handle_t image_handle)
++{
++  return do_unload_image (image_handle);
++}
++
++/* TODO: move the creation of the load options here */
 +static grub_efi_status_t
-+start_image (struct image_info *info)
++do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
++	       grub_efi_handle_t parent_image_handle,
++	       grub_efi_device_path_t *file_path, void *source_buffer,
++	       grub_efi_uintn_t source_size, grub_efi_handle_t *image_handle)
++{
++  grub_efi_status_t status;
++  struct image_info *info;
++
++  info = grub_efi_allocate_pages_real (
++      GRUB_EFI_MAX_USABLE_ADDRESS, GRUB_EFI_BYTES_TO_PAGES (sizeof *info),
++      GRUB_EFI_ALLOCATE_MAX_ADDRESS, GRUB_EFI_LOADER_DATA);
++  if (!info)
++    return GRUB_EFI_OUT_OF_RESOURCES;
++
++  grub_memset (info, 0, sizeof *info);
++
++  // Load PE
++  info->data = source_buffer, info->data_size = source_size,
++  info->file_path = grub_efi_duplicate_device_path (file_path),
++
++  status = check_pe_header (info);
++  if (status != GRUB_EFI_SUCCESS)
++    goto err;
++
++  status = load_sections (info);
++  if (status != GRUB_EFI_SUCCESS)
++    goto err;
++
++  status = relocate (info);
++  if (status != GRUB_EFI_SUCCESS)
++    goto err;
++
++  // Setup EFI_LOADED_IMAGE_PROTOCOL
++  info->loaded_image.revision = 0x1000;
++  info->loaded_image.parent_handle = parent_image_handle;
++  info->loaded_image.system_table = grub_efi_system_table;
++
++  // FIXME: We should be pulling file_path apart into dev_handle and
++  // file_path, however there are no functions to do so, and Windows
++  // chainloads fine this way, so meh?
++  // info.loaded_image->device_handle = ?;
++  info->loaded_image.file_path = info->file_path;
++
++  info->loaded_image.image_base = info->image_addr;
++  info->loaded_image.image_size = info->image_size;
++  // FIXME2: we may want to support loading drivers?
++  // this should be good enough for chainloading bootloaders
++  info->loaded_image.image_code_type = GRUB_EFI_LOADER_CODE;
++  info->loaded_image.image_data_type = GRUB_EFI_LOADER_DATA;
++  info->loaded_image.unload = do_unload_image_ms;
++
++  // Instruct EFI to create a new handle
++  *image_handle = NULL;
++  status
++      = grub_efi_system_table->boot_services
++	    ->install_multiple_protocol_interfaces (
++		image_handle, &(grub_guid_t)GRUB_PEIMAGE_MARKER_GUID, info,
++		&(grub_guid_t)GRUB_EFI_LOADED_IMAGE_GUID, &info->loaded_image,
++		&(grub_guid_t)GRUB_EFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOL_GUID,
++		info->file_path, NULL);
++  if (status != GRUB_EFI_SUCCESS)
++    goto err;
++
++  // Increment module refcount
++  grub_dl_ref (my_mod);
++
++  return status;
++
++err:
++  grub_efi_free_pages ((unsigned long)info,
++		       GRUB_EFI_BYTES_TO_PAGES (sizeof *info));
++  return status;
++}
++
++static grub_efi_status_t
++do_start_image (grub_efi_handle_t image_handle,
++		grub_efi_uintn_t *exit_data_size __attribute__ ((unused)),
++		grub_efi_char16_t **exit_data __attribute__ ((unused)))
 +{
 +  int ret;
 +  grub_efi_status_t status;
-+  grub_efi_loaded_image_t *loaded_image;
++  struct image_info *info;
 +
-+  /*
-+   * TODO: It would better comply to the UEFI specification to
-+   *     use a separate handle for the image we are running.
-+   */
-+  started_image.image_handle = grub_efi_image_handle;
-+
-+  loaded_image = grub_efi_get_loaded_image (grub_efi_image_handle);
-+  if (loaded_image)
++  info = grub_efi_open_protocol (
++      image_handle,
++      &(grub_guid_t)GRUB_PEIMAGE_MARKER_GUID,
++      GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
++  if (!info)
 +    {
-+      loaded_image->image_base = info->image_addr;
-+      loaded_image->image_size = info->image_size;
-+      // FIXME: We should be pulling file_path apart into dev_handle and
-+      // file_path, however there are no functions to do so, and Windows
-+      // chainloads fine this way, so meh?
-+      loaded_image->file_path = info->file_path;
-+    }
-+  else
-+    {
-+      grub_dprintf ("linux", "Loaded image protocol missing\n");
++      grub_error (GRUB_ERR_BAD_OS, "image not loaded");
++      return GRUB_EFI_LOAD_ERROR;
 +    }
 +
-+  ret = grub_setjmp (started_image.jmp);
++  ret = grub_setjmp (info->jmp);
 +  if (ret)
-+    {
-+      started_image.image_handle = NULL;
++    return info->exit_status;
 +
-+      return started_image.exit_status;
-+    }
-+
-+  started_image.exit = grub_efi_system_table->boot_services->exit;
-+  grub_efi_system_table->boot_services->exit = efi_exit;
-+
-+  grub_dprintf (
-+      "linux",
-+      "Executing image loaded at 0x%lx\nEntry point 0x%lx\nSize 0x%08x\n",
-+      (unsigned long)info->image_addr, (unsigned long)info->entry_point,
-+      info->image_size);
++  grub_dprintf ("linux",
++		"Executing image loaded at 0x%lx\n"
++		"Entry point 0x%lx\n"
++		"Size 0x%08x\n",
++		(unsigned long)info->image_addr,
++		(unsigned long)info->entry_point, info->image_size);
 +
 +  /* Invalidate the instruction cache */
 +  grub_arch_sync_caches (info->image_addr, info->image_size);
 +
 +  debug ("pestart");
-+  status
-+      = info->entry_point (started_image.image_handle, grub_efi_system_table);
++  status = info->entry_point (image_handle, grub_efi_system_table);
 +
 +  grub_dprintf ("linux", "Application returned\n");
 +
-+  return efi_exit (started_image.image_handle, status, 0, NULL);
-+}
-+
-+static struct image_info info;
-+
-+/* TODO: move the creation of the load options here */
-+static grub_efi_status_t
-+do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
-+	       grub_efi_handle_t parent_image_handle __attribute__ ((unused)),
-+	       grub_efi_device_path_t *file_path,
-+	       void *source_buffer, grub_efi_uintn_t source_size,
-+	       grub_efi_handle_t *image_handle)
-+{
-+  grub_efi_status_t ret = GRUB_EFI_SUCCESS;
-+  if (info.data != NULL)
-+    {
-+      grub_error (GRUB_ERR_BAD_OS, "cannot load multiple images");
-+      return GRUB_EFI_LOAD_ERROR;
-+    }
-+
-+  grub_dl_ref (my_mod);
-+
-+  info = (struct image_info){
-+    .data = source_buffer,
-+    .data_size = source_size,
-+    .file_path = grub_efi_duplicate_device_path(file_path),
-+  };
-+
-+  ret = check_pe_header (&info);
-+  if (ret != GRUB_EFI_SUCCESS)
-+    goto err;
-+
-+  ret = load_sections (&info);
-+  if (ret != GRUB_EFI_SUCCESS)
-+    goto err;
-+
-+  ret = relocate (&info);
-+  if (ret != GRUB_EFI_SUCCESS)
-+    goto err;
-+
-+  // We are hacking this up as we go along
-+  *image_handle = grub_efi_image_handle;
-+err:
-+  return ret;
++  return exit_hook (image_handle, status, 0, NULL);
 +}
 +
 +static grub_efi_status_t
-+do_start_image (grub_efi_handle_t image_handle __attribute__ ((unused)),
-+		grub_efi_uintn_t *exit_data_size __attribute__ ((unused)),
-+		grub_efi_char16_t **exit_data __attribute__ ((unused)))
++do_unload_image (grub_efi_handle_t image_handle)
 +{
-+  if (info.data == NULL)
++  grub_efi_status_t status;
++  struct image_info *info;
++
++  info = grub_efi_open_protocol (
++      image_handle,
++      &(grub_guid_t)GRUB_PEIMAGE_MARKER_GUID,
++      GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
++  if (!info)
 +    {
 +      grub_error (GRUB_ERR_BAD_OS, "image not loaded");
 +      return GRUB_EFI_LOAD_ERROR;
 +    }
-+  return start_image (&info);
-+}
 +
-+static grub_efi_status_t
-+do_unload_image (grub_efi_handle_t image_handle __attribute__ ((unused)))
-+{
-+  if (info.data == NULL)
-+    {
-+      grub_error (GRUB_ERR_BAD_OS, "image not loaded");
-+      return GRUB_EFI_LOAD_ERROR;
-+    }
-+  if (info.alloc_addr)
-+    grub_efi_free_pages ((unsigned long)info.alloc_addr, info.alloc_pages);
-+  if (info.file_path)
-+    grub_free(info.file_path);
++  status = grub_efi_system_table->boot_services
++      ->uninstall_multiple_protocol_interfaces (
++    image_handle, &(grub_guid_t)GRUB_PEIMAGE_MARKER_GUID, info,
++    &(grub_guid_t)GRUB_EFI_LOADED_IMAGE_GUID, &info->loaded_image,
++    &(grub_guid_t)GRUB_EFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOL_GUID,
++    info->file_path, NULL);
++  if (status != GRUB_EFI_SUCCESS)
++    return GRUB_EFI_LOAD_ERROR;
++
++  if (info->alloc_addr)
++    grub_efi_free_pages ((unsigned long)info->alloc_addr, info->alloc_pages);
++  if (info->file_path)
++    grub_free (info->file_path);
++
++  grub_efi_free_pages ((unsigned long)info,
++    GRUB_EFI_BYTES_TO_PAGES (sizeof *info));
 +
 +  grub_dl_unref (my_mod);
-+  info = (struct image_info){};
 +
 +  return GRUB_EFI_SUCCESS;
 +}
@@ -907,10 +953,18 @@ index 0000000..f199555
 +{
 +  grub_efi_register_loader (&peimage_loader);
 +  my_mod = mod;
++
++  // Backup exit pointer
++  exit_orig = grub_efi_system_table->boot_services->exit;
++  // Replace exit handler
++  grub_efi_system_table->boot_services->exit = exit_hook;
 +}
 +
 +GRUB_MOD_FINI (peimage)
 +{
++  // Restore exit handler
++  grub_efi_system_table->boot_services->exit = exit_orig;
++
 +  grub_efi_unregister_loader (&peimage_loader);
 +}
 diff --git a/include/grub/efi/peimage.h b/include/grub/efi/peimage.h
