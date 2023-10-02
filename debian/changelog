@@ -1,3 +1,39 @@
+grub2 (2.12~rc1-11) unstable; urgency=medium
+
+  [ Mate Kukri ]
+  * SECURITY UPDATE: Crafted file system images can cause out-of-bounds write
+    and may leak sensitive information into the GRUB pager.
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-a-volume-
+      label.patch:
+      fs/ntfs: Fix an OOB read when parsing a volume label
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-bs-for-
+      index-at.patch:
+      fs/ntfs: Fix an OOB read when parsing bitmaps for index attributes
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-dory-
+      entries-fr.patch:
+      fs/ntfs: Fix an OOB read when parsing directory entries from resident and
+      non-resident index attributes
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-reading-data-fhe-
+      reside.patch:
+      fs/ntfs: Fix an OOB read when reading data from the resident $DATA +
+      attribute
+    - CVE-2023-4693
+  * SECURITY UPDATE: Crafted file system images can cause heap-based buffer
+    overflow and may allow arbitrary code execution and secure boot bypass.
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-write-when-parsing-the-
+      ATTRIBUTE_LIST-.patch:
+      fs/ntfs: Fix an OOB write when parsing the $ATTRIBUTE_LIST attribute for
+      the $MFT file
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Make-code-more-readable.patch
+      fs/ntfs: Make code more readable
+    - CVE-2023-4692
+  * efi: Cleanup peimage.c
+
+  [ Julian Andres Klode ]
+  * Bump SBAT to grub,4
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 02 Oct 2023 15:55:25 +0200
+
 grub2 (2.12~rc1-10) unstable; urgency=medium
 
   [ Julian Andres Klode ]

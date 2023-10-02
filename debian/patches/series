@@ -58,6 +58,12 @@ efivar-check-that-efivarfs-is-writeable.patch
 fdt-add-debug-output-to-devicetree-command.patch
 fdt-device-tree-fixup-protocol.patch
 upstream/unmerged-usr-shebang.patch
+ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-write-when-parsing-the-ATTRIBUTE_LIST-.patch
+ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-reading-data-from-the-reside.patch
+ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-directory-entries-fr.patch
+ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-bitmaps-for-index-at.patch
+ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-a-volume-label.patch
+ntfs-cve-fixes/fs-ntfs-Make-code-more-readable.patch
 install-signed.patch
 grub-install-extra-removable.patch
 grub-install-removable-shim.patch

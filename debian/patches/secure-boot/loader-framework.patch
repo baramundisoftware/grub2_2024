@@ -160,7 +160,7 @@ index 43c4e2d..0e575b4 100644
    return grub_errno;
  }
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 572f713..a6aab7c 100644
+index 572f713..88d2c5c 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
 @@ -129,6 +129,43 @@ grub_err_t grub_arch_efi_linux_load_image_header(grub_file_t file,
@@ -184,18 +184,18 @@ index 572f713..a6aab7c 100644
 +
 +typedef struct grub_efi_loader
 +{
-+  grub_efi_status_t (*load_image) (grub_efi_boolean_t boot_policy,
++  grub_efi_status_t (__grub_efi_api *load_image) (grub_efi_boolean_t boot_policy,
 +				   grub_efi_handle_t parent_image_handle,
 +				   grub_efi_device_path_t *file_path,
 +				   void *source_buffer,
 +				   grub_efi_uintn_t source_size,
 +				   grub_efi_handle_t *image_handle);
 +
-+  grub_efi_status_t (*start_image) (grub_efi_handle_t image_handle,
++  grub_efi_status_t (__grub_efi_api *start_image) (grub_efi_handle_t image_handle,
 +				    grub_efi_uintn_t *exit_data_size,
 +				    grub_efi_char16_t **exit_data);
 +
-+  grub_efi_status_t (*unload_image) (grub_efi_handle_t image_handle);
++  grub_efi_status_t (__grub_efi_api *unload_image) (grub_efi_handle_t image_handle);
 +} grub_efi_loader_t;
 +
 +grub_err_t
