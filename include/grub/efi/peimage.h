@@ -1,23 +1,19 @@
 /* SPDX-License-Identifier: GPL-3.0+ */
 
-#define GRUB_PE_MAGIC "PE\0"
+/* Distinguishing our loaded image handles from the firmware's */
+#define GRUB_PEIMAGE_MARKER_GUID \
+  { 0xda24567a, 0xf899, 0x4566, \
+    { 0xb8, 0x27, 0x9f, 0x66, 0x00, 0xc2, 0x14, 0x39 } \
+  }
 
-#define EFI_LOADED_IMAGE_PROTOCOL_REVISION (0x1000)
+/* Associates an image handle with the device path it was loaded from */
+#define GRUB_EFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOL_GUID \
+  { 0xbc62157e, 0x3e33, 0x4fec, \
+    { 0x99, 0x20, 0x2d, 0x3b, 0x36, 0xd7, 0x50, 0xdf } \
+  }
 
-typedef grub_efi_status_t (*grub_efi_entry_point) (
-    grub_efi_handle_t image_handle, grub_efi_system_table_t *system_table);
+/* Revision defined for the EFI_LOADED_IMAGE_PROTOCOL */
+#define GRUB_EFI_LOADED_IMAGE_REVISION  0x1000
 
-struct grub_dos_stub
-{
-  grub_uint16_t magic;	    /* MZ magic */
-  grub_uint16_t lbsize;	    /* size of last block */
-  grub_uint32_t res0;	    /* reserved */
-  grub_uint64_t res1;	    /* reserved */
-  grub_uint64_t res2;	    /* reserved */
-  grub_uint64_t res3;	    /* reserved */
-  grub_uint64_t res4;	    /* reserved */
-  grub_uint64_t res5;	    /* reserved */
-  grub_uint64_t res6;	    /* reserved */
-  grub_uint32_t linux_arch; /* linux architecture */
-  grub_uint32_t pe_addr;    /* offset of PE/COFF header */
-};
+/* Value of the signature field of a PE image header */
+#define GRUB_PE32_SIGNATURE "PE\0"
