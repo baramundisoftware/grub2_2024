@@ -15,6 +15,7 @@
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
+
 static grub_dl_t my_mod;
 
 struct image_info
@@ -57,6 +58,19 @@ static grub_uint16_t machines[] = {
   GRUB_PE32_MACHINE_RISCV64,
 #endif
 };
+
+// Forward declare unload_image handler
+static grub_efi_status_t __grub_efi_api
+do_unload_image (grub_efi_handle_t image_handle);
+
+// Original exit handler
+static grub_efi_status_t (__grub_efi_api *exit_orig) (
+    grub_efi_handle_t image_handle, grub_efi_status_t exit_status,
+    grub_efi_uintn_t exit_data_size, grub_efi_char16_t *exit_data);
+
+// Original unload_image handler
+static grub_efi_status_t (__grub_efi_api *unload_image_orig) (
+  grub_efi_handle_t image_handle);
 
 /**
  * check_machine_type() - check if the machine type matches the architecture
@@ -611,13 +625,8 @@ bad_reloc:
   return GRUB_EFI_LOAD_ERROR;
 }
 
-// Original exit handler
-static grub_efi_status_t (__grub_efi_api *exit_orig) (
-    grub_efi_handle_t image_handle, grub_efi_status_t exit_status,
-    grub_efi_uintn_t exit_data_size, grub_efi_char16_t *exit_data);
-
 /**
- * efi_exit() - replacement for EFI_BOOT_SERVICES.Exit()
+ * exit_hook() - replacement for EFI_BOOT_SERVICES.Exit()
  *
  * This function is inserted into system table to trap invocations of
  * EFI_BOOT_SERVICES.Exit(). If Exit() is called with our handle
@@ -670,8 +679,24 @@ exit_hook (grub_efi_handle_t image_handle, grub_efi_status_t exit_status,
   grub_longjmp (info->jmp, 1);
 }
 
+/**
+ * unload_image_hook() - replacement for EFI_BOOT_SERVICES.UnloadImage()
+ *
+ * peimage only supports loading EFI Applications, which cannot be correctly
+ * unloaded while running.
+ *
+ * Installing this hooks prevents that from happening.
+ */
 static grub_efi_status_t __grub_efi_api
-do_unload_image (grub_efi_handle_t image_handle);
+unload_image_hook (grub_efi_handle_t image_handle)
+{
+  if (grub_efi_open_protocol (image_handle,
+         &(grub_guid_t) GRUB_PEIMAGE_MARKER_GUID,
+         GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL))
+    return GRUB_EFI_UNSUPPORTED;
+
+  return unload_image_orig(image_handle);
+}
 
 static grub_efi_status_t __grub_efi_api
 do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
@@ -703,8 +728,7 @@ do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
 	     || file_path->subtype != GRUB_EFI_FILE_PATH_DEVICE_PATH_SUBTYPE))
     file_path = GRUB_EFI_NEXT_DEVICE_PATH (file_path);
   if (file_path)
-    info->loaded_image.file_path
-	= grub_efi_duplicate_device_path (file_path);
+    info->loaded_image.file_path = grub_efi_duplicate_device_path (file_path);
 
   // Process PE image
   status = check_pe_header (info);
@@ -725,7 +749,6 @@ do_load_image (grub_efi_boolean_t boot_policy __attribute__ ((unused)),
   info->loaded_image.system_table = grub_efi_system_table;
   info->loaded_image.image_code_type = GRUB_EFI_LOADER_CODE;
   info->loaded_image.image_data_type = GRUB_EFI_LOADER_DATA;
-  info->loaded_image.unload = do_unload_image;
 
   // Instruct EFI to create a new handle
   *image_handle = NULL;
@@ -761,7 +784,6 @@ do_start_image (grub_efi_handle_t image_handle,
 		grub_efi_uintn_t *exit_data_size __attribute__ ((unused)),
 		grub_efi_char16_t **exit_data __attribute__ ((unused)))
 {
-  int ret;
   grub_efi_status_t status;
   struct image_info *info;
 
@@ -774,27 +796,40 @@ do_start_image (grub_efi_handle_t image_handle,
       return GRUB_EFI_LOAD_ERROR;
     }
 
-  ret = grub_setjmp (info->jmp);
-  if (ret)
-    return info->exit_status;
+  if (grub_setjmp (info->jmp))
+    {
+      status = info->exit_status;
+      do_unload_image (image_handle);
+    }
+  else
+    {
+      grub_dprintf ("linux",
+		    "Executing image loaded at 0x%lx\n"
+		    "Entry point 0x%lx\n"
+		    "Size 0x%lx\n",
+		    (unsigned long)info->loaded_image.image_base,
+		    (unsigned long)info->entry_point,
+		    (unsigned long)info->loaded_image.image_size);
 
-  grub_dprintf ("linux",
-		"Executing image loaded at 0x%lx\n"
-		"Entry point 0x%lx\n"
-		"Size 0x%lx\n",
-		(unsigned long)info->loaded_image.image_base,
-		(unsigned long)info->entry_point,
-		(unsigned long)info->loaded_image.image_size);
+      /* Invalidate the instruction cache */
+      grub_arch_sync_caches (info->loaded_image.image_base,
+			     info->loaded_image.image_size);
 
-  /* Invalidate the instruction cache */
-  grub_arch_sync_caches (info->loaded_image.image_base,
-			 info->loaded_image.image_size);
+      status = info->entry_point (image_handle, grub_efi_system_table);
 
-  status = info->entry_point (image_handle, grub_efi_system_table);
+      grub_dprintf ("linux", "Application returned\n");
 
-  grub_dprintf ("linux", "Application returned\n");
+      /* converge to the same exit path as if the image called
+       * boot_services->exit itself */
+      exit_hook (image_handle, status, 0, NULL);
 
-  return exit_hook (image_handle, status, 0, NULL);
+      /* image_handle is always valid above, thus exit_hook cannot
+       * return to here. if only GRUB had assert :(
+      grub_assert (false && "entered unreachable code");
+      */
+    }
+
+  return status;
 }
 
 static grub_efi_status_t __grub_efi_api
@@ -848,16 +883,20 @@ GRUB_MOD_INIT (peimage)
   grub_efi_register_loader (&peimage_loader);
   my_mod = mod;
 
-  // Backup exit pointer
+  // Hook exit handler
   exit_orig = grub_efi_system_table->boot_services->exit;
-  // Replace exit handler
   grub_efi_system_table->boot_services->exit = exit_hook;
+  // Hook unload_image handler
+  unload_image_orig = grub_efi_system_table->boot_services->unload_image;
+  grub_efi_system_table->boot_services->unload_image = unload_image_hook;
 }
 
 GRUB_MOD_FINI (peimage)
 {
   // Restore exit handler
   grub_efi_system_table->boot_services->exit = exit_orig;
+  // Restore unload_image handler
+  grub_efi_system_table->boot_services->unload_image = unload_image_orig;
 
   grub_efi_unregister_loader (&peimage_loader);
 }

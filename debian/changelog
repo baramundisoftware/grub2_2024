@@ -1,3 +1,20 @@
+grub2 (2.12~rc1-12) unstable; urgency=medium
+
+  [ Mate Kukri ]
+  * Port UEFI based network stack to 2.12 (LP: #2039081)
+  * efi: Correct image unloading behavior
+  * Prevent the incorrect use of `UnloadImage()` by binaries loaded by peimage
+  * efinet: HTTP_MESSAGE fix field size (LP: #2043084)
+
+  [ Abe Wieland ]
+  * Maintain administrator value for os-prober
+
+  [ Julian Andres Klode ]
+  * Cherry-pick upstream XFS directory extent parsing fixes (Closes: #1051543)
+    (LP: #2039172)
+
+ -- Julian Andres Klode <jak@debian.org>  Thu, 09 Nov 2023 14:13:44 +0200
+
 grub2 (2.12~rc1-11) unstable; urgency=medium
 
   [ Mate Kukri ]

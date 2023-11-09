@@ -52,7 +52,7 @@ index f0cb2f2..7a5a878 100644
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/net.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/memory.h
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index b0bd361..d8149a4 100644
+index a9b9c20..0b4d6b7 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -152,7 +152,7 @@ kernel = {
@@ -78,7 +78,7 @@ index b0bd361..d8149a4 100644
    name = hdparm;
    common = commands/hdparm.c;
 diff --git a/grub-core/kern/main.c b/grub-core/kern/main.c
-index f21376e..71ca62e 100644
+index 8401bc3..1258514 100644
 --- a/grub-core/kern/main.c
 +++ b/grub-core/kern/main.c
 @@ -29,7 +29,9 @@
@@ -91,7 +91,7 @@ index f21376e..71ca62e 100644
  
  #ifdef GRUB_MACHINE_PCBIOS
  #include <grub/machine/memory.h>
-@@ -288,8 +290,10 @@ grub_main (void)
+@@ -296,8 +298,10 @@ grub_main (void)
  #endif
  #endif
  

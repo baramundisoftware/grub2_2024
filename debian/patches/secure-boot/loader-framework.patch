@@ -12,10 +12,10 @@ for example, when shim provides a protocol with those functions.
  4 files changed, 103 insertions(+), 13 deletions(-)
 
 diff --git a/grub-core/kern/efi/efi.c b/grub-core/kern/efi/efi.c
-index a2afd8d..cdc6f36 100644
+index 9544ef9..e4b2f79 100644
 --- a/grub-core/kern/efi/efi.c
 +++ b/grub-core/kern/efi/efi.c
-@@ -1031,3 +1031,59 @@ grub_efi_compare_device_paths (const grub_efi_device_path_t *dp1,
+@@ -1091,3 +1091,59 @@ grub_efi_compare_device_paths (const grub_efi_device_path_t *dp1,
  
    return 0;
  }
