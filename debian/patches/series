@@ -35,6 +35,17 @@ network/efinet-add-structures-for-PXE-messages.patch
 network/bootp-process-dhcpack-http-boot.patch
 network/efinet-Configure-network-from-UEFI-device-path.patch
 network/efinet-set-dns-from-uefi-proto.patch
+network/support-uefi-networking-protocols.patch
+network/efinet-also-use-the-firmware-acceleration-for-http.patch
+network/efi-http-match-protocol-hostname-of-boot-url-in-root.patch
+network/add-fw_path-variable-to-detect-config-file-on-efi.patch
+network/use-fw_path-prefix-when-fallback-searching-for-grub-config.patch
+network/try-prefixes-for-tftp-config-file.patch
+network/prepend-prefix-when-http-path-is-relative.patch
+network/efi-http-enclose-literal-ipv6-addresses-in-square-br.patch
+network/http-prepend-prefix-when-the-http-path-is-relative.patch
+network/discover-the-device-to-read-the-config-from-as-fallback.patch
+network/efinet-add-dhcp-proxy-support.patch
 skip-grub_cmd_set_date.patch
 bash-completion-drop-have-checks.patch
 at_keyboard-module-init.patch
@@ -67,3 +78,6 @@ ntfs-cve-fixes/fs-ntfs-Make-code-more-readable.patch
 install-signed.patch
 grub-install-extra-removable.patch
 grub-install-removable-shim.patch
+upstream/xfs-incorrect-directory-data-boundary-check.patch
+upstream/xfs-fix-directory-extend-parsing.patch
+network/rhboot-http-message-field-size.patch
