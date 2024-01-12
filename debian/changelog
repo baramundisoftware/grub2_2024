@@ -1,3 +1,9 @@
+grub2 (2.12~rc1-13) unstable; urgency=medium
+
+  * No-change rebuild to retrigger signing following binNMU breakage
+
+ -- Julian Andres Klode <jak@debian.org>  Fri, 12 Jan 2024 19:00:41 +0100
+
 grub2 (2.12~rc1-12) unstable; urgency=medium
 
   [ Mate Kukri ]
