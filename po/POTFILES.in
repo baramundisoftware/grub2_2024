@@ -1023,6 +1023,7 @@
 ./include/grub/ia64/time.h
 ./include/grub/ia64/types.h
 ./include/grub/icon_manager.h
+./include/grub/ieee1275/alloc.h
 ./include/grub/ieee1275/console.h
 ./include/grub/ieee1275/ieee1275.h
 ./include/grub/ieee1275/obdisk.h

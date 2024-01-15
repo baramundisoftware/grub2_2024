@@ -153,6 +153,7 @@ endif
 if COND_i386_ieee1275
 KERNEL_HEADER_FILES += $(top_builddir)/include/grub/machine/kernel.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/ieee1275/ieee1275.h
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/ieee1275/alloc.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/terminfo.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/extcmd.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/lib/arg.h
@@ -240,6 +241,7 @@ endif
 
 if COND_powerpc_ieee1275
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/ieee1275/ieee1275.h
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/ieee1275/alloc.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/terminfo.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/extcmd.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/lib/arg.h
@@ -452,8 +454,8 @@ crypto.lst: $(srcdir)/lib/libgcrypt-grub/cipher/crypto.lst
 platform_DATA += crypto.lst
 CLEANFILES += crypto.lst
 
-syminfo.lst: gensyminfo.sh kernel_syms.lst $(MODULE_FILES)
-	cat kernel_syms.lst > $@.new
+syminfo.lst: gensyminfo.sh kernel_syms.lst $(top_srcdir)/grub-core/extra_deps.lst $(MODULE_FILES)
+	cat kernel_syms.lst $(top_srcdir)/grub-core/extra_deps.lst > $@.new
 	for m in $(MODULE_FILES); do \
 	  sh $< $$m >> $@.new || exit 1; \
 	done

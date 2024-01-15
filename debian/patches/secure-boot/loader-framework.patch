@@ -12,10 +12,10 @@ for example, when shim provides a protocol with those functions.
  4 files changed, 103 insertions(+), 13 deletions(-)
 
 diff --git a/grub-core/kern/efi/efi.c b/grub-core/kern/efi/efi.c
-index 9544ef9..e4b2f79 100644
+index b674816..9feffb1 100644
 --- a/grub-core/kern/efi/efi.c
 +++ b/grub-core/kern/efi/efi.c
-@@ -1091,3 +1091,59 @@ grub_efi_compare_device_paths (const grub_efi_device_path_t *dp1,
+@@ -1109,3 +1109,59 @@ grub_efi_find_configuration_table (const grub_guid_t *target_guid)
  
    return 0;
  }
@@ -126,10 +126,10 @@ index 1de98f7..eb833b6 100644
    grub_dl_unref (my_mod);
  
 diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
-index 43c4e2d..0e575b4 100644
+index dd6ca47..2b891d6 100644
 --- a/grub-core/loader/efi/linux.c
 +++ b/grub-core/loader/efi/linux.c
-@@ -204,9 +204,9 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
+@@ -207,9 +207,9 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
    mempath[1].header.length = sizeof (grub_efi_device_path_t);
  
    b = grub_efi_system_table->boot_services;
@@ -142,7 +142,7 @@ index 43c4e2d..0e575b4 100644
    if (status != GRUB_EFI_SUCCESS)
      return grub_error (GRUB_ERR_BAD_OS, "cannot load image");
  
-@@ -231,14 +231,14 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
+@@ -234,14 +234,14 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
  			    (grub_uint8_t *) args, len, NULL);
  
    grub_dprintf ("linux", "starting image %p\n", image_handle);
@@ -160,10 +160,10 @@ index 43c4e2d..0e575b4 100644
    return grub_errno;
  }
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 572f713..88d2c5c 100644
+index a5cd99e..7a98474 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -129,6 +129,43 @@ grub_err_t grub_arch_efi_linux_load_image_header(grub_file_t file,
+@@ -132,6 +132,43 @@ grub_err_t grub_arch_efi_linux_load_image_header(grub_file_t file,
  grub_err_t grub_arch_efi_linux_boot_image(grub_addr_t addr, grub_size_t size,
                                             char *args);
  

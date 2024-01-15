@@ -17,10 +17,10 @@ Patch-Name: vt-handoff.patch
  2 files changed, 38 insertions(+), 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index a793eea..a65a9b1 100644
+index 6812742..7f43651 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2036,6 +2036,17 @@ else
+@@ -2101,6 +2101,17 @@ else
  fi
  AC_SUBST([GFXPAYLOAD_DYNAMIC])
  

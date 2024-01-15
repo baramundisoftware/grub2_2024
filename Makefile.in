@@ -1296,15 +1296,16 @@ am__dist_noinst_DATA_DIST = grub-core/kern/disk_common.c \
 	tests/grub_script_no_commands.in tests/partmap_test.in \
 	tests/hddboot_test.in tests/fddboot_test.in \
 	tests/cdboot_test.in tests/netboot_test.in \
-	tests/pseries_test.in tests/core_compress_test.in \
-	tests/xzcompress_test.in tests/gzcompress_test.in \
-	tests/lzocompress_test.in tests/grub_cmd_echo.in \
-	tests/help_test.in tests/grub_script_gettext.in \
-	tests/grub_script_escape_comma.in tests/grub_script_strcmp.in \
-	tests/test_sha512sum.in tests/test_unset.in \
-	tests/grub_func_test.in tests/grub_cmd_tr.in \
-	tests/file_filter_test.in tests/grub_cmd_test.in \
-	tests/syslinux_test.in tests/luks1_test.in tests/luks2_test.in
+	tests/serial_test.in tests/pseries_test.in \
+	tests/core_compress_test.in tests/xzcompress_test.in \
+	tests/gzcompress_test.in tests/lzocompress_test.in \
+	tests/grub_cmd_echo.in tests/help_test.in \
+	tests/grub_script_gettext.in tests/grub_script_escape_comma.in \
+	tests/grub_script_strcmp.in tests/test_sha512sum.in \
+	tests/test_unset.in tests/grub_func_test.in \
+	tests/grub_cmd_tr.in tests/file_filter_test.in \
+	tests/grub_cmd_test.in tests/syslinux_test.in \
+	tests/luks1_test.in tests/luks2_test.in
 DATA = $(dist_grubconf_DATA) $(dist_noinst_DATA) $(noinst_DATA) \
 	$(pkgdata_DATA) $(platform_DATA) $(starfield_DATA)
 HEADERS = $(nodist_platform_HEADERS)
@@ -1998,6 +1999,7 @@ GNULIB_GETTIMEOFDAY = @GNULIB_GETTIMEOFDAY@
 GREP = @GREP@
 GRUB_BOOT_MACHINE_LINK_ADDR = @GRUB_BOOT_MACHINE_LINK_ADDR@
 GRUB_PLATFORM = @GRUB_PLATFORM@
+GRUB_STACK_PROTECTOR_INIT = @GRUB_STACK_PROTECTOR_INIT@
 GRUB_TARGET_CPU = @GRUB_TARGET_CPU@
 HAVE_ALIGNED_ALLOC = @HAVE_ALIGNED_ALLOC@
 HAVE_ALLOCA_H = @HAVE_ALLOCA_H@
@@ -2781,7 +2783,7 @@ CCASFLAGS_LIBRARY =
 grubconfdir = $(sysconfdir)/grub.d
 platformdir = $(pkglibdir)/$(target_cpu)-$(platform)
 starfielddir = $(pkgdatadir)/themes/starfield
-CFLAGS_GNULIB = -Wno-undef -Wno-sign-compare -Wno-unused -Wno-unused-parameter -Wno-redundant-decls -Wno-unreachable-code -Wno-conversion
+CFLAGS_GNULIB = -Wno-undef -Wno-sign-compare -Wno-unused -Wno-unused-parameter -Wno-redundant-decls -Wno-unreachable-code -Wno-conversion -Wno-error=attributes
 CPPFLAGS_GNULIB = -I$(top_builddir)/grub-core/lib/gnulib -I$(top_srcdir)/grub-core/lib/gnulib
 CFLAGS_POSIX = -fno-builtin
 CPPFLAGS_POSIX = -I$(top_srcdir)/grub-core/lib/posix_wrap
@@ -2834,11 +2836,12 @@ check_SCRIPTS_nonnative = pata_test ahci_test uhci_test ohci_test \
 	grub_cmd_cryptomount grub_cmd_regexp grub_cmd_date \
 	grub_cmd_set_date grub_cmd_sleep grub_script_expansion \
 	grub_script_not partmap_test hddboot_test fddboot_test \
-	cdboot_test netboot_test pseries_test core_compress_test \
-	xzcompress_test gzcompress_test lzocompress_test grub_cmd_echo \
-	help_test grub_script_gettext grub_script_escape_comma \
-	grub_script_strcmp test_sha512sum test_unset grub_func_test \
-	grub_cmd_tr file_filter_test grub_cmd_test
+	cdboot_test netboot_test serial_test pseries_test \
+	core_compress_test xzcompress_test gzcompress_test \
+	lzocompress_test grub_cmd_echo help_test grub_script_gettext \
+	grub_script_escape_comma grub_script_strcmp test_sha512sum \
+	test_unset grub_func_test grub_cmd_tr file_filter_test \
+	grub_cmd_test
 check_PROGRAMS_native = example_unit_test printf_test date_test \
 	$(am__append_50) cmp_test
 check_PROGRAMS_nonnative = 
@@ -2899,15 +2902,16 @@ dist_noinst_DATA = grub-core/kern/disk_common.c \
 	tests/grub_script_no_commands.in tests/partmap_test.in \
 	tests/hddboot_test.in tests/fddboot_test.in \
 	tests/cdboot_test.in tests/netboot_test.in \
-	tests/pseries_test.in tests/core_compress_test.in \
-	tests/xzcompress_test.in tests/gzcompress_test.in \
-	tests/lzocompress_test.in tests/grub_cmd_echo.in \
-	tests/help_test.in tests/grub_script_gettext.in \
-	tests/grub_script_escape_comma.in tests/grub_script_strcmp.in \
-	tests/test_sha512sum.in tests/test_unset.in \
-	tests/grub_func_test.in tests/grub_cmd_tr.in \
-	tests/file_filter_test.in tests/grub_cmd_test.in \
-	tests/syslinux_test.in tests/luks1_test.in tests/luks2_test.in
+	tests/serial_test.in tests/pseries_test.in \
+	tests/core_compress_test.in tests/xzcompress_test.in \
+	tests/gzcompress_test.in tests/lzocompress_test.in \
+	tests/grub_cmd_echo.in tests/help_test.in \
+	tests/grub_script_gettext.in tests/grub_script_escape_comma.in \
+	tests/grub_script_strcmp.in tests/test_sha512sum.in \
+	tests/test_unset.in tests/grub_func_test.in \
+	tests/grub_cmd_tr.in tests/file_filter_test.in \
+	tests/grub_cmd_test.in tests/syslinux_test.in \
+	tests/luks1_test.in tests/luks2_test.in
 grubconf_SCRIPTS = 00_header $(am__append_59) $(am__append_63) \
 	$(am__append_67) $(am__append_71) $(am__append_75) \
 	$(am__append_79) $(am__append_83) $(am__append_87) 25_bli \
@@ -3086,9 +3090,9 @@ CLEANFILES = $(nodist_libgrubkern_a_SOURCES) \
 	grub_cmd_regexp grub_cmd_date grub_cmd_set_date grub_cmd_sleep \
 	grub_script_expansion grub_script_not grub_script_no_commands \
 	partmap_test hddboot_test fddboot_test cdboot_test \
-	netboot_test pseries_test core_compress_test xzcompress_test \
-	gzcompress_test lzocompress_test grub_cmd_echo help_test \
-	grub_script_gettext grub_script_escape_comma \
+	netboot_test serial_test pseries_test core_compress_test \
+	xzcompress_test gzcompress_test lzocompress_test grub_cmd_echo \
+	help_test grub_script_gettext grub_script_escape_comma \
 	grub_script_strcmp test_sha512sum test_unset grub_func_test \
 	grub_cmd_tr file_filter_test grub_cmd_test syslinux_test \
 	luks1_test luks2_test grub_script.tab.c grub_script.tab.h \
@@ -3216,7 +3220,7 @@ libgrubmods_a_SOURCES = grub-core/commands/blocklist.c \
 nodist_libgrubmods_a_SOURCES = grub_script.tab.c grub_script.tab.h \
 	grub_script.yy.c grub_script.yy.h libgrub_a_init.c
 libgrubmods_a_CFLAGS = $(AM_CFLAGS) $(CFLAGS_LIBRARY) -fno-builtin \
-	-Wno-undef
+	-Wno-undef -Wno-unused-but-set-variable
 libgrubmods_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPFLAGS_LIBRARY) \
 	-I$(srcdir)/grub-core/lib/minilzo \
 	-I$(srcdir)/grub-core/lib/xzembed \
@@ -12395,6 +12399,13 @@ netboot_test.log: netboot_test
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+serial_test.log: serial_test
+	@p='serial_test'; \
+	b='serial_test'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 pseries_test.log: pseries_test
 	@p='pseries_test'; \
 	b='pseries_test'; \
@@ -13452,6 +13463,10 @@ cdboot_test: $(top_builddir)/config.status tests/cdboot_test.in
 netboot_test: $(top_builddir)/config.status tests/netboot_test.in 
 	(for x in tests/netboot_test.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
 	chmod a+x netboot_test
+
+serial_test: $(top_builddir)/config.status tests/serial_test.in 
+	(for x in tests/serial_test.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
+	chmod a+x serial_test
 
 pseries_test: $(top_builddir)/config.status tests/pseries_test.in 
 	(for x in tests/pseries_test.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-

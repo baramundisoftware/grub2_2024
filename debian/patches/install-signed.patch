@@ -18,7 +18,7 @@ Patch-Name: install-signed.patch
  1 file changed, 155 insertions(+), 65 deletions(-)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 16b5474..a42880b 100644
+index c36a286..db378d7 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -80,6 +80,7 @@ static char *label_color;
@@ -201,8 +201,8 @@ index 16b5474..a42880b 100644
  	}
        t = grub_util_path_concat (3, efidir, "EFI", efi_distributor);
        free (efidir);
-@@ -1435,14 +1436,38 @@ main (int argc, char *argv[])
- 	}
+@@ -1437,14 +1438,38 @@ main (int argc, char *argv[])
+               debug_image);
      }
  
 -  if (!have_abstractions)
@@ -242,7 +242,7 @@ index 16b5474..a42880b 100644
  	{
  	  char *uuid = NULL;
  
-@@ -2022,7 +2047,72 @@ main (int argc, char *argv[])
+@@ -2024,7 +2049,72 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_IA64_EFI:
        {
  	char *dst = grub_util_path_concat (2, efidir, efi_file);

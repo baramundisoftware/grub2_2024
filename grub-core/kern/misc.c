@@ -1068,7 +1068,7 @@ grub_vsnprintf_real (char *str, grub_size_t max_len, const char *fmt0,
 	  if (*(fmt) == 'G')
 	    {
 	      ++fmt;
-	      grub_guid_t *guid = (grub_guid_t *)(grub_addr_t) curarg;
+	      grub_packed_guid_t *guid = (grub_packed_guid_t *)(grub_addr_t) curarg;
 	      write_number (str, &count, max_len, 8, 0, '0', 'x', guid->data1);
 	      write_char (str, &count, max_len, '-');
 	      write_number (str, &count, max_len, 4, 0, '0', 'x', guid->data2);
@@ -1201,7 +1201,7 @@ grub_vsnprintf (char *str, grub_size_t n, const char *fmt, va_list ap)
 
   free_printf_args (&args);
 
-  return ret < n ? ret : n;
+  return ret;
 }
 
 int

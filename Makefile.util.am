@@ -25,7 +25,7 @@ CLEANFILES += $(nodist_libgrubkern_a_SOURCES)
 noinst_LIBRARIES += libgrubmods.a
 libgrubmods_a_SOURCES += grub-core/commands/blocklist.c grub-core/commands/ls.c grub-core/commands/macbless.c grub-core/commands/testload.c grub-core/commands/xnu_uuid.c grub-core/disk/dmraid_nvidia.c grub-core/disk/loopback.c grub-core/disk/lvm.c grub-core/disk/mdraid1x_linux.c grub-core/disk/mdraid_linux.c grub-core/disk/mdraid_linux_be.c grub-core/disk/raid5_recover.c grub-core/disk/raid6_recover.c grub-core/font/font.c grub-core/fs/affs.c grub-core/fs/afs.c grub-core/fs/bfs.c grub-core/fs/btrfs.c grub-core/fs/cbfs.c grub-core/fs/cpio.c grub-core/fs/cpio_be.c grub-core/fs/exfat.c grub-core/fs/ext2.c grub-core/fs/f2fs.c grub-core/fs/fat.c grub-core/fs/fshelp.c grub-core/fs/hfs.c grub-core/fs/hfsplus.c grub-core/fs/hfspluscomp.c grub-core/fs/iso9660.c grub-core/fs/jfs.c grub-core/fs/minix.c grub-core/fs/minix2.c grub-core/fs/minix2_be.c grub-core/fs/minix3.c grub-core/fs/minix3_be.c grub-core/fs/minix_be.c grub-core/fs/newc.c grub-core/fs/nilfs2.c grub-core/fs/ntfs.c grub-core/fs/ntfscomp.c grub-core/fs/odc.c grub-core/fs/reiserfs.c grub-core/fs/romfs.c grub-core/fs/sfs.c grub-core/fs/squash4.c grub-core/fs/tar.c grub-core/fs/udf.c grub-core/fs/ufs.c grub-core/fs/ufs2.c grub-core/fs/ufs_be.c grub-core/fs/xfs.c grub-core/fs/zfs/zfs.c grub-core/fs/zfs/zfs_fletcher.c grub-core/fs/zfs/zfs_lz4.c grub-core/fs/zfs/zfs_lzjb.c grub-core/fs/zfs/zfs_sha256.c grub-core/fs/zfs/zfscrypt.c grub-core/fs/zfs/zfsinfo.c grub-core/gfxmenu/font.c grub-core/io/bufio.c grub-core/io/gzio.c grub-core/io/lzopio.c grub-core/io/xzio.c grub-core/kern/arm/dl_helper.c grub-core/kern/arm64/dl_helper.c grub-core/kern/ia64/dl_helper.c grub-core/kern/loongarch64/dl_helper.c grub-core/lib/LzFind.c grub-core/lib/LzmaEnc.c grub-core/lib/adler32.c grub-core/lib/crc.c grub-core/lib/crc64.c grub-core/lib/datetime.c grub-core/lib/envblk.c grub-core/lib/hexdump.c grub-core/lib/minilzo/minilzo.c grub-core/lib/xzembed/xz_dec_bcj.c grub-core/lib/xzembed/xz_dec_lzma2.c grub-core/lib/xzembed/xz_dec_stream.c grub-core/lib/zstd/debug.c grub-core/lib/zstd/entropy_common.c grub-core/lib/zstd/error_private.c grub-core/lib/zstd/fse_decompress.c grub-core/lib/zstd/huf_decompress.c grub-core/lib/zstd/module.c grub-core/lib/zstd/xxhash.c grub-core/lib/zstd/zstd_common.c grub-core/lib/zstd/zstd_decompress.c grub-core/normal/charset.c grub-core/normal/misc.c grub-core/partmap/acorn.c grub-core/partmap/amiga.c grub-core/partmap/apple.c grub-core/partmap/bsdlabel.c grub-core/partmap/dfly.c grub-core/partmap/dvh.c grub-core/partmap/plan.c grub-core/partmap/sun.c grub-core/partmap/sunpc.c grub-core/script/argv.c grub-core/script/function.c grub-core/script/lexer.c grub-core/script/main.c grub-core/script/script.c grub-core/unidata.c grub-core/video/capture.c grub-core/video/colors.c grub-core/video/fb/fbblit.c grub-core/video/fb/fbfill.c grub-core/video/fb/fbutil.c grub-core/video/fb/video_fb.c grub-core/video/video.c 
 nodist_libgrubmods_a_SOURCES += grub_script.tab.c grub_script.tab.h grub_script.yy.c grub_script.yy.h libgrub_a_init.c 
-libgrubmods_a_CFLAGS += $(AM_CFLAGS) $(CFLAGS_LIBRARY) -fno-builtin -Wno-undef 
+libgrubmods_a_CFLAGS += $(AM_CFLAGS) $(CFLAGS_LIBRARY) -fno-builtin -Wno-undef -Wno-unused-but-set-variable 
 libgrubmods_a_CPPFLAGS += $(AM_CPPFLAGS) $(CPPFLAGS_LIBRARY) -I$(srcdir)/grub-core/lib/minilzo -I$(srcdir)/grub-core/lib/xzembed -I$(srcdir)/grub-core/lib/zstd -DMINILZO_HAVE_CONFIG_H 
 libgrubmods_a_CCASFLAGS += $(AM_CCASFLAGS) $(CCASFLAGS_LIBRARY) 
 dist_noinst_DATA += 
@@ -1393,6 +1393,15 @@ netboot_test: $(top_builddir)/config.status tests/netboot_test.in
 CLEANFILES += netboot_test
 EXTRA_DIST += 
 dist_noinst_DATA += tests/netboot_test.in 
+check_SCRIPTS_nonnative += serial_test
+
+serial_test: $(top_builddir)/config.status tests/serial_test.in 
+	(for x in tests/serial_test.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
+	chmod a+x serial_test
+	
+CLEANFILES += serial_test
+EXTRA_DIST += 
+dist_noinst_DATA += tests/serial_test.in 
 check_SCRIPTS_nonnative += pseries_test
 
 pseries_test: $(top_builddir)/config.status tests/pseries_test.in 

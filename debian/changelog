@@ -1,3 +1,27 @@
+grub2 (2.12-1) unstable; urgency=medium
+
+  [ Mate Kukri ]
+  * New upstream version, 2.12
+  * d/patches: Rebase on `upstream/2.12` and drop superseded patches:
+    - Dropping patches now included upstream:
+      + d/p/ntfs-cve-fixes/*: Fixes for NTFS OOB CVE
+      + d/p/upstream/xfs-*: XFS parsing fixes
+      + d/p/upstream/unmerged-usr-shebang.patch
+    - Dropping patch replaced with configure option:
+      + d/p/dejavu-font-path.patch
+  * d/rules: Pass configure option '--enable-grub-themes'
+  * d/rules: Provide Debian specific DejaVu path via configure
+  * d/{control,rules}: Use default gcc version
+  * d/p/extra_deps_lst.patch:
+    Checkout "extra_deps.lst" from upstream/master
+  * d/p/sb/revert-efi-fallback-to-legacy.patch:
+    Also revert newer fallback patch
+
+  [ Julian Andres Klode ]
+  * Add Mate to Uploaders
+
+ -- Mate Kukri <mate.kukri@canonical.com>  Mon, 15 Jan 2024 09:54:55 +0000
+
 grub2 (2.12~rc1-13) unstable; urgency=medium
 
   * No-change rebuild to retrigger signing following binNMU breakage

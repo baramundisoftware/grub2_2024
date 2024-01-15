@@ -1,6 +1,6 @@
 This is grub.info, produced by makeinfo version 6.3 from grub.texi.
 
-This manual is for GNU GRUB (version 2.12~rc1, 3 July 2023).
+This manual is for GNU GRUB (version 2.12, 5 December 2023).
 
    Copyright (C)
 1999,2000,2001,2002,2004,2006,2008,2009,2010,2011,2012,2013 Free
@@ -33,9 +33,9 @@ This is the documentation of GNU GRUB, the GRand Unified Bootloader, a
 flexible and powerful boot loader program for a wide range of
 architectures.
 
-   This edition documents version 2.12~rc1.
+   This edition documents version 2.12.
 
-   This manual is for GNU GRUB (version 2.12~rc1, 3 July 2023).
+   This manual is for GNU GRUB (version 2.12, 5 December 2023).
 
    Copyright (C)
 1999,2000,2001,2002,2004,2006,2008,2009,2010,2011,2012,2013 Free
@@ -73,15 +73,7 @@ Software Foundation, Inc.
 * Platform-specific operations:: Platform-specific operations
 * Supported kernels::           Supported kernels
 * Troubleshooting::             Error messages produced by GRUB
-* Invoking grub-install::       How to use the GRUB installer
-* Invoking grub-mkconfig::      Generate a GRUB configuration file
-* Invoking grub-mkpasswd-pbkdf2::
-                                Generate GRUB password hashes
-* Invoking grub-mkrelpath::     Make system path relative to its root
-* Invoking grub-mkrescue::      Make a GRUB rescue image
-* Invoking grub-mount::         Mount a file system using GRUB
-* Invoking grub-probe::         Probe device information for GRUB
-* Invoking grub-script-check::  Check GRUB script file for syntax errors
+* User-space utilities::        Usage of user-space utilities
 * Obtaining and Building GRUB:: How to obtain and build GRUB
 * Reporting bugs::              Where you should send a bug report
 * Future::                      Some future plans on GRUB
@@ -908,7 +900,7 @@ File: grub.info,  Node: Kexec,  Next: Chain-loading,  Prev: Loading an operating
 --------------------------
 
 GRUB can be run in userspace by invoking the grub2-emu tool.  It will
-read all configuration scripts as if booting directly (see *Note Loading
+read all configuration scripts as if booting directly (see *note Loading
 an operating system directly::).  With the '--kexec' flag, and kexec(8)
 support from the operating system, the 'linux' command will directly
 boot the target image.  For systems that lack working systemctl(1)
@@ -3933,12 +3925,21 @@ File: grub.info,  Node: bli,  Up: Modules
 
 This module provides basic support for the Boot Loader Interface.  The
 Boot Loader Interface specifies a set of EFI variables that are used to
-communicate boot-time information between the boot loader and the
+communicate boot-time information between the bootloader and the
 operating system.
 
-   When loaded, the bli module publishes the GPT partition UUID of the
-EFI System Partition used during boot and a string identifying GRUB as
-the active boot loader, including the version number.
+   The following variables are placed under the vendor UUID
+'4a67b082-0a4c-41cf-b6c7-440b29bb8c4f' when the module is loaded:
+
+   The GPT partition UUID of the EFI System Partition used during boot
+is published via the 'LoaderDevicePartUUID' variable.  The Boot Loader
+Interface specification requires GPT formatted drives.  The bli module
+ignores drives/partitions in any other format.  If GRUB is loaded from a
+non-GPT partition, e.g.  from an MSDOS formatted drive or network, this
+variable will not be set.
+
+   A string identifying GRUB as the active bootloader including the
+version number is stored in 'LoaderInfo'.
 
    This module is only available on UEFI platforms.
 
@@ -4125,10 +4126,42 @@ File: grub.info,  Node: initrd,  Next: initrd16,  Prev: chainloader,  Up: Loader
 -------------
 
  -- Command: initrd file [file ...]
-     Load, in order, all initial ramdisks for a Linux kernel image, and
-     set the appropriate parameters in the Linux setup area in memory.
-     This may only be used after the 'linux' command (*note linux::) has
-     been run.  See also *note GNU/Linux::.
+     Load, in order, all initrds for a Linux kernel image, and set the
+     appropriate parameters in the Linux setup area in memory.  This may
+     only be used after the 'linux' command (*note linux::) has been
+     run.  See *note GNU/Linux:: for more info on booting GNU/Linux.
+     For more information on initrds see the GNU/Linux kernel
+     documentation
+     (https://docs.kernel.org/filesystems/ramfs-rootfs-initramfs.html).
+
+     A new-style initrd (for kernels newer than 2.6) containing one file
+     with leading path components can also be generated at run time.
+     This can be done by prefixing an argument with 'newc:' followed by
+     the path of the file in the new initrd, a ':', and then the GRUB
+     file path to the file data to be be included.
+
+     For example:
+          initrd newc:/etc/ssh/config:(hd0,2)/home/user/.ssh/config \
+                 newc:/etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key \
+                 /boot/initrd.gz \
+                 newc:/init:/home/user/init.fixed
+
+     This command will generate two new-style initrds on the fly.  The
+     first contains the path '/etc/ssh/config' with the contents of
+     '(hd0,2)/home/user/.ssh/config' and the path
+     '/etc/ssh/ssh_host_rsa_key' with the contents of
+     '/etc/ssh/ssh_host_rsa_key' on the ROOT device.  Parent directory
+     paths will automatically be generated as needed.  This first
+     generated initrd will then have '/boot/initrd.gz' concatenated
+     after it.  Next, another new-style archive will be generated with
+     the contents of '/home/user/init.fixed' in the path '/init' and
+     appended to the previous concatenation.  Finally, the result will
+     be sent to the kernel when booted.
+
+     Keep in mind that paths that come later will take precedence.  So
+     in the example above, the generated path '/init' will overwrite any
+     '/init' in '/boot/initrd.gz'.  This can be useful when changing the
+     main initrd is undesirable or difficult.
 
 
 File: grub.info,  Node: initrd16,  Next: linux,  Prev: initrd,  Up: Loader commands
@@ -4137,13 +4170,14 @@ File: grub.info,  Node: initrd16,  Next: linux,  Prev: initrd,  Up: Loader comma
 ---------------
 
  -- Command: initrd16 file [file ...]
-     Load, in order, all initial ramdisks for a Linux kernel image to be
-     booted in 16-bit mode, and set the appropriate parameters in the
-     Linux setup area in memory.  This may only be used after the
-     'linux16' command (*note linux16::) has been run.  See also *note
-     GNU/Linux::.
+     Load, in order, all initrds for a Linux kernel image to be booted
+     in 16-bit mode, and set the appropriate parameters in the Linux
+     setup area in memory.  This may only be used after the 'linux16'
+     command (*note linux16::) has been run.  See also *note GNU/Linux::
+     and the 'initrd' command (*note initrd::) for more details on
+     arguments.
 
-     This command is only available on x86 systems.
+     This command is only available on the pc platform for x86 systems.
 
 
 File: grub.info,  Node: linux,  Next: linux16,  Prev: initrd16,  Up: Loader commands
@@ -4390,6 +4424,7 @@ you forget a command, you can run the command 'help' (*note help::).
 * halt::                        Shut down your computer
 * hashsum::                     Compute or check hash checksum
 * help::                        Show help messages
+* hexdump::                     Show raw contents of a file or memory
 * insmod::                      Insert a module
 * keystatus::                   Check key modifier status
 * list_env::                    List variables in environment block
@@ -4581,6 +4616,12 @@ File: grub.info,  Node: cat,  Next: clear,  Prev: boot,  Up: Command-line comman
      carriage return will be displayed as a control character ('<d>') to
      make it easier to see when boot problems are caused by a file
      formatted using DOS-style line endings.
+
+     Note: 'cat' can be used to view the contents of devices using the
+     block list syntax (*note Block list syntax::).  However, it is not
+     advised to view binary data because it will try to decode UTF-8
+     strings, which can lead to some bytes missing or added in the
+     output.  Instead, use the 'hexdump' command (*note hexdump::).
 
 
 File: grub.info,  Node: clear,  Next: cmosclean,  Prev: cat,  Up: Command-line commands
@@ -5041,7 +5082,7 @@ File: grub.info,  Node: hashsum,  Next: help,  Prev: halt,  Up: Command-line com
      it fails, '$?' is set to a nonzero value.
 
 
-File: grub.info,  Node: help,  Next: insmod,  Prev: hashsum,  Up: Command-line commands
+File: grub.info,  Node: help,  Next: hexdump,  Prev: hashsum,  Up: Command-line commands
 
 17.4.35 help
 ------------
@@ -5055,9 +5096,25 @@ File: grub.info,  Node: help,  Next: insmod,  Prev: hashsum,  Up: Command-line c
      each of the commands whose names begin with those PATTERNS.
 
 
-File: grub.info,  Node: insmod,  Next: keystatus,  Prev: help,  Up: Command-line commands
+File: grub.info,  Node: hexdump,  Next: insmod,  Prev: help,  Up: Command-line commands
 
-17.4.36 insmod
+17.4.36 hexdump
+---------------
+
+ -- Command: hexdump [--skip offset] [--length len] FILE_OR_DEVICE
+     Show raw contents of a file or memory.  When option '--skip' is
+     given, 'offset' number of bytes are skipped from the start of the
+     device or file given.  And '--length' allows specifying a maximum
+     number of bytes to be shown.
+
+     If given the special device named '(mem)', then the 'offset' given
+     to '--skip' is treated as the address of a memory location to dump
+     from.
+
+
+File: grub.info,  Node: insmod,  Next: keystatus,  Prev: hexdump,  Up: Command-line commands
+
+17.4.37 insmod
 --------------
 
  -- Command: insmod module
@@ -5066,7 +5123,7 @@ File: grub.info,  Node: insmod,  Next: keystatus,  Prev: help,  Up: Command-line
 
 File: grub.info,  Node: keystatus,  Next: list_env,  Prev: insmod,  Up: Command-line commands
 
-17.4.37 keystatus
+17.4.38 keystatus
 -----------------
 
  -- Command: keystatus ['--shift'] ['--ctrl'] ['--alt']
@@ -5082,7 +5139,7 @@ File: grub.info,  Node: keystatus,  Next: list_env,  Prev: insmod,  Up: Command-
 
 File: grub.info,  Node: list_env,  Next: list_trusted,  Prev: keystatus,  Up: Command-line commands
 
-17.4.38 list_env
+17.4.39 list_env
 ----------------
 
  -- Command: list_env ['--file' file]
@@ -5095,7 +5152,7 @@ File: grub.info,  Node: list_env,  Next: list_trusted,  Prev: keystatus,  Up: Co
 
 File: grub.info,  Node: list_trusted,  Next: load_env,  Prev: list_env,  Up: Command-line commands
 
-17.4.39 list_trusted
+17.4.40 list_trusted
 --------------------
 
  -- Command: list_trusted
@@ -5109,7 +5166,7 @@ File: grub.info,  Node: list_trusted,  Next: load_env,  Prev: list_env,  Up: Com
 
 File: grub.info,  Node: load_env,  Next: loadfont,  Prev: list_trusted,  Up: Command-line commands
 
-17.4.40 load_env
+17.4.41 load_env
 ----------------
 
  -- Command: load_env ['--file' file] ['--skip-sig']
@@ -5147,7 +5204,7 @@ File: grub.info,  Node: load_env,  Next: loadfont,  Prev: list_trusted,  Up: Com
 
 File: grub.info,  Node: loadfont,  Next: loopback,  Prev: load_env,  Up: Command-line commands
 
-17.4.41 loadfont
+17.4.42 loadfont
 ----------------
 
  -- Command: loadfont file ...
@@ -5158,7 +5215,7 @@ File: grub.info,  Node: loadfont,  Next: loopback,  Prev: load_env,  Up: Command
 
 File: grub.info,  Node: loopback,  Next: ls,  Prev: loadfont,  Up: Command-line commands
 
-17.4.42 loopback
+17.4.43 loopback
 ----------------
 
  -- Command: loopback ['-d'] ['-D'] device file
@@ -5178,7 +5235,7 @@ File: grub.info,  Node: loopback,  Next: ls,  Prev: loadfont,  Up: Command-line 
 
 File: grub.info,  Node: ls,  Next: lsfonts,  Prev: loopback,  Up: Command-line commands
 
-17.4.43 ls
+17.4.44 ls
 ----------
 
  -- Command: ls [arg ...]
@@ -5197,7 +5254,7 @@ File: grub.info,  Node: ls,  Next: lsfonts,  Prev: loopback,  Up: Command-line c
 
 File: grub.info,  Node: lsfonts,  Next: lsmod,  Prev: ls,  Up: Command-line commands
 
-17.4.44 lsfonts
+17.4.45 lsfonts
 ---------------
 
  -- Command: lsfonts
@@ -5206,7 +5263,7 @@ File: grub.info,  Node: lsfonts,  Next: lsmod,  Prev: ls,  Up: Command-line comm
 
 File: grub.info,  Node: lsmod,  Next: md5sum,  Prev: lsfonts,  Up: Command-line commands
 
-17.4.45 lsmod
+17.4.46 lsmod
 -------------
 
  -- Command: lsmod
@@ -5215,7 +5272,7 @@ File: grub.info,  Node: lsmod,  Next: md5sum,  Prev: lsfonts,  Up: Command-line 
 
 File: grub.info,  Node: md5sum,  Next: module,  Prev: lsmod,  Up: Command-line commands
 
-17.4.46 md5sum
+17.4.47 md5sum
 --------------
 
  -- Command: md5sum arg ...
@@ -5225,7 +5282,7 @@ File: grub.info,  Node: md5sum,  Next: module,  Prev: lsmod,  Up: Command-line c
 
 File: grub.info,  Node: module,  Next: multiboot,  Prev: md5sum,  Up: Command-line commands
 
-17.4.47 module
+17.4.48 module
 --------------
 
  -- Command: module [--nounzip] file [arguments]
@@ -5235,7 +5292,7 @@ File: grub.info,  Node: module,  Next: multiboot,  Prev: md5sum,  Up: Command-li
 
 File: grub.info,  Node: multiboot,  Next: nativedisk,  Prev: module,  Up: Command-line commands
 
-17.4.48 multiboot
+17.4.49 multiboot
 -----------------
 
  -- Command: multiboot [--quirk-bad-kludge]
@@ -5259,7 +5316,7 @@ File: grub.info,  Node: multiboot,  Next: nativedisk,  Prev: module,  Up: Comman
 
 File: grub.info,  Node: nativedisk,  Next: normal,  Prev: multiboot,  Up: Command-line commands
 
-17.4.49 nativedisk
+17.4.50 nativedisk
 ------------------
 
  -- Command: nativedisk
@@ -5271,7 +5328,7 @@ File: grub.info,  Node: nativedisk,  Next: normal,  Prev: multiboot,  Up: Comman
 
 File: grub.info,  Node: normal,  Next: normal_exit,  Prev: nativedisk,  Up: Command-line commands
 
-17.4.50 normal
+17.4.51 normal
 --------------
 
  -- Command: normal [file]
@@ -5292,7 +5349,7 @@ File: grub.info,  Node: normal,  Next: normal_exit,  Prev: nativedisk,  Up: Comm
 
 File: grub.info,  Node: normal_exit,  Next: parttool,  Prev: normal,  Up: Command-line commands
 
-17.4.51 normal_exit
+17.4.52 normal_exit
 -------------------
 
  -- Command: normal_exit
@@ -5302,7 +5359,7 @@ File: grub.info,  Node: normal_exit,  Next: parttool,  Prev: normal,  Up: Comman
 
 File: grub.info,  Node: parttool,  Next: password,  Prev: normal_exit,  Up: Command-line commands
 
-17.4.52 parttool
+17.4.53 parttool
 ----------------
 
  -- Command: parttool partition commands
@@ -5339,7 +5396,7 @@ File: grub.info,  Node: parttool,  Next: password,  Prev: normal_exit,  Up: Comm
 
 File: grub.info,  Node: password,  Next: password_pbkdf2,  Prev: parttool,  Up: Command-line commands
 
-17.4.53 password
+17.4.54 password
 ----------------
 
  -- Command: password user clear-password
@@ -5349,7 +5406,7 @@ File: grub.info,  Node: password,  Next: password_pbkdf2,  Prev: parttool,  Up: 
 
 File: grub.info,  Node: password_pbkdf2,  Next: plainmount,  Prev: password,  Up: Command-line commands
 
-17.4.54 password_pbkdf2
+17.4.55 password_pbkdf2
 -----------------------
 
  -- Command: password_pbkdf2 user hashed-password
@@ -5360,7 +5417,7 @@ File: grub.info,  Node: password_pbkdf2,  Next: plainmount,  Prev: password,  Up
 
 File: grub.info,  Node: plainmount,  Next: play,  Prev: password_pbkdf2,  Up: Command-line commands
 
-17.4.55 plainmount
+17.4.56 plainmount
 ------------------
 
  -- Command: plainmount device '-c' cipher '-s' key size ['-h' hash]
@@ -5440,7 +5497,7 @@ File: grub.info,  Node: plainmount-Footnotes,  Up: plainmount
 
 File: grub.info,  Node: play,  Next: probe,  Prev: plainmount,  Up: Command-line commands
 
-17.4.56 play
+17.4.57 play
 ------------
 
  -- Command: play file | tempo [pitch1 duration1] [pitch2 duration2] ...
@@ -5460,7 +5517,7 @@ File: grub.info,  Node: play,  Next: probe,  Prev: plainmount,  Up: Command-line
 
 File: grub.info,  Node: probe,  Next: rdmsr,  Prev: play,  Up: Command-line commands
 
-17.4.57 probe
+17.4.58 probe
 -------------
 
  -- Command: probe ['--set' var]
@@ -5475,7 +5532,7 @@ File: grub.info,  Node: probe,  Next: rdmsr,  Prev: play,  Up: Command-line comm
 
 File: grub.info,  Node: rdmsr,  Next: read,  Prev: probe,  Up: Command-line commands
 
-17.4.58 rdmsr
+17.4.59 rdmsr
 -------------
 
  -- Command:: rdmsr 0xADDR [-v VARNAME]
@@ -5495,7 +5552,7 @@ File: grub.info,  Node: rdmsr,  Next: read,  Prev: probe,  Up: Command-line comm
 
 File: grub.info,  Node: read,  Next: reboot,  Prev: rdmsr,  Up: Command-line commands
 
-17.4.59 read
+17.4.60 read
 ------------
 
  -- Command: read [-s] [var]
@@ -5508,7 +5565,7 @@ File: grub.info,  Node: read,  Next: reboot,  Prev: rdmsr,  Up: Command-line com
 
 File: grub.info,  Node: reboot,  Next: regexp,  Prev: read,  Up: Command-line commands
 
-17.4.60 reboot
+17.4.61 reboot
 --------------
 
  -- Command: reboot
@@ -5517,7 +5574,7 @@ File: grub.info,  Node: reboot,  Next: regexp,  Prev: read,  Up: Command-line co
 
 File: grub.info,  Node: regexp,  Next: rmmod,  Prev: reboot,  Up: Command-line commands
 
-17.4.61 regexp
+17.4.62 regexp
 --------------
 
  -- Command: regexp ['--set' [number:]var] regexp string
@@ -5530,7 +5587,7 @@ File: grub.info,  Node: regexp,  Next: rmmod,  Prev: reboot,  Up: Command-line c
 
 File: grub.info,  Node: rmmod,  Next: save_env,  Prev: regexp,  Up: Command-line commands
 
-17.4.62 rmmod
+17.4.63 rmmod
 -------------
 
  -- Command: rmmod module
@@ -5539,7 +5596,7 @@ File: grub.info,  Node: rmmod,  Next: save_env,  Prev: regexp,  Up: Command-line
 
 File: grub.info,  Node: save_env,  Next: search,  Prev: rmmod,  Up: Command-line commands
 
-17.4.63 save_env
+17.4.64 save_env
 ----------------
 
  -- Command: save_env ['--file' file] var ...
@@ -5563,7 +5620,7 @@ File: grub.info,  Node: save_env,  Next: search,  Prev: rmmod,  Up: Command-line
 
 File: grub.info,  Node: search,  Next: sendkey,  Prev: save_env,  Up: Command-line commands
 
-17.4.64 search
+17.4.65 search
 --------------
 
  -- Command: search ['--file'|'--label'|'--fs-uuid'] ['--set' [var]]
@@ -5598,7 +5655,7 @@ File: grub.info,  Node: search,  Next: sendkey,  Prev: save_env,  Up: Command-li
 
 File: grub.info,  Node: sendkey,  Next: set,  Prev: search,  Up: Command-line commands
 
-17.4.65 sendkey
+17.4.66 sendkey
 ---------------
 
  -- Command: sendkey
@@ -5740,7 +5797,7 @@ File: grub.info,  Node: sendkey,  Next: set,  Prev: search,  Up: Command-line co
 
 File: grub.info,  Node: set,  Next: sha1sum,  Prev: sendkey,  Up: Command-line commands
 
-17.4.66 set
+17.4.67 set
 -----------
 
  -- Command: set [envvar=value]
@@ -5752,7 +5809,7 @@ File: grub.info,  Node: set,  Next: sha1sum,  Prev: sendkey,  Up: Command-line c
 
 File: grub.info,  Node: sha1sum,  Next: sha256sum,  Prev: set,  Up: Command-line commands
 
-17.4.67 sha1sum
+17.4.68 sha1sum
 ---------------
 
  -- Command: sha1sum arg ...
@@ -5762,7 +5819,7 @@ File: grub.info,  Node: sha1sum,  Next: sha256sum,  Prev: set,  Up: Command-line
 
 File: grub.info,  Node: sha256sum,  Next: sha512sum,  Prev: sha1sum,  Up: Command-line commands
 
-17.4.68 sha256sum
+17.4.69 sha256sum
 -----------------
 
  -- Command: sha256sum arg ...
@@ -5772,7 +5829,7 @@ File: grub.info,  Node: sha256sum,  Next: sha512sum,  Prev: sha1sum,  Up: Comman
 
 File: grub.info,  Node: sha512sum,  Next: sleep,  Prev: sha256sum,  Up: Command-line commands
 
-17.4.69 sha512sum
+17.4.70 sha512sum
 -----------------
 
  -- Command: sha512sum arg ...
@@ -5782,7 +5839,7 @@ File: grub.info,  Node: sha512sum,  Next: sleep,  Prev: sha256sum,  Up: Command-
 
 File: grub.info,  Node: sleep,  Next: smbios,  Prev: sha512sum,  Up: Command-line commands
 
-17.4.70 sleep
+17.4.71 sleep
 -------------
 
  -- Command: sleep ['--verbose'] ['--interruptible'] count
@@ -5795,7 +5852,7 @@ File: grub.info,  Node: sleep,  Next: smbios,  Prev: sha512sum,  Up: Command-lin
 
 File: grub.info,  Node: smbios,  Next: source,  Prev: sleep,  Up: Command-line commands
 
-17.4.71 smbios
+17.4.72 smbios
 --------------
 
  -- Command: smbios ['--type' TYPE] ['--handle' HANDLE] ['--match'
@@ -5856,7 +5913,7 @@ File: grub.info,  Node: smbios,  Next: source,  Prev: sleep,  Up: Command-line c
 
 File: grub.info,  Node: source,  Next: test,  Prev: smbios,  Up: Command-line commands
 
-17.4.72 source
+17.4.73 source
 --------------
 
  -- Command: source file
@@ -5870,7 +5927,7 @@ File: grub.info,  Node: source,  Next: test,  Prev: smbios,  Up: Command-line co
 
 File: grub.info,  Node: test,  Next: true,  Prev: source,  Up: Command-line commands
 
-17.4.73 test
+17.4.74 test
 ------------
 
  -- Command: test expression
@@ -5946,7 +6003,7 @@ File: grub.info,  Node: test,  Next: true,  Prev: source,  Up: Command-line comm
 
 File: grub.info,  Node: true,  Next: trust,  Prev: test,  Up: Command-line commands
 
-17.4.74 true
+17.4.75 true
 ------------
 
  -- Command: true
@@ -5956,7 +6013,7 @@ File: grub.info,  Node: true,  Next: trust,  Prev: test,  Up: Command-line comma
 
 File: grub.info,  Node: trust,  Next: unset,  Prev: true,  Up: Command-line commands
 
-17.4.75 trust
+17.4.76 trust
 -------------
 
  -- Command: trust ['--skip-sig'] pubkey_file
@@ -5973,7 +6030,7 @@ File: grub.info,  Node: trust,  Next: unset,  Prev: true,  Up: Command-line comm
 
 File: grub.info,  Node: unset,  Next: verify_detached,  Prev: trust,  Up: Command-line commands
 
-17.4.76 unset
+17.4.77 unset
 -------------
 
  -- Command: unset envvar
@@ -5982,7 +6039,7 @@ File: grub.info,  Node: unset,  Next: verify_detached,  Prev: trust,  Up: Comman
 
 File: grub.info,  Node: verify_detached,  Next: videoinfo,  Prev: unset,  Up: Command-line commands
 
-17.4.77 verify_detached
+17.4.78 verify_detached
 -----------------------
 
  -- Command: verify_detached ['--skip-sig'] file signature_file
@@ -6004,7 +6061,7 @@ File: grub.info,  Node: verify_detached,  Next: videoinfo,  Prev: unset,  Up: Co
 
 File: grub.info,  Node: videoinfo,  Next: wrmsr,  Prev: verify_detached,  Up: Command-line commands
 
-17.4.78 videoinfo
+17.4.79 videoinfo
 -----------------
 
  -- Command: videoinfo [[WxH]xD]
@@ -6014,7 +6071,7 @@ File: grub.info,  Node: videoinfo,  Next: wrmsr,  Prev: verify_detached,  Up: Co
 
 File: grub.info,  Node: wrmsr,  Prev: videoinfo,  Up: Command-line commands
 
-17.4.79 wrmsr
+17.4.80 wrmsr
 -------------
 
  -- Command:: wrmsr 0xADDR 0xVALUE
@@ -6311,7 +6368,6 @@ GRUB shell may provide more information on parameters and usage.
    * 'gdbstub' - Start GDB stub on given port
    * 'gdbstub_stop' - Stop GDB stub
    * 'hdparm' - Get/set ATA disk parameters.
-   * 'hexdump' - Show raw contents of a file or memory.
    * 'hexdump_random' - Hexdump random data.
    * 'inb' - Read 8-bit value from PORT.
    * 'inl' - Read 32-bit value from PORT.
@@ -7121,7 +7177,7 @@ linux.i386                    32-bit Linux
 linux.x86_64                  64-bit Linux
 
 
-File: grub.info,  Node: Troubleshooting,  Next: Invoking grub-install,  Prev: Supported kernels,  Up: Top
+File: grub.info,  Node: Troubleshooting,  Next: User-space utilities,  Prev: Supported kernels,  Up: Top
 
 23 Error messages produced by GRUB
 **********************************
@@ -7206,10 +7262,28 @@ a partition table entry which claims partition start at block 0.  This
 change will not hamper bootability on other machines.
 
 
-File: grub.info,  Node: Invoking grub-install,  Next: Invoking grub-mkconfig,  Prev: Troubleshooting,  Up: Top
+File: grub.info,  Node: User-space utilities,  Next: Obtaining and Building GRUB,  Prev: Troubleshooting,  Up: Top
 
-24 Invoking grub-install
-************************
+24 User-space utilities
+***********************
+
+* Menu:
+
+* Invoking grub-install::       How to use the GRUB installer
+* Invoking grub-mkconfig::      Generate a GRUB configuration file
+* Invoking grub-mkpasswd-pbkdf2::
+                                Generate GRUB password hashes
+* Invoking grub-mkrelpath::     Make system path relative to its root
+* Invoking grub-mkrescue::      Make a GRUB rescue image
+* Invoking grub-mount::         Mount a file system using GRUB
+* Invoking grub-probe::         Probe device information for GRUB
+* Invoking grub-script-check::  Check GRUB script file for syntax errors
+
+
+File: grub.info,  Node: Invoking grub-install,  Next: Invoking grub-mkconfig,  Up: User-space utilities
+
+24.1 Invoking grub-install
+==========================
 
 The program 'grub-install' generates a GRUB core image using
 'grub-mkimage' and installs it on your system.  You must specify the
@@ -7265,10 +7339,10 @@ name.
      codes with this option.
 
 
-File: grub.info,  Node: Invoking grub-mkconfig,  Next: Invoking grub-mkpasswd-pbkdf2,  Prev: Invoking grub-install,  Up: Top
+File: grub.info,  Node: Invoking grub-mkconfig,  Next: Invoking grub-mkpasswd-pbkdf2,  Prev: Invoking grub-install,  Up: User-space utilities
 
-25 Invoking grub-mkconfig
-*************************
+24.2 Invoking grub-mkconfig
+===========================
 
 The program 'grub-mkconfig' generates a configuration file for GRUB
 (*note Simple configuration::).
@@ -7287,109 +7361,4 @@ The program 'grub-mkconfig' generates a configuration file for GRUB
 '--output=FILE'
      Send the generated configuration file to FILE.  The default is to
      send it to standard output.
-
-
-File: grub.info,  Node: Invoking grub-mkpasswd-pbkdf2,  Next: Invoking grub-mkrelpath,  Prev: Invoking grub-mkconfig,  Up: Top
-
-26 Invoking grub-mkpasswd-pbkdf2
-********************************
-
-The program 'grub-mkpasswd-pbkdf2' generates password hashes for GRUB
-(*note Security::).
-
-     grub-mkpasswd-pbkdf2
-
-   'grub-mkpasswd-pbkdf2' accepts the following options:
-
-'-c NUMBER'
-'--iteration-count=NUMBER'
-     Number of iterations of the underlying pseudo-random function.
-     Defaults to 10000.
-
-'-l NUMBER'
-'--buflen=NUMBER'
-     Length of the generated hash.  Defaults to 64.
-
-'-s NUMBER'
-'--salt=NUMBER'
-     Length of the salt.  Defaults to 64.
-
-
-File: grub.info,  Node: Invoking grub-mkrelpath,  Next: Invoking grub-mkrescue,  Prev: Invoking grub-mkpasswd-pbkdf2,  Up: Top
-
-27 Invoking grub-mkrelpath
-**************************
-
-The program 'grub-mkrelpath' makes a file system path relative to the
-root of its containing file system.  For instance, if '/usr' is a mount
-point, then:
-
-     $ grub-mkrelpath /usr/share/grub/unicode.pf2
-     '/share/grub/unicode.pf2'
-
-   This is mainly used internally by other GRUB utilities such as
-'grub-mkconfig' (*note Invoking grub-mkconfig::), but may occasionally
-also be useful for debugging.
-
-   'grub-mkrelpath' accepts the following options:
-
-'--help'
-     Print a summary of the command-line options and exit.
-
-'--version'
-     Print the version number of GRUB and exit.
-
-
-File: grub.info,  Node: Invoking grub-mkrescue,  Next: Invoking grub-mount,  Prev: Invoking grub-mkrelpath,  Up: Top
-
-28 Invoking grub-mkrescue
-*************************
-
-The program 'grub-mkrescue' generates a bootable GRUB rescue image
-(*note Making a GRUB bootable CD-ROM::).
-
-     grub-mkrescue -o grub.iso
-
-   All arguments not explicitly listed as 'grub-mkrescue' options are
-passed on directly to 'xorriso' in 'mkisofs' emulation mode.  Options
-passed to 'xorriso' will normally be interpreted as 'mkisofs' options;
-if the option '--' is used, then anything after that will be interpreted
-as native 'xorriso' options.
-
-   Non-option arguments specify additional source directories.  This is
-commonly used to add extra files to the image:
-
-     mkdir -p disk/boot/grub
-     (add extra files to 'disk/boot/grub')
-     grub-mkrescue -o grub.iso disk
-
-   'grub-mkrescue' accepts the following options:
-
-'--help'
-     Print a summary of the command-line options and exit.
-
-'--version'
-     Print the version number of GRUB and exit.
-
-'-o FILE'
-'--output=FILE'
-     Save output in FILE.  This "option" is required.
-
-'--modules=MODULES'
-     Pre-load the named GRUB modules in the image.  Multiple entries in
-     MODULES should be separated by whitespace (so you will probably
-     need to quote this for your shell).
-
-'--rom-directory=DIR'
-     If generating images for the QEMU or Coreboot platforms, copy the
-     resulting 'qemu.img' or 'coreboot.elf' files respectively to the
-     DIR directory as well as including them in the image.
-
-'--xorriso=FILE'
-     Use FILE as the 'xorriso' program, rather than the built-in
-     default.
-
-'--grub-mkimage=FILE'
-     Use FILE as the 'grub-mkimage' program, rather than the built-in
-     default.
 

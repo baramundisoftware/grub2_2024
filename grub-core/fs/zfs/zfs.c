@@ -73,6 +73,8 @@ GRUB_MOD_LICENSE ("GPLv3+");
 #define	DATA_TYPE_NVLIST	19
 #define	DATA_TYPE_NVLIST_ARRAY	20
 
+#define DNODE_NUM_MASK 0xffffffffffffULL
+
 #ifndef GRUB_UTIL
 static grub_dl_t my_mod;
 #endif
@@ -2669,6 +2671,8 @@ dnode_get (dnode_end_t * mdn, grub_uint64_t objnum, grub_uint8_t type,
   grub_err_t err;
   grub_zfs_endian_t endian;
 
+  objnum &= DNODE_NUM_MASK;
+
   blksz = grub_zfs_to_cpu16 (mdn->dn.dn_datablkszsec,
 			     mdn->endian) << SPA_MINBLOCKSHIFT;
   epbs = zfs_log2 (blksz) - DNODE_SHIFT;
@@ -2680,8 +2684,8 @@ dnode_get (dnode_end_t * mdn, grub_uint64_t objnum, grub_uint8_t type,
   blkid = objnum >> epbs;
   idx = objnum & ((1 << epbs) - 1);
 
-  if (data->dnode_buf != NULL && grub_memcmp (data->dnode_mdn, mdn,
-					      sizeof (*mdn)) == 0
+  if (data->dnode_buf != NULL && grub_memcmp (data->dnode_mdn, &mdn->dn,
+					      sizeof (mdn->dn)) == 0
       && objnum >= data->dnode_start && objnum < data->dnode_end)
     {
       grub_memmove (&(buf->dn), &(data->dnode_buf)[idx], DNODE_SIZE);
@@ -3378,8 +3382,11 @@ dnode_get_fullpath (const char *fullpath, struct subvolume *subvol,
       if (!err)
 	err = zap_lookup (&subvol->mdn, snapname, &headobj, data, 0);
       if (!err)
-	err = dnode_get (&(data->mos), headobj, DMU_OT_DSL_DATASET,
+	err = dnode_get (&(data->mos), headobj, 0,
 			 &subvol->mdn, data);
+      if (!err && subvol->mdn.dn.dn_type != DMU_OT_DSL_DATASET && subvol->mdn.dn.dn_bonustype != DMU_OT_DSL_DATASET)
+	return grub_error(GRUB_ERR_BAD_FS, "incorrect dataset dnode type");
+
       if (err)
 	{
 	  grub_free (fsname);
@@ -4011,7 +4018,7 @@ fill_fs_info (struct grub_dirhook_info *info,
 
   info->dir = 1;
 
-  if (mdn.dn.dn_type == DMU_OT_DSL_DIR)
+  if (mdn.dn.dn_type == DMU_OT_DSL_DIR || mdn.dn.dn_bonustype == DMU_OT_DSL_DIR)
     {
       headobj = grub_zfs_to_cpu64 (((dsl_dir_phys_t *) DN_BONUS (&mdn.dn))->dd_head_dataset_obj, mdn.endian);
 
@@ -4153,6 +4160,9 @@ iterate_zap_fs (const char *name, grub_uint64_t val,
   grub_err_t err;
   struct grub_dirhook_info info;
 
+  if (name[0] == 0 && val == 0)
+    return 0;
+
   dnode_end_t mdn;
   err = dnode_get (&(ctx->data->mos), val, 0, &mdn, ctx->data);
   if (err)
@@ -4160,8 +4170,10 @@ iterate_zap_fs (const char *name, grub_uint64_t val,
       grub_errno = 0;
       return 0;
     }
-  if (mdn.dn.dn_type != DMU_OT_DSL_DIR)
+  if (mdn.dn.dn_type != DMU_OT_DSL_DIR && mdn.dn.dn_bonustype != DMU_OT_DSL_DIR) {
+    grub_dprintf ("zfs", "type = 0x%x, val = 0x%llx\n", mdn.dn.dn_type, (long long)val);
     return 0;
+  }
 
   err = fill_fs_info (&info, &mdn, ctx->data);
   if (err)
@@ -4191,7 +4203,7 @@ iterate_zap_snap (const char *name, grub_uint64_t val,
       return 0;
     }
 
-  if (mdn.dn.dn_type != DMU_OT_DSL_DATASET)
+  if (mdn.dn.dn_type != DMU_OT_DSL_DATASET && mdn.dn.dn_bonustype != DMU_OT_DSL_DATASET)
     return 0;
 
   err = fill_fs_info (&info, &mdn, ctx->data);
@@ -4263,7 +4275,10 @@ grub_zfs_dir (grub_device_t device, const char *path,
 
       zap_iterate_u64 (&dn, iterate_zap_fs, data, &ctx);
 
-      err = dnode_get (&(data->mos), headobj, DMU_OT_DSL_DATASET, &dn, data);
+      err = dnode_get (&(data->mos), headobj, 0, &dn, data);
+      if (!err && dn.dn.dn_type != DMU_OT_DSL_DATASET && dn.dn.dn_bonustype != DMU_OT_DSL_DATASET)
+	return grub_error(GRUB_ERR_BAD_FS, "incorrect dataset dnode type");
+
       if (err)
 	{
 	  zfs_unmount (data);

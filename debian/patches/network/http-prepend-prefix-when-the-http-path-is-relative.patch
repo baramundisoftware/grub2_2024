@@ -19,7 +19,7 @@ Signed-off-by: Robbie Harwood <rharwood@redhat.com>
  1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/net/http.c b/grub-core/net/http.c
-index a966599..796b5bd 100644
+index f63f8b9..000f9db 100644
 --- a/grub-core/net/http.c
 +++ b/grub-core/net/http.c
 @@ -16,6 +16,7 @@
@@ -30,7 +30,7 @@ index a966599..796b5bd 100644
  #include <grub/misc.h>
  #include <grub/net/tcp.h>
  #include <grub/net/ip.h>
-@@ -505,13 +506,20 @@ http_open (struct grub_file *file, const char *filename)
+@@ -501,13 +502,20 @@ http_open (struct grub_file *file, const char *filename)
  {
    grub_err_t err;
    struct http_data *data;

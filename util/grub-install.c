@@ -1291,13 +1291,6 @@ main (int argc, char *argv[])
 	}
     }
 
-  grub_install_copy_files (grub_install_source_directory,
-			   grubdir, platform);
-
-  char *envfile = grub_util_path_concat (2, grubdir, "grubenv");
-  if (!grub_util_is_regular (envfile))
-    grub_util_create_envblk_file (envfile);
-
   size_t ndev = 0;
 
   /* Write device to a variable so we don't have to traverse /dev every time.  */
@@ -1373,29 +1366,6 @@ main (int argc, char *argv[])
       relative_grubdir = xstrdup ("/");
     }
 
-  char *platname =  grub_install_get_platform_name (platform);
-  char *platdir;
-  {
-    char *t = grub_util_path_concat (2, grubdir,
-				   platname);
-    platdir = grub_canonicalize_file_name (t);
-    if (!platdir)
-      grub_util_error (_("failed to get canonical path of `%s'"),
-		       t);
-    free (t);
-  }
-  load_cfg = grub_util_path_concat (2, platdir,
-				  "load.cfg");
-
-  grub_util_unlink (load_cfg);
-
-  if (debug_image && debug_image[0])
-    {
-      load_cfg_f = grub_util_fopen (load_cfg, "wb");
-      have_load_cfg = 1;
-      fprintf (load_cfg_f, "set debug='%s'\n",
-	      debug_image);
-    }
   char *prefix_drive = NULL;
   char *install_drive = NULL;
 
@@ -1417,6 +1387,38 @@ main (int argc, char *argv[])
 	    grub_util_error (_("cannot find a GRUB drive for %s.  Check your device.map"),
 			     install_device);
 	}
+    }
+
+  grub_install_copy_files (grub_install_source_directory,
+                           grubdir, platform);
+
+  char *envfile = grub_util_path_concat (2, grubdir, "grubenv");
+  if (!grub_util_is_regular (envfile))
+    grub_util_create_envblk_file (envfile);
+
+  char *platname =  grub_install_get_platform_name (platform);
+  char *platdir;
+  {
+    char *t = grub_util_path_concat (2, grubdir,
+                                   platname);
+    platdir = grub_canonicalize_file_name (t);
+    if (!platdir)
+      grub_util_error (_("failed to get canonical path of `%s'"),
+                       t);
+    free (t);
+  }
+
+  load_cfg = grub_util_path_concat (2, platdir,
+                                  "load.cfg");
+
+  grub_util_unlink (load_cfg);
+
+  if (debug_image && debug_image[0])
+    {
+      load_cfg_f = grub_util_fopen (load_cfg, "wb");
+      have_load_cfg = 1;
+      fprintf (load_cfg_f, "set debug='%s'\n",
+              debug_image);
     }
 
   if (!have_abstractions)

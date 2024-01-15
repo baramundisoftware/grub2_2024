@@ -45,7 +45,7 @@ Patch-Name: maybe-quiet.patch
  9 files changed, 111 insertions(+), 6 deletions(-)
 
 diff --git a/config.h.in b/config.h.in
-index 4d1e50e..10e023e 100644
+index 9b1d399..9d6f369 100644
 --- a/config.h.in
 +++ b/config.h.in
 @@ -16,6 +16,8 @@
@@ -58,10 +58,10 @@ index 4d1e50e..10e023e 100644
  /* We don't need those.  */
  #define MINILZO_CFG_SKIP_LZO_PTR 1
 diff --git a/configure.ac b/configure.ac
-index 76aed17..9cb67b6 100644
+index f19356e..dcf9f72 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2003,6 +2003,17 @@ else
+@@ -2068,6 +2068,17 @@ else
  fi
  AC_SUBST([UBUNTU_RECOVERY])
  
@@ -79,7 +79,7 @@ index 76aed17..9cb67b6 100644
  LIBS=""
  
  AC_SUBST([FONT_SOURCE])
-@@ -2278,5 +2289,10 @@ echo "With stack smashing protector: Yes"
+@@ -2343,5 +2354,10 @@ echo "With stack smashing protector: Yes"
  else
  echo "With stack smashing protector: No"
  fi

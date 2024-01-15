@@ -53,7 +53,7 @@
 
 #include <grub/osdep/major.h>
 
-#if defined(HAVE_LIBZFS) && defined(HAVE_LIBNVPAIR)
+#ifdef USE_LIBZFS
 # include <grub/util/libzfs.h>
 # include <grub/util/libnvpair.h>
 #endif
@@ -158,7 +158,7 @@ grub_util_find_root_devices_from_poolname (char *poolname)
   size_t ndevices = 0;
   size_t devices_allocated = 0;
 
-#if defined(HAVE_LIBZFS) && defined(HAVE_LIBNVPAIR)
+#ifdef USE_LIBZFS
   zpool_handle_t *zpool;
   libzfs_handle_t *libzfs;
   nvlist_t *config, *vdev_tree;
@@ -174,20 +174,20 @@ grub_util_find_root_devices_from_poolname (char *poolname)
   zpool = zpool_open (libzfs, poolname);
   config = zpool_get_config (zpool, NULL);
 
-  if (nvlist_lookup_nvlist (config, "vdev_tree", &vdev_tree) != 0)
+  if (NVLIST(lookup_nvlist) (config, "vdev_tree", &vdev_tree) != 0)
     error (1, errno, "nvlist_lookup_nvlist (\"vdev_tree\")");
 
-  if (nvlist_lookup_nvlist_array (vdev_tree, "children", &children, &nvlist_count) != 0)
+  if (NVLIST(lookup_nvlist_array) (vdev_tree, "children", &children, &nvlist_count) != 0)
     error (1, errno, "nvlist_lookup_nvlist_array (\"children\")");
   assert (nvlist_count > 0);
 
-  while (nvlist_lookup_nvlist_array (children[0], "children",
+  while (NVLIST(lookup_nvlist_array) (children[0], "children",
 				     &children, &nvlist_count) == 0)
     assert (nvlist_count > 0);
 
   for (i = 0; i < nvlist_count; i++)
     {
-      if (nvlist_lookup_string (children[i], "path", &device) != 0)
+      if (NVLIST(lookup_string) (children[i], "path", &device) != 0)
 	error (1, errno, "nvlist_lookup_string (\"path\")");
 
       struct stat st;

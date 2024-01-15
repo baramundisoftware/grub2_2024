@@ -617,60 +617,73 @@ grub_install_make_image_wrap_file (const char *dir, const char *prefix,
   int dc = decompressors ();
 
   if (memdisk_path)
-    slen += 20 + grub_strlen (memdisk_path);
+    slen += sizeof (" --memdisk ''") + grub_strlen (memdisk_path);
   if (config_path)
-    slen += 20 + grub_strlen (config_path);
+    slen += sizeof (" --config ''") + grub_strlen (config_path);
+  if (dtb)
+    slen += sizeof (" --dtb ''") + grub_strlen (dtb);
+  if (sbat)
+    slen += sizeof (" --sbat ''") + grub_strlen (sbat);
 
   for (pk = pubkeys; pk < pubkeys + npubkeys; pk++)
-    slen += 20 + grub_strlen (*pk);
+    slen += sizeof (" --pubkey ''") + grub_strlen (*pk);
 
   for (md = modules.entries; *md; md++)
-    {
-      slen += 10 + grub_strlen (*md);
-    }
+    slen += sizeof (" ''") + grub_strlen (*md);
 
   p = s = xmalloc (slen);
   if (memdisk_path)
     {
+      *p++ = ' ';
       p = grub_stpcpy (p, "--memdisk '");
       p = grub_stpcpy (p, memdisk_path);
       *p++ = '\'';
-      *p++ = ' ';
     }
   if (config_path)
     {
+      *p++ = ' ';
       p = grub_stpcpy (p, "--config '");
       p = grub_stpcpy (p, config_path);
       *p++ = '\'';
+    }
+  if (dtb)
+    {
       *p++ = ' ';
+      p = grub_stpcpy (p, "--dtb '");
+      p = grub_stpcpy (p, dtb);
+      *p++ = '\'';
+    }
+  if (sbat)
+    {
+      *p++ = ' ';
+      p = grub_stpcpy (p, "--sbat '");
+      p = grub_stpcpy (p, sbat);
+      *p++ = '\'';
     }
   for (pk = pubkeys; pk < pubkeys + npubkeys; pk++)
     {
+      *p++ = ' ';
       p = grub_stpcpy (p, "--pubkey '");
       p = grub_stpcpy (p, *pk);
       *p++ = '\'';
-      *p++ = ' ';
     }
 
   for (md = modules.entries; *md; md++)
     {
+      *p++ = ' ';
       *p++ = '\'';
       p = grub_stpcpy (p, *md);
       *p++ = '\'';
-      *p++ = ' ';
     }
 
   *p = '\0';
 
-  grub_util_info ("grub-mkimage --directory '%s' --prefix '%s'"
-		  " --output '%s' "
-		  " --dtb '%s' "
-		  "--sbat '%s' "
-		  "--format '%s' --compression '%s' %s %s %s\n",
-		  dir, prefix,
-		  outname, dtb ? : "", sbat ? : "", mkimage_target,
-		  compnames[compression], note ? "--note" : "",
-		  disable_shim_lock ? "--disable-shim-lock" : "", s);
+  grub_util_info ("grub-mkimage --directory '%s' --prefix '%s' --output '%s'"
+		  " --format '%s' --compression '%s'%s%s%s\n",
+		  dir, prefix, outname,
+		  mkimage_target, compnames[compression],
+		  note ? " --note" : "",
+		  disable_shim_lock ? " --disable-shim-lock" : "", s);
   free (s);
 
   tgt = grub_install_get_image_target (mkimage_target);

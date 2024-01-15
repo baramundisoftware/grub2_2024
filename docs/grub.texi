@@ -104,15 +104,7 @@ This edition documents version @value{VERSION}.
 * Platform-specific operations:: Platform-specific operations
 * Supported kernels::           Supported kernels
 * Troubleshooting::             Error messages produced by GRUB
-* Invoking grub-install::       How to use the GRUB installer
-* Invoking grub-mkconfig::      Generate a GRUB configuration file
-* Invoking grub-mkpasswd-pbkdf2::
-                                Generate GRUB password hashes
-* Invoking grub-mkrelpath::     Make system path relative to its root
-* Invoking grub-mkrescue::      Make a GRUB rescue image
-* Invoking grub-mount::         Mount a file system using GRUB
-* Invoking grub-probe::         Probe device information for GRUB
-* Invoking grub-script-check::  Check GRUB script file for syntax errors
+* User-space utilities::        Usage of user-space utilities
 * Obtaining and Building GRUB:: How to obtain and build GRUB
 * Reporting bugs::              Where you should send a bug report
 * Future::                      Some future plans on GRUB
@@ -964,7 +956,7 @@ information.
 @subsection Kexec with grub2-emu
 
 GRUB can be run in userspace by invoking the grub2-emu tool. It will
-read all configuration scripts as if booting directly (see @xref{Loading
+read all configuration scripts as if booting directly (see @ref{Loading
 an operating system directly}). With the @code{--kexec} flag, and
 kexec(8) support from the operating system, the @command{linux} command
 will directly boot the target image. For systems that lack working
@@ -3888,11 +3880,20 @@ Modules can be loaded via the @command{insmod} (@pxref{insmod}) command.
 @section bli
 This module provides basic support for the Boot Loader Interface. The Boot
 Loader Interface specifies a set of EFI variables that are used to communicate
-boot-time information between the boot loader and the operating system.
+boot-time information between the bootloader and the operating system.
 
-When loaded, the bli module publishes the GPT partition UUID of the EFI System
-Partition used during boot and a string identifying GRUB as the active boot
-loader, including the version number.
+The following variables are placed under the vendor UUID
+@code{4a67b082-0a4c-41cf-b6c7-440b29bb8c4f} when the module is loaded:
+
+The GPT partition UUID of the EFI System Partition used during boot is
+published via the @code{LoaderDevicePartUUID} variable. The Boot Loader
+Interface specification requires GPT formatted drives. The bli module
+ignores drives/partitions in any other format. If GRUB is loaded from
+a non-GPT partition, e.g. from an MSDOS formatted drive or network,
+this variable will not be set.
+
+A string identifying GRUB as the active bootloader including the version
+number is stored in @code{LoaderInfo}.
 
 This module is only available on UEFI platforms.
 
@@ -4076,10 +4077,43 @@ load a defective boot loader, such as SCO UnixWare 7.1.
 @subsection initrd
 
 @deffn Command initrd file [file @dots{}]
-Load, in order, all initial ramdisks for a Linux kernel image, and set
-the appropriate parameters in the Linux setup area in memory.  This may only
-be used after the @command{linux} command (@pxref{linux}) has been run.  See
-also @ref{GNU/Linux}.
+Load, in order, all initrds for a Linux kernel image, and set the
+appropriate parameters in the Linux setup area in memory.  This may only
+be used after the @command{linux} command (@pxref{linux}) has been run.
+See @ref{GNU/Linux} for more info on booting GNU/Linux.  For more
+information on initrds see the GNU/Linux kernel
+@uref{https://docs.kernel.org/filesystems/ramfs-rootfs-initramfs.html,
+documentation}.
+
+A new-style initrd (for kernels newer than 2.6) containing one file
+with leading path components can also be generated at run time. This
+can be done by prefixing an argument with @code{newc:} followed by the
+path of the file in the new initrd, a @code{:}, and then the GRUB file
+path to the file data to be be included.
+
+For example:
+@example
+initrd newc:/etc/ssh/config:(hd0,2)/home/user/.ssh/config \
+       newc:/etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key \
+       /boot/initrd.gz \
+       newc:/init:/home/user/init.fixed
+@end example
+
+This command will generate two new-style initrds on the fly. The first
+contains the path @samp{/etc/ssh/config} with the contents of
+@samp{(hd0,2)/home/user/.ssh/config} and the path
+@samp{/etc/ssh/ssh_host_rsa_key} with the contents of
+@samp{/etc/ssh/ssh_host_rsa_key} on the @var{root} device. Parent directory
+paths will automatically be generated as needed. This first generated initrd
+will then have @samp{/boot/initrd.gz} concatenated after it. Next, another
+new-style archive will be generated with the contents of @samp{/home/user/init.fixed}
+in the path @samp{/init} and appended to the previous concatenation. Finally,
+the result will be sent to the kernel when booted.
+
+Keep in mind that paths that come later will take precedence. So in the
+example above, the generated path @samp{/init} will overwrite any @samp{/init}
+in @samp{/boot/initrd.gz}. This can be useful when changing the main initrd
+is undesirable or difficult.
 @end deffn
 
 
@@ -4087,12 +4121,13 @@ also @ref{GNU/Linux}.
 @subsection initrd16
 
 @deffn Command initrd16 file [file @dots{}]
-Load, in order, all initial ramdisks for a Linux kernel image to be booted in
+Load, in order, all initrds for a Linux kernel image to be booted in
 16-bit mode, and set the appropriate parameters in the Linux setup area in
 memory.  This may only be used after the @command{linux16} command
-(@pxref{linux16}) has been run.  See also @ref{GNU/Linux}.
+(@pxref{linux16}) has been run.  See also @ref{GNU/Linux} and the @command{initrd}
+command (@pxref{initrd}) for more details on arguments.
 
-This command is only available on x86 systems.
+This command is only available on the pc platform for x86 systems.
 @end deffn
 
 
@@ -4335,6 +4370,7 @@ you forget a command, you can run the command @command{help}
 * halt::                        Shut down your computer
 * hashsum::                     Compute or check hash checksum
 * help::                        Show help messages
+* hexdump::                     Show raw contents of a file or memory
 * insmod::                      Insert a module
 * keystatus::                   Check key modifier status
 * list_env::                    List variables in environment block
@@ -4514,6 +4550,12 @@ will be displayed as a simple new line.  Otherwise, the carriage return will
 be displayed as a control character (@samp{<d>}) to make it easier to see
 when boot problems are caused by a file formatted using DOS-style line
 endings.
+
+Note: @command{cat} can be used to view the contents of devices using the
+block list syntax (@pxref{Block list syntax}). However, it is not advised
+to view binary data because it will try to decode UTF-8 strings, which can
+lead to some bytes missing or added in the output. Instead, use the
+@command{hexdump} command (@pxref{hexdump}).
 @end deffn
 
 
@@ -4950,6 +4992,20 @@ available commands.
 
 If you specify any @var{patterns}, it displays longer information
 about each of the commands whose names begin with those @var{patterns}.
+@end deffn
+
+
+@node hexdump
+@subsection hexdump
+
+@deffn Command hexdump [--skip offset] [--length len] FILE_OR_DEVICE
+Show raw contents of a file or memory. When option @option{--skip} is given,
+@samp{offset} number of bytes are skipped from the start of the device or
+file given. And @option{--length} allows specifying a maximum number of bytes
+to be shown.
+
+If given the special device named @samp{(mem)}, then the @samp{offset} given to
+@option{--skip} is treated as the address of a memory location to dump from.
 @end deffn
 
 
@@ -6139,7 +6195,6 @@ GRUB shell may provide more information on parameters and usage.
 @item @command{gdbstub} -  Start GDB stub on given port
 @item @command{gdbstub_stop} - Stop GDB stub
 @item @command{hdparm} - Get/set ATA disk parameters.
-@item @command{hexdump} - Show raw contents of a file or memory.
 @item @command{hexdump_random} - Hexdump random data.
 @item @command{inb} - Read 8-bit value from PORT.
 @item @command{inl} - Read 32-bit value from PORT.
@@ -6995,8 +7050,24 @@ entry which claims partition start at block 0. This change will not hamper
 bootability on other machines.
 
 
+@node User-space utilities
+@chapter User-space utilities
+
+@menu
+* Invoking grub-install::       How to use the GRUB installer
+* Invoking grub-mkconfig::      Generate a GRUB configuration file
+* Invoking grub-mkpasswd-pbkdf2::
+                                Generate GRUB password hashes
+* Invoking grub-mkrelpath::     Make system path relative to its root
+* Invoking grub-mkrescue::      Make a GRUB rescue image
+* Invoking grub-mount::         Mount a file system using GRUB
+* Invoking grub-probe::         Probe device information for GRUB
+* Invoking grub-script-check::  Check GRUB script file for syntax errors
+@end menu
+
+
 @node Invoking grub-install
-@chapter Invoking grub-install
+@section Invoking grub-install
 
 The program @command{grub-install} generates a GRUB core image using
 @command{grub-mkimage} and installs it on your system.  You must specify the
@@ -7062,7 +7133,7 @@ outside of the MBR.  Disable the Reed-Solomon codes with this option.
 @end table
 
 @node Invoking grub-mkconfig
-@chapter Invoking grub-mkconfig
+@section Invoking grub-mkconfig
 
 The program @command{grub-mkconfig} generates a configuration file for GRUB
 (@pxref{Simple configuration}).
@@ -7088,7 +7159,7 @@ it to standard output.
 
 
 @node Invoking grub-mkpasswd-pbkdf2
-@chapter Invoking grub-mkpasswd-pbkdf2
+@section Invoking grub-mkpasswd-pbkdf2
 
 The program @command{grub-mkpasswd-pbkdf2} generates password hashes for
 GRUB (@pxref{Security}).
@@ -7116,7 +7187,7 @@ Length of the salt.  Defaults to 64.
 
 
 @node Invoking grub-mkrelpath
-@chapter Invoking grub-mkrelpath
+@section Invoking grub-mkrelpath
 
 The program @command{grub-mkrelpath} makes a file system path relative to
 the root of its containing file system.  For instance, if @file{/usr} is a
@@ -7143,7 +7214,7 @@ Print the version number of GRUB and exit.
 
 
 @node Invoking grub-mkrescue
-@chapter Invoking grub-mkrescue
+@section Invoking grub-mkrescue
 
 The program @command{grub-mkrescue} generates a bootable GRUB rescue image
 (@pxref{Making a GRUB bootable CD-ROM}).
@@ -7201,7 +7272,7 @@ built-in default.
 
 
 @node Invoking grub-mount
-@chapter Invoking grub-mount
+@section Invoking grub-mount
 
 The program @command{grub-mount} performs a read-only mount of any file
 system or file system image that GRUB understands, using GRUB's file system
@@ -7288,7 +7359,7 @@ Print verbose messages.
 
 
 @node Invoking grub-probe
-@chapter Invoking grub-probe
+@section Invoking grub-probe
 
 The program @command{grub-probe} probes device information for a given path
 or device.
@@ -7374,7 +7445,7 @@ Print verbose messages.
 
 
 @node Invoking grub-script-check
-@chapter Invoking grub-script-check
+@section Invoking grub-script-check
 
 The program @command{grub-script-check} takes a GRUB script file
 (@pxref{Shell-like scripting}) and checks it for syntax errors, similar to

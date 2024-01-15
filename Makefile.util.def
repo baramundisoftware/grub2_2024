@@ -55,7 +55,7 @@ library = {
 
 library = {
   name = libgrubmods.a;
-  cflags = '-fno-builtin -Wno-undef';
+  cflags = '-fno-builtin -Wno-undef -Wno-unused-but-set-variable';
   cppflags = '-I$(srcdir)/grub-core/lib/minilzo -I$(srcdir)/grub-core/lib/xzembed -I$(srcdir)/grub-core/lib/zstd -DMINILZO_HAVE_CONFIG_H';
 
   common_nodist = grub_script.tab.c;
@@ -1128,6 +1128,12 @@ script = {
   testcase = nonnative;
   name = netboot_test;
   common = tests/netboot_test.in;
+};
+
+script = {
+  testcase = nonnative;
+  name = serial_test;
+  common = tests/serial_test.in;
 };
 
 script = {

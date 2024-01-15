@@ -22,14 +22,14 @@ Signed-off-by: Robbie Harwood <rharwood@redhat.com>
  grub-core/net/efi/ip6_config.c     |  423 +++++++++++
  grub-core/net/efi/net.c            | 1413 ++++++++++++++++++++++++++++++++++++
  grub-core/net/efi/pxe.c            |  351 +++++++++
- grub-core/net/http.c               |    5 +-
+ grub-core/net/http.c               |    3 +
  grub-core/net/net.c                |   74 ++
  include/grub/efi/api.h             |  211 +++++-
  include/grub/efi/dhcp.h            |  347 +++++++++
  include/grub/efi/http.h            |  215 ++++++
  include/grub/net/efi.h             |  144 ++++
  util/grub-mknetdir.c               |    5 +-
- 17 files changed, 4450 insertions(+), 50 deletions(-)
+ 17 files changed, 4449 insertions(+), 49 deletions(-)
  create mode 100644 grub-core/net/efi/dhcp.c
  create mode 100644 grub-core/net/efi/http.c
  create mode 100644 grub-core/net/efi/ip4_config.c
@@ -41,7 +41,7 @@ Signed-off-by: Robbie Harwood <rharwood@redhat.com>
  create mode 100644 include/grub/net/efi.h
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index b0bd361..a9b9c20 100644
+index 15be5db..044e53c 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -2359,6 +2359,12 @@ module = {
@@ -71,7 +71,7 @@ index a458c3a..1637731 100644
    if (file->offset + res < next_buf)
      {
 diff --git a/grub-core/kern/efi/efi.c b/grub-core/kern/efi/efi.c
-index a2afd8d..9544ef9 100644
+index b93ae3a..b674816 100644
 --- a/grub-core/kern/efi/efi.c
 +++ b/grub-core/kern/efi/efi.c
 @@ -770,7 +770,7 @@ grub_efi_print_device_path (grub_efi_device_path_t *dp)
@@ -3678,20 +3678,18 @@ index 0000000..e0b303b
 +  };
 +
 diff --git a/grub-core/net/http.c b/grub-core/net/http.c
-index 406777b..a966599 100644
+index 69b6296..f63f8b9 100644
 --- a/grub-core/net/http.c
 +++ b/grub-core/net/http.c
-@@ -31,7 +31,8 @@ GRUB_MOD_LICENSE ("GPLv3+");
+@@ -30,6 +30,7 @@
+ GRUB_MOD_LICENSE ("GPLv3+");
  
- enum
-   {
--    HTTP_PORT = 80
-+    HTTP_PORT = 80,
-+    HTTP_MAX_CHUNK_SIZE = 0x80000000
-   };
+ #define HTTP_PORT	((grub_uint16_t) 80)
++#define HTTP_MAX_CHUNK_SIZE 0x80000000
  
- 
-@@ -86,6 +87,8 @@ parse_line (grub_file_t file, http_data_t data, char *ptr, grub_size_t len)
+ typedef struct http_data
+ {
+@@ -82,6 +83,8 @@ parse_line (grub_file_t file, http_data_t data, char *ptr, grub_size_t len)
    if (data->in_chunk_len == 2)
      {
        data->chunk_rem = grub_strtoul (ptr, 0, 16);
@@ -3811,7 +3809,7 @@ index a31f0c9..7571afa 100644
 +#endif
  }
 diff --git a/include/grub/efi/api.h b/include/grub/efi/api.h
-index 1aa56a1..3d88dc0 100644
+index b64fd49..ae02e6d 100644
 --- a/include/grub/efi/api.h
 +++ b/include/grub/efi/api.h
 @@ -658,6 +658,27 @@ typedef union

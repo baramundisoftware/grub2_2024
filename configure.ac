@@ -34,7 +34,7 @@ dnl "TARGET_" (such as TARGET_CC, TARGET_CFLAGS, etc.) are used for
 dnl the target type. See INSTALL for full list of variables and
 dnl description of the relationships between them.
 
-AC_INIT([GRUB],[2.12~rc1],[bug-grub@gnu.org])
+AC_INIT([GRUB],[2.12],[bug-grub@gnu.org])
 
 AS_CASE(["$ERROR_PLATFORM_NOT_SUPPORT_SSP"],
   [n | no | nO | N | No | NO], [ERROR_PLATFORM_NOT_SUPPORT_SSP=no],
@@ -1020,6 +1020,19 @@ if test x"$target_cpu" = xsparc64 ; then
   TARGET_LDFLAGS="$TARGET_LDFLAGS $grub_cv_target_cc_mno_relax"
 fi
 
+# The backtrace module relies on frame pointers and the default optimization
+# level, -Os, omits them. Make sure they are enabled.
+AC_CACHE_CHECK([whether -fno-omit-frame-pointer works], [grub_cv_cc_fno_omit_frame_pointer], [
+  CFLAGS="$TARGET_CFLAGS -fno-omit-frame-pointer"
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],
+      [grub_cv_cc_fno_omit_frame_pointer=yes],
+      [grub_cv_cc_fno_omit_frame_pointer=no])
+])
+
+if test "x$grub_cv_cc_fno_omit_frame_pointer" = xyes; then
+  TARGET_CFLAGS="$TARGET_CFLAGS -fno-omit-frame-pointer"
+fi
+
 # By default, GCC 4.4 generates .eh_frame sections containing unwind
 # information in some cases where it previously did not. GRUB doesn't need
 # these and they just use up vital space. Restore the old compiler
@@ -1262,8 +1275,7 @@ AC_SUBST(TARGET_LDFLAGS_OLDMAGIC)
 
 LDFLAGS="$TARGET_LDFLAGS"
 
-if test "$target_cpu" = x86_64 || test "$target_cpu" = sparc64 || test "$target_cpu" = riscv64 \
-  || test "$target_cpu" = loongarch64 ; then
+if test "$target_cpu" = x86_64 || test "$target_cpu" = sparc64 || test "$target_cpu" = riscv64 ; then
   # Use large model to support 4G memory
   AC_CACHE_CHECK([whether option -mcmodel=large works], grub_cv_cc_mcmodel, [
     CFLAGS="$TARGET_CFLAGS -mcmodel=large"
@@ -1426,6 +1438,28 @@ else
     AC_MSG_ERROR([invalid value $enable_stack_protector for --enable-stack-protector])
   fi
   TARGET_CPPFLAGS="$TARGET_CPPFLAGS -DGRUB_STACK_PROTECTOR=1"
+
+  if test -n "$SOURCE_DATE_EPOCH"; then
+     GRUB_STACK_PROTECTOR_INIT="0x00f2b7e2$(printf "%x" "$SOURCE_DATE_EPOCH" | sed 's/.*\(........\)$/\1/')"
+  elif test -r /dev/urandom; then
+     # Generate the 8 byte stack protector canary at build time if /dev/urandom
+     # is able to be read. The first byte should be NUL to filter out string
+     # buffer overflow attacks.
+     GRUB_STACK_PROTECTOR_INIT="$($PYTHON -c 'import codecs; rf=open("/dev/urandom", "rb"); print("0x00"+codecs.encode(rf.read(7), "hex").decode("ascii"))')"
+  else
+    # Some hosts may not have a urandom, e.g. Windows, so use statically
+    # generated random bytes
+    GRUB_STACK_PROTECTOR_INIT="0x00f2b7e2f193b25c"
+  fi
+
+  if test x"$target_m32" = x1 ; then
+    # Make sure that the canary default value is 24-bits by only using the
+    # lower 3 bytes on 32 bit systems. This allows the upper byte to be NUL
+    # to filter out string buffer overflow attacks.
+    GRUB_STACK_PROTECTOR_INIT="0x00$(echo "$GRUB_STACK_PROTECTOR_INIT" | sed 's/.*\(......\)$/\1/')"
+  fi
+
+  AC_SUBST([GRUB_STACK_PROTECTOR_INIT])
 fi
 
 CFLAGS="$TARGET_CFLAGS"
@@ -1609,7 +1643,7 @@ if test "$platform" = emu; then
             AC_SUBST(HAVE_SDL2)],
             [grub_emu_sdl2_excuse="libSDL2 libraries are required to build \`grub-emu' with SDL2 support"])
   [fi]
-  if test x"enable_grub_emu_sdl2" = xyes && test x"$grub_emu_sdl2_excuse" != x ; then
+  if test x"$enable_grub_emu_sdl2" = xyes && test x"$grub_emu_sdl2_excuse" != x ; then
     AC_MSG_ERROR([SDL2 support for grub-emu was explicitly requested but can't be compiled ($grub_emu_sdl2_excuse)])
   fi
   if test x"$grub_emu_sdl2_excuse" = x ; then
@@ -1704,6 +1738,9 @@ if test x"$grub_mkfont_excuse" = x ; then
     CPPFLAGS="$SAVED_CPPFLAGS"
     LIBS="$SAVED_LIBS"
   ], [grub_mkfont_excuse=["need freetype2 library"]])
+  if test x"$grub_mkfont_excuse" = x && test x"$host_kernel" = xnetbsd ; then
+      FREETYPE_LIBS="$FREETYPE_LIBS -Wl,-R,/usr/pkg/lib" ;
+  fi
 fi
 
 if test x"$enable_grub_mkfont" = xyes && test x"$grub_mkfont_excuse" != x ; then
@@ -1758,6 +1795,11 @@ if test x"$grub_build_mkfont_excuse" = x ; then
     LIBS="$SAVED_LIBS"
     CPPFLAGS="$SAVED_CPPFLAGS_2"
   ], [grub_build_mkfont_excuse=["need freetype2 library"]])
+  if test x"$grub_build_mkfont_excuse" = x ; then
+    case x"$build_os" in
+      xnetbsd*) BUILD_FREETYPE_LIBS="$BUILD_FREETYPE_LIBS -Wl,-R,/usr/pkg/lib" ;;
+    esac
+  fi
   PKG_CONFIG="$SAVED_PKG_CONFIG"
 fi
 
@@ -1784,8 +1826,6 @@ CPPFLAGS="$SAVED_CPPFLAGS"
 LDFLAGS="$SAVED_LDFLAGS"
 
 
-DJVU_FONT_SOURCE=
-
 starfield_excuse=
 
 AC_ARG_ENABLE([grub-themes],
@@ -1799,19 +1839,28 @@ if test x"$starfield_excuse" = x && test x"$enable_build_grub_mkfont" = xno ; th
   starfield_excuse="No build-time grub-mkfont"
 fi
 
-if test x"$starfield_excuse" = x; then
-   for ext in pcf pcf.gz bdf bdf.gz ttf ttf.gz; do
-     for dir in . /usr/src /usr/share/fonts/X11/misc /usr/share/fonts/truetype/ttf-dejavu /usr/share/fonts/dejavu /usr/share/fonts/truetype; do
-        if test -f "$dir/DejaVuSans.$ext"; then
-          DJVU_FONT_SOURCE="$dir/DejaVuSans.$ext"
-          break 2
-        fi
-     done
-   done
+AC_ARG_WITH([dejavufont],
+            AS_HELP_STRING([--with-dejavufont=FILE],
+                           [set the DejeVu source [[guessed]]]))
 
-   if test "x$DJVU_FONT_SOURCE" = x; then
-     starfield_excuse="No DejaVu found"
-   fi
+if test "x$with_dejavufont" = x; then
+  # search in well-known directories
+  if test x"$starfield_excuse" = x; then
+     for ext in pcf pcf.gz bdf bdf.gz ttf ttf.gz; do
+       for dir in . /usr/src /usr/share/fonts/X11/misc /usr/share/fonts/truetype/ttf-dejavu /usr/share/fonts/dejavu /usr/share/fonts/truetype /usr/pkg/share/fonts/X11/TTF /usr/local/share/fonts/dejavu /usr/X11R6/lib/X11/fonts/TTF; do
+          if test -f "$dir/DejaVuSans.$ext"; then
+            DJVU_FONT_SOURCE="$dir/DejaVuSans.$ext"
+            break 2
+          fi
+       done
+     done
+
+     if test "x$DJVU_FONT_SOURCE" = x; then
+       starfield_excuse="No DejaVu found"
+     fi
+  fi
+else
+  DJVU_FONT_SOURCE="$with_dejavufont"
 fi
 
 if test x"$enable_grub_themes" = xyes &&  test x"$starfield_excuse" != x; then
@@ -1820,21 +1869,28 @@ fi
 
 AC_SUBST([DJVU_FONT_SOURCE])
 
-FONT_SOURCE=
+AC_ARG_WITH([unifont],
+            AS_HELP_STRING([--with-unifont=FILE],
+                           [set the unifont source [[guessed]]]))
 
-for ext in pcf pcf.gz bdf bdf.gz ttf ttf.gz; do
-  for dir in . /usr/src /usr/share/fonts/X11/misc /usr/share/fonts/unifont /usr/share/fonts/uni /usr/share/fonts/truetype/unifont /usr/share/fonts/misc; do
-    if test -f "$dir/unifont.$ext"; then
-      md5="$(md5sum "$dir/unifont.$ext"|awk '{ print $1; }')"
-      # PCF and BDF from version 6.3 isn't hanled properly by libfreetype.
-      if test "$md5" = 0a54834d2788c83886a3e1785a6a1e61 || test "$md5" = 28f2565c7a41d8d407e2551159385edb || test "$md5" = dae5e588461b3b92b87b6ffee734f936 || test "$md5" = 4a3d687aa5bb329ed05f4263a1016791 ; then
-        continue
+if test "x$with_unifont" = x; then
+  # search in well-known directories
+  for ext in pcf pcf.gz bdf bdf.gz ttf ttf.gz; do
+    for dir in . /usr/src /usr/share/fonts/X11/misc /usr/share/fonts/unifont /usr/share/fonts/uni /usr/share/fonts/truetype/unifont /usr/share/fonts/misc /usr/pkg/share/fonts/X11/misc /usr/local/share/fonts/gnu-unifont /usr/local/share/fonts/unifont; do
+      if test -f "$dir/unifont.$ext"; then
+        md5="$(md5sum "$dir/unifont.$ext"|awk '{ print $1; }')"
+        # PCF and BDF from version 6.3 isn't hanled properly by libfreetype.
+        if test "$md5" = 0a54834d2788c83886a3e1785a6a1e61 || test "$md5" = 28f2565c7a41d8d407e2551159385edb || test "$md5" = dae5e588461b3b92b87b6ffee734f936 || test "$md5" = 4a3d687aa5bb329ed05f4263a1016791 ; then
+          continue
+        fi
+        FONT_SOURCE="$dir/unifont.$ext"
+        break 2
       fi
-      FONT_SOURCE="$dir/unifont.$ext"
-      break 2
-    fi
+    done
   done
-done
+else
+  FONT_SOURCE="$with_unifont"
+fi
 
 if test x"$enable_build_grub_mkfont" = xno ; then
   FONT_SOURCE=
@@ -1971,8 +2027,19 @@ fi
 
 if test x"$libzfs_excuse" = x ; then
   AC_CHECK_LIB([nvpair], [nvlist_lookup_string],
-               [],
-               [libzfs_excuse="need nvpair library"])
+               [have_normal_nvpair=yes],
+               [have_normal_nvpair=no])
+  if test x"$have_normal_nvpair" = xno ; then
+    AC_CHECK_LIB([nvpair], [opensolaris_nvlist_lookup_string],
+                 [have_prefixed_nvpair=yes],
+                 [have_prefixed_nvpair=no])
+    if test x"$have_prefixed_nvpair" = xyes ; then
+      AC_DEFINE([GRUB_UTIL_NVPAIR_IS_PREFIXED], [1],
+            [Define to 1 if libnvpair symbols are prefixed with opensolaris_.])
+    else
+      libzfs_excuse="need nvpair library"
+    fi
+  fi
 fi
 
 if test x"$enable_libzfs" = xyes && test x"$libzfs_excuse" != x ; then
@@ -1982,11 +2049,9 @@ fi
 if test x"$libzfs_excuse" = x ; then
   # We need both libzfs and libnvpair for a successful build.
   LIBZFS="-lzfs"
-  AC_DEFINE([HAVE_LIBZFS], [1],
-            [Define to 1 if you have the ZFS library.])
   LIBNVPAIR="-lnvpair"
-  AC_DEFINE([HAVE_LIBNVPAIR], [1],
-            [Define to 1 if you have the NVPAIR library.])
+  AC_DEFINE([USE_LIBZFS], [1],
+            [Define to 1 if ZFS library should be used.])
 fi
 
 AC_SUBST([LIBZFS])

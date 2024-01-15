@@ -66,8 +66,8 @@ exec_show_error () {
     v=`$@ 2>&1`
     ret=$?
     if [ "$ret" != 0 ]; then
-        echo "$v" >&2
-        exit $ret
+	echo "$v" >&2
+	exit $ret
     fi
 }
 
@@ -225,7 +225,14 @@ case "${grub_modinfo_target_cpu}-${grub_modinfo_platform}" in
 	console=console;;
 esac
 
-timeout=60
+case "${grub_modinfo_target_cpu}-${grub_modinfo_platform}" in
+    # Only add the RNG device for EFI platforms because we currently only
+    # support Stack Smashing protection on EFI.
+    *-efi)
+	qemuopts="$qemuopts -device virtio-rng-pci" ;;
+esac
+
+timeout=${GRUB_SHELL_DEFAULT_TIMEOUT:-60}
 mkimage_extra_arg=
 debug=${GRUB_SHELL_DEFAULT_DEBUG:-$GRUB_TEST_DEFAULT_DEBUG}
 
@@ -247,7 +254,9 @@ for option in "$@"; do
     --no-trim)
 	trim=0 ;;
     --debug)
-        debug=$((debug+1)) ;;
+	debug=$((debug+1)) ;;
+    --debug=*)
+        debug=$((`echo "$option" | sed -e 's/--debug=//'`)) ;;
     --modules=*)
 	ms=`echo "$option" | sed -e 's/--modules=//' -e 's/,/ /g'`
 	modules="$modules $ms" ;;
@@ -257,8 +266,6 @@ for option in "$@"; do
     --mkrescue-arg=*)
 	mkr=`echo "$option" | sed -e 's/--mkrescue-arg=//' -e 's/,/ /g'`
 	mkrescue_args="$mkrescue_args $mkr" ;;
-    --qemu=*)
-	qemu=`echo "$option" | sed -e 's/--qemu=//' -e 's/,/ /g'`;;
     --pseries)
 	qemu=qemu-system-ppc64
 	serial_port=ieee1275/hvterm
@@ -267,11 +274,15 @@ for option in "$@"; do
 	trim=1
 	pseries=y
 	    ;;
+    --serial=*)
+	serial_port=`echo "$option" | sed -e 's/--serial=//'`;;
+    --qemu=*)
+	qemu=`echo "$option" | sed -e 's/--qemu=//' -e 's/,/ /g'`;;
     --qemu-opts=*)
-        qs=`echo "$option" | sed -e 's/--qemu-opts=//'`
-        qemuopts="$qemuopts $qs" ;;
+	qs=`echo "$option" | sed -e 's/--qemu-opts=//'`
+	qemuopts="$qemuopts $qs" ;;
     --disk=*)
-        dsk=`echo "$option" | sed -e 's/--disk=//'`
+	dsk=`echo "$option" | sed -e 's/--disk=//'`
 	if [ ${grub_modinfo_platform} = emu ]; then
 	    echo "(hd$disk)  $dsk" >> "$device_map"
 	    disk="$((disk+1))"
@@ -280,7 +291,7 @@ for option in "$@"; do
 		echo "Too many disks" 1>&2
 		exit 1;
 	    fi
-            qemuopts="$qemuopts -$disk$dsk"
+	    qemuopts="$qemuopts -$disk$dsk"
 	    if [ "$disk" = "hda " ]; then
 		disk="hdb ";
 	    elif [ "$disk" = "hdb " ]; then
@@ -293,7 +304,7 @@ for option in "$@"; do
 	fi
 	;;
     --timeout=*)
-        timeout=`echo "$option" | sed -e 's/--timeout=//'`
+	timeout=`echo "$option" | sed -e 's/--timeout=//'`
 	;;
 
     # Intentionally undocumented
@@ -303,7 +314,7 @@ for option in "$@"; do
 	mkimage_extra_arg="$mkimage_extra_arg `echo "$option" | sed 's/--grub-mkimage-extra=//'`" ;;
 
     --boot=*)
-        dev=`echo "$option" | sed -e 's/--boot=//'`
+	dev=`echo "$option" | sed -e 's/--boot=//'`
 	if   [ "$dev" = "fd" ] ; then boot=fd;
 	elif [ "$dev" = "hd" ] ; then boot=hd;
 	elif [ "$dev" = "cd" ] ; then boot=cd;
@@ -422,7 +433,9 @@ fi
 
 if [ x$boot != xnet ] && [ x$boot != xemu ]; then
     pkgdatadir="${builddir}" \
-    exec_show_error "${builddir}/grub-mkrescue" "--output=${isofile}" \
+    exec_show_error "${builddir}/grub-mkrescue" \
+	${debug:+$([ "$debug" -gt 2 ] && echo -n "--verbose")} \
+	"--output=${isofile}" \
 	"--override-directory=${builddir}/grub-core" \
 	--rom-directory="${rom_directory}" \
 	--locale-directory="${srcdir}/po" \
