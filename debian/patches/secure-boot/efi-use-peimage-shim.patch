@@ -37,7 +37,7 @@ Signed-off-by: Julian Andres Klode <julian.klode@canonical.com>
  create mode 100644 include/grub/efi/peimage.h
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 0b4d6b7..0411752 100644
+index 333d3fe..c3ad031 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -1875,6 +1875,18 @@ module = {

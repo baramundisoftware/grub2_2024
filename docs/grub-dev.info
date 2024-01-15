@@ -1,7 +1,7 @@
 This is grub-dev.info, produced by makeinfo version 6.3 from
 grub-dev.texi.
 
-This developer manual is for GNU GRUB (version 2.12~rc1, 3 July 2023).
+This developer manual is for GNU GRUB (version 2.12, 31 August 2023).
 
    Copyright (C) 1999,2000,2001,2002,2004,2005,2006,2008,2009,2010,2011
 Free Software Foundation, Inc.
@@ -25,10 +25,9 @@ This is the developer documentation of GNU GRUB, the GRand Unified
 Bootloader, a flexible and powerful boot loader program for a wide range
 of architectures.
 
-   This edition documents version 2.12~rc1.
+   This edition documents version 2.12.
 
-   This developer manual is for GNU GRUB (version 2.12~rc1, 3 July
-2023).
+   This developer manual is for GNU GRUB (version 2.12, 31 August 2023).
 
    Copyright (C) 1999,2000,2001,2002,2004,2005,2006,2008,2009,2010,2011
 Free Software Foundation, Inc.
@@ -698,10 +697,11 @@ kernel.exec', if GDB is started from the 'grub-core' directory in the
 GRUB2 build directory.  GRUB2 developers have made this more simple by
 including a GDB script which does much of the setup.  This file is at
 'grub-core/gdb_grub' in the build directory and is also installed via
-'make install'.  If not building GRUB, the distribution may have a
-package which installs this GDB script along with debug symbol binaries,
-such as Debian's 'grub-pc-dbg' package.  The GDB script is intended to
-be used like so, assuming:
+'make install'.  When using a pre-built GRUB, the distribution may have
+a package which installs this GDB script along with debug symbol
+binaries, such as Debian's 'grub-pc-dbg' package.  The GDB script is
+intended to be used like so, assuming that '/path/to/script' is the path
+to the directory containing the gdb_grub script and debug symbol files:
 
      cd $(dirname /path/to/script/gdb_grub)
      gdb -x gdb_grub
@@ -2944,52 +2944,52 @@ Index
 
 
 Tag Table:
-Node: Top640
-Node: Getting the source code1862
-Node: Coding style2854
-Node: Naming Conventions3263
-Node: Functions3548
-Node: Variables4422
-Node: Types5537
-Node: Macros6138
-Node: Comments6470
-Node: Multi-Line Comments7079
-Node: Finding your way around8004
-Node: Contributing Changes11320
-Node: Getting started12436
-Node: Typical Developer Experience16488
-Node: When you are approved for write access to project's files17530
-Node: Setting up and running test suite18963
-Node: Updating External Code19660
-Node: Gnulib19967
-Node: jsmn21960
-Node: minilzo22431
-Node: Debugging23138
-Node: i386-pc25159
-Node: x86_64-efi27591
-Node: OVMF debug log34074
-Node: Using the gdbinfo command35249
-Node: Porting35547
-Node: Error Handling47301
-Node: Stack and heap size52393
-Node: BIOS port memory map55193
-Node: Video Subsystem56044
-Node: Video API56518
-Node: Example usage of Video API76967
-Node: Bitmap API78547
-Node: PFF2 Font File Format81080
-Node: Introduction81320
-Node: File Structure82823
-Node: Font Metrics87741
-Node: Graphical Menu Software Design88889
-Node: Introduction_289181
-Node: Startup Sequence89915
-Node: GUI Components90766
-Node: Command Line Window93367
-Node: Verifiers framework94319
-Node: Lockdown framework96926
-Node: Copying This Manual97868
-Node: GNU Free Documentation License98112
-Node: Index120505
+Node: Top639
+Node: Getting the source code1856
+Node: Coding style2848
+Node: Naming Conventions3257
+Node: Functions3542
+Node: Variables4416
+Node: Types5531
+Node: Macros6132
+Node: Comments6464
+Node: Multi-Line Comments7073
+Node: Finding your way around7998
+Node: Contributing Changes11314
+Node: Getting started12430
+Node: Typical Developer Experience16482
+Node: When you are approved for write access to project's files17524
+Node: Setting up and running test suite18957
+Node: Updating External Code19654
+Node: Gnulib19961
+Node: jsmn21954
+Node: minilzo22425
+Node: Debugging23132
+Node: i386-pc25153
+Node: x86_64-efi27698
+Node: OVMF debug log34181
+Node: Using the gdbinfo command35356
+Node: Porting35654
+Node: Error Handling47408
+Node: Stack and heap size52500
+Node: BIOS port memory map55300
+Node: Video Subsystem56151
+Node: Video API56625
+Node: Example usage of Video API77074
+Node: Bitmap API78654
+Node: PFF2 Font File Format81187
+Node: Introduction81427
+Node: File Structure82930
+Node: Font Metrics87848
+Node: Graphical Menu Software Design88996
+Node: Introduction_289288
+Node: Startup Sequence90022
+Node: GUI Components90873
+Node: Command Line Window93474
+Node: Verifiers framework94426
+Node: Lockdown framework97033
+Node: Copying This Manual97975
+Node: GNU Free Documentation License98219
+Node: Index120612
 
 End Tag Table

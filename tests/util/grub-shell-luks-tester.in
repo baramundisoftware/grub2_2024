@@ -37,6 +37,9 @@ keyfile_offset=
 keyfile_size=
 KEYFILE_SIZE_MAX=4096
 
+debug="${GRUB_SHELL_LUKS_DEFAULT_DEBUG:-$GRUB_TEST_DEFAULT_DEBUG}"
+GRUB_SHELL_LUKS_TIMEOUT=${GRUB_SHELL_LUKS_TIMEOUT:-${GRUB_SHELL_DEFAULT_TIMEOUT:-600s}}
+
 # Usage: usage
 # Print the usage.
 usage () {
@@ -132,7 +135,7 @@ done
 
 [ "${debug:-0}" -gt 1 ] && set -x
 
-grub_shell_opts="$grub_shell_opts --timeout=600s"
+grub_shell_opts="$grub_shell_opts --timeout=${GRUB_SHELL_LUKS_TIMEOUT}"
 
 if [ "${debug:-0}" -gt 2 ]; then
     grub_shell_opts="$grub_shell_opts --qemu-opts=-nographic"
@@ -143,7 +146,9 @@ cleanup() {
     if [ -e "$luksdev" ]; then
         cryptsetup close "$luksdev"
     fi
-    [ -z "$debug" ] && rm -rf "$lukstestdir" || :
+    if [ -z "$debug" ] && [ "${RET:-1}" -eq 0 ]; then
+        rm -rf "$lukstestdir" || :
+    fi
 }
 trap cleanup EXIT INT TERM KILL QUIT
 
@@ -350,7 +355,7 @@ if [ -n "$detached_header" ]; then
 fi
 
 # Run the test in grub-shell
-@builddir@/grub-shell ${debug:+--debug} $grub_shell_opts \
+@builddir@/grub-shell ${debug:+--debug=$debug} $grub_shell_opts \
     --modules="$modules" --qemu-opts="$qemuopts" \
     --files="${grub_testvars}=${testvars}" "$testcase" \
     >$testoutput

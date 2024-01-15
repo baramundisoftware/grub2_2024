@@ -17,7 +17,7 @@ Patch-Name: install-efi-adjust-distributor.patch
  1 file changed, 4 insertions(+)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index c71f339..4bff65d 100644
+index dc3813b..1f69187 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -1141,6 +1141,10 @@ main (int argc, char *argv[])

@@ -1,6 +1,6 @@
 This is grub.info, produced by makeinfo version 6.3 from grub.texi.
 
-This manual is for GNU GRUB (version 2.12~rc1, 3 July 2023).
+This manual is for GNU GRUB (version 2.12, 5 December 2023).
 
    Copyright (C)
 1999,2000,2001,2002,2004,2006,2008,2009,2010,2011,2012,2013 Free
@@ -24,10 +24,115 @@ START-INFO-DIR-ENTRY
 END-INFO-DIR-ENTRY
 
 
-File: grub.info,  Node: Invoking grub-mount,  Next: Invoking grub-probe,  Prev: Invoking grub-mkrescue,  Up: Top
+File: grub.info,  Node: Invoking grub-mkpasswd-pbkdf2,  Next: Invoking grub-mkrelpath,  Prev: Invoking grub-mkconfig,  Up: User-space utilities
 
-29 Invoking grub-mount
-**********************
+24.3 Invoking grub-mkpasswd-pbkdf2
+==================================
+
+The program 'grub-mkpasswd-pbkdf2' generates password hashes for GRUB
+(*note Security::).
+
+     grub-mkpasswd-pbkdf2
+
+   'grub-mkpasswd-pbkdf2' accepts the following options:
+
+'-c NUMBER'
+'--iteration-count=NUMBER'
+     Number of iterations of the underlying pseudo-random function.
+     Defaults to 10000.
+
+'-l NUMBER'
+'--buflen=NUMBER'
+     Length of the generated hash.  Defaults to 64.
+
+'-s NUMBER'
+'--salt=NUMBER'
+     Length of the salt.  Defaults to 64.
+
+
+File: grub.info,  Node: Invoking grub-mkrelpath,  Next: Invoking grub-mkrescue,  Prev: Invoking grub-mkpasswd-pbkdf2,  Up: User-space utilities
+
+24.4 Invoking grub-mkrelpath
+============================
+
+The program 'grub-mkrelpath' makes a file system path relative to the
+root of its containing file system.  For instance, if '/usr' is a mount
+point, then:
+
+     $ grub-mkrelpath /usr/share/grub/unicode.pf2
+     '/share/grub/unicode.pf2'
+
+   This is mainly used internally by other GRUB utilities such as
+'grub-mkconfig' (*note Invoking grub-mkconfig::), but may occasionally
+also be useful for debugging.
+
+   'grub-mkrelpath' accepts the following options:
+
+'--help'
+     Print a summary of the command-line options and exit.
+
+'--version'
+     Print the version number of GRUB and exit.
+
+
+File: grub.info,  Node: Invoking grub-mkrescue,  Next: Invoking grub-mount,  Prev: Invoking grub-mkrelpath,  Up: User-space utilities
+
+24.5 Invoking grub-mkrescue
+===========================
+
+The program 'grub-mkrescue' generates a bootable GRUB rescue image
+(*note Making a GRUB bootable CD-ROM::).
+
+     grub-mkrescue -o grub.iso
+
+   All arguments not explicitly listed as 'grub-mkrescue' options are
+passed on directly to 'xorriso' in 'mkisofs' emulation mode.  Options
+passed to 'xorriso' will normally be interpreted as 'mkisofs' options;
+if the option '--' is used, then anything after that will be interpreted
+as native 'xorriso' options.
+
+   Non-option arguments specify additional source directories.  This is
+commonly used to add extra files to the image:
+
+     mkdir -p disk/boot/grub
+     (add extra files to 'disk/boot/grub')
+     grub-mkrescue -o grub.iso disk
+
+   'grub-mkrescue' accepts the following options:
+
+'--help'
+     Print a summary of the command-line options and exit.
+
+'--version'
+     Print the version number of GRUB and exit.
+
+'-o FILE'
+'--output=FILE'
+     Save output in FILE.  This "option" is required.
+
+'--modules=MODULES'
+     Pre-load the named GRUB modules in the image.  Multiple entries in
+     MODULES should be separated by whitespace (so you will probably
+     need to quote this for your shell).
+
+'--rom-directory=DIR'
+     If generating images for the QEMU or Coreboot platforms, copy the
+     resulting 'qemu.img' or 'coreboot.elf' files respectively to the
+     DIR directory as well as including them in the image.
+
+'--xorriso=FILE'
+     Use FILE as the 'xorriso' program, rather than the built-in
+     default.
+
+'--grub-mkimage=FILE'
+     Use FILE as the 'grub-mkimage' program, rather than the built-in
+     default.
+
+
+File: grub.info,  Node: Invoking grub-mount,  Next: Invoking grub-probe,  Prev: Invoking grub-mkrescue,  Up: User-space utilities
+
+24.6 Invoking grub-mount
+========================
 
 The program 'grub-mount' performs a read-only mount of any file system
 or file system image that GRUB understands, using GRUB's file system
@@ -104,10 +209,10 @@ them as a RAID set), and also accepts the following options:
      Print verbose messages.
 
 
-File: grub.info,  Node: Invoking grub-probe,  Next: Invoking grub-script-check,  Prev: Invoking grub-mount,  Up: Top
+File: grub.info,  Node: Invoking grub-probe,  Next: Invoking grub-script-check,  Prev: Invoking grub-mount,  Up: User-space utilities
 
-30 Invoking grub-probe
-**********************
+24.7 Invoking grub-probe
+========================
 
 The program 'grub-probe' probes device information for a given path or
 device.
@@ -186,10 +291,10 @@ and also accepts the following options:
      Print verbose messages.
 
 
-File: grub.info,  Node: Invoking grub-script-check,  Next: Obtaining and Building GRUB,  Prev: Invoking grub-probe,  Up: Top
+File: grub.info,  Node: Invoking grub-script-check,  Prev: Invoking grub-probe,  Up: User-space utilities
 
-31 Invoking grub-script-check
-*****************************
+24.8 Invoking grub-script-check
+===============================
 
 The program 'grub-script-check' takes a GRUB script file (*note
 Shell-like scripting::) and checks it for syntax errors, similar to
@@ -211,7 +316,7 @@ if none is supplied, it will read from standard input.
      Print each line of input after reading it.
 
 
-File: grub.info,  Node: Obtaining and Building GRUB,  Next: Reporting bugs,  Prev: Invoking grub-script-check,  Up: Top
+File: grub.info,  Node: Obtaining and Building GRUB,  Next: Reporting bugs,  Prev: User-space utilities,  Up: Top
 
 Appendix A How to obtain and build GRUB
 ***************************************
@@ -224,20 +329,20 @@ Appendix A How to obtain and build GRUB
 
    GRUB is available from the GNU alpha archive site
 <ftp://ftp.gnu.org/gnu/grub> or any of its mirrors.  The file will be
-named grub-version.tar.gz.  The current version is 2.12~rc1, so the file
-you should grab is:
+named grub-version.tar.gz.  The current version is 2.12, so the file you
+should grab is:
 
-   <ftp://ftp.gnu.org/gnu/grub/grub-2.12~rc1.tar.gz>
+   <ftp://ftp.gnu.org/gnu/grub/grub-2.12.tar.gz>
 
    To unbundle GRUB use the instruction:
 
-     zcat grub-2.12~rc1.tar.gz | tar xvf -
+     zcat grub-2.12.tar.gz | tar xvf -
 
-   which will create a directory called 'grub-2.12~rc1' with all the
+   which will create a directory called 'grub-2.12' with all the
 sources.  You can look at the file 'INSTALL' for detailed instructions
 on how to build and install GRUB, but you should be able to just do:
 
-     cd grub-2.12~rc1
+     cd grub-2.12
      ./configure
      make install
 
@@ -804,6 +909,7 @@ Index
 * halt:                                  halt.                  (line 6)
 * hashsum:                               hashsum.               (line 6)
 * help:                                  help.                  (line 6)
+* hexdump:                               hexdump.               (line 6)
 * initrd:                                initrd.                (line 6)
 * initrd16:                              initrd16.              (line 6)
 * insmod:                                insmod.                (line 6)

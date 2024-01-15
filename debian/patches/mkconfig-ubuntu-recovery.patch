@@ -22,10 +22,10 @@ Patch-Name: mkconfig-ubuntu-recovery.patch
  3 files changed, 25 insertions(+), 2 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 01500ff..76aed17 100644
+index cd667a2..f19356e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1992,6 +1992,17 @@ fi
+@@ -2057,6 +2057,17 @@ fi
  AC_SUBST([LIBZFS])
  AC_SUBST([LIBNVPAIR])
  

@@ -33,7 +33,7 @@ index a599037..5d7cad2 100644
      else
        {
 diff --git a/include/grub/efi/api.h b/include/grub/efi/api.h
-index c651c8b..d84cee0 100644
+index c1b869d..ad8b697 100644
 --- a/include/grub/efi/api.h
 +++ b/include/grub/efi/api.h
 @@ -1562,31 +1562,6 @@ typedef union

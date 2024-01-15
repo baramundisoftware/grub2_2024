@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: grub 2.12~rc1\n"
+"Project-Id-Version: grub 2.12\n"
 "Report-Msgid-Bugs-To: bug-grub@gnu.org\n"
-"POT-Creation-Date: 2023-07-10 17:58+0200\n"
-"PO-Revision-Date: 2023-07-10 17:53+0200\n"
+"POT-Creation-Date: 2023-12-20 17:09+0100\n"
+"PO-Revision-Date: 2023-12-20 17:03+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en@arabic\n"
@@ -24,14 +24,14 @@ msgstr "ونسوپ‎پ‎ورتعد سعرִيال پ‎ورت سپ‎ععد"
 
 #: grub-core/bus/usb/serial/ftdi.c:151 grub-core/bus/usb/serial/pl2303.c:164
 #: grub-core/term/efi/serial.c:116 grub-core/term/ieee1275/escc.c:175
-#: grub-core/term/ns8250.c:268 grub-core/term/serial.c:285
-#: grub-core/term/serial.c:301
+#: grub-core/term/ns8250.c:268 grub-core/term/serial.c:288
+#: grub-core/term/serial.c:304
 msgid "unsupported serial port parity"
 msgstr "ونسوپ‎پ‎ورتعد سعرִيال پ‎ورت پ‎ارִيتي"
 
 #: grub-core/bus/usb/serial/ftdi.c:157 grub-core/bus/usb/serial/pl2303.c:170
 #: grub-core/term/efi/serial.c:122 grub-core/term/ieee1275/escc.c:181
-#: grub-core/term/ns8250.c:273 grub-core/term/serial.c:325
+#: grub-core/term/ns8250.c:273 grub-core/term/serial.c:328
 msgid "unsupported serial port stop bits number"
 msgstr "ونسوپ‎پ‎ورتعد سعرִيال پ‎ورت ستوپ‎ بִيتس نومبعر"
 
@@ -86,7 +86,7 @@ msgstr ""
 "دون'ت وپ‎داتع عبدا. ماي فִيكس فاִيلورعس ور هانغس ون سومع بִيوسعس بوت ماكعس ִيت ִ"
 "ينعففعصتִيوع وִيته وس نوت رعصعִيوִينغ رسدپ‎ فروم غروب."
 
-#: grub-core/commands/acpi.c:655 grub-core/commands/acpi.c:672
+#: grub-core/commands/acpi.c:666 grub-core/commands/acpi.c:683
 #: grub-core/commands/i386/pc/play.c:105 grub-core/commands/keylayouts.c:230
 #: grub-core/commands/keylayouts.c:245 grub-core/commands/keylayouts.c:263
 #: grub-core/efiemu/loadcore.c:350 grub-core/kern/elf.c:117
@@ -95,17 +95,17 @@ msgstr ""
 #: grub-core/loader/arm64/xen_boot.c:342 grub-core/loader/efi/chainloader.c:283
 #: grub-core/loader/efi/chainloader.c:304
 #: grub-core/loader/efi/chainloader.c:336 grub-core/loader/efi/fdt.c:145
-#: grub-core/loader/efi/linux.c:527 grub-core/loader/i386/bsd.c:1282
+#: grub-core/loader/efi/linux.c:530 grub-core/loader/i386/bsd.c:1282
 #: grub-core/loader/i386/bsd.c:2123 grub-core/loader/i386/bsdXX.c:20
 #: grub-core/loader/i386/bsdXX.c:39 grub-core/loader/i386/bsdXX.c:70
-#: grub-core/loader/i386/bsdXX.c:375 grub-core/loader/i386/bsdXX.c:394
-#: grub-core/loader/i386/bsdXX.c:541 grub-core/loader/i386/bsdXX.c:557
-#: grub-core/loader/i386/bsdXX.c:643 grub-core/loader/i386/bsdXX.c:666
+#: grub-core/loader/i386/bsdXX.c:379 grub-core/loader/i386/bsdXX.c:398
+#: grub-core/loader/i386/bsdXX.c:545 grub-core/loader/i386/bsdXX.c:561
+#: grub-core/loader/i386/bsdXX.c:647 grub-core/loader/i386/bsdXX.c:670
 #: grub-core/loader/i386/coreboot/chainloader.c:112
 #: grub-core/loader/i386/coreboot/chainloader.c:148
 #: grub-core/loader/i386/coreboot/chainloader.c:170
-#: grub-core/loader/i386/linux.c:675 grub-core/loader/i386/linux.c:791
-#: grub-core/loader/i386/linux.c:1011 grub-core/loader/i386/multiboot_mbi.c:171
+#: grub-core/loader/i386/linux.c:687 grub-core/loader/i386/linux.c:803
+#: grub-core/loader/i386/linux.c:1023 grub-core/loader/i386/multiboot_mbi.c:171
 #: grub-core/loader/i386/pc/chainloader.c:202
 #: grub-core/loader/i386/pc/linux.c:150 grub-core/loader/i386/pc/linux.c:326
 #: grub-core/loader/i386/pc/linux.c:368 grub-core/loader/i386/pc/plan9.c:457
@@ -131,7 +131,7 @@ msgstr ""
 msgid "premature end of file %s"
 msgstr "پ‎رعماتورع عند وف فִيلع %s"
 
-#: grub-core/commands/acpi.c:784
+#: grub-core/commands/acpi.c:795
 msgid ""
 "[-1|-2] [--exclude=TABLE1,TABLE2|--load-only=TABLE1,TABLE2] FILE1 [FILE2] "
 "[...]"
@@ -139,7 +139,7 @@ msgstr ""
 "[-1|-2] [--عكسصلودع=تابلع1,تابلع2|--لواد-ونلي=تابلع1,تابلع2] فִيلع1 [فִيلع2] "
 "[...]"
 
-#: grub-core/commands/acpi.c:787
+#: grub-core/commands/acpi.c:798
 msgid "Load host ACPI tables and tables specified by arguments."
 msgstr "لواد هوست اصپ‎ִي تابلعس اند تابلعس سپ‎عصִيفִيعد بي ارغومعنتس."
 
@@ -158,10 +158,11 @@ msgstr "عررور: %s.\n"
 #: grub-core/lib/relocator.c:1443 grub-core/lib/relocator.c:1542
 #: grub-core/loader/arm/linux.c:260 grub-core/loader/arm64/xen_boot.c:330
 #: grub-core/loader/arm64/xen_boot.c:353 grub-core/loader/efi/chainloader.c:296
-#: grub-core/loader/efi/linux.c:408 grub-core/loader/efi/linux.c:430
-#: grub-core/loader/efi/linux.c:518 grub-core/loader/efi/linux.c:537
+#: grub-core/loader/efi/linux.c:411 grub-core/loader/efi/linux.c:433
+#: grub-core/loader/efi/linux.c:521 grub-core/loader/efi/linux.c:540
 #: grub-core/osdep/unix/dl.c:48 grub-core/osdep/windows/dl.c:46
 #: grub-core/script/lexer.c:161 grub-core/script/lexer.c:197
+#: grub-core/video/efi_gop.c:485
 msgid "out of memory"
 msgstr "ووت وف معموري"
 
@@ -171,8 +172,8 @@ msgstr "ووت وف معموري"
 #: grub-core/osdep/linux/ofpath.c:195 grub-core/osdep/linux/ofpath.c:521
 #: grub-core/osdep/linux/ofpath.c:534 util/glue-efi.c:90 util/glue-efi.c:104
 #: util/grub-editenv.c:161 util/grub-fstest.c:583
-#: util/grub-install-common.c:1117 util/grub-mkrescue.c:658
-#: util/grub-mkrescue.c:931 util/grub-mount.c:525 util/grub-render-label.c:176
+#: util/grub-install-common.c:1130 util/grub-mkrescue.c:658
+#: util/grub-mkrescue.c:931 util/grub-mount.c:526 util/grub-render-label.c:176
 #: util/misc.c:95 util/setup.c:817 util/setup.c:836
 #, c-format
 msgid "cannot read `%s': %s"
@@ -216,7 +217,7 @@ msgid "unable to determine partition UUID of boot device"
 msgstr "ونابلع تو دعتعرمִينع پ‎ارتִيتִيون ووִيد وف بووت دعوִيصع"
 
 #: grub-core/commands/blocklist.c:124 grub-core/commands/cat.c:57
-#: grub-core/commands/configfile.c:35 grub-core/commands/efi/loadbios.c:169
+#: grub-core/commands/configfile.c:35 grub-core/commands/efi/loadbios.c:150
 #: grub-core/commands/file.c:160 grub-core/commands/hexdump.c:47
 #: grub-core/commands/legacycfg.c:228 grub-core/commands/legacycfg.c:334
 #: grub-core/commands/minicmd.c:44 grub-core/commands/syslinuxcfg.c:146
@@ -226,12 +227,12 @@ msgstr "ونابلع تو دعتعرمִينع پ‎ارتִيتִيون ووִ�
 #: grub-core/loader/arm/linux.c:365 grub-core/loader/arm/linux.c:410
 #: grub-core/loader/arm/linux.c:473 grub-core/loader/arm64/xen_boot.c:384
 #: grub-core/loader/arm64/xen_boot.c:397 grub-core/loader/arm64/xen_boot.c:448
-#: grub-core/loader/efi/chainloader.c:232 grub-core/loader/efi/linux.c:377
-#: grub-core/loader/efi/linux.c:480 grub-core/loader/emu/linux.c:119
+#: grub-core/loader/efi/chainloader.c:232 grub-core/loader/efi/linux.c:380
+#: grub-core/loader/efi/linux.c:483 grub-core/loader/emu/linux.c:119
 #: grub-core/loader/emu/linux.c:152 grub-core/loader/i386/bsd.c:1468
 #: grub-core/loader/i386/bsd.c:1813 grub-core/loader/i386/bsd.c:2091
 #: grub-core/loader/i386/coreboot/chainloader.c:438
-#: grub-core/loader/i386/linux.c:664 grub-core/loader/i386/linux.c:1047
+#: grub-core/loader/i386/linux.c:676 grub-core/loader/i386/linux.c:1059
 #: grub-core/loader/i386/pc/chainloader.c:290
 #: grub-core/loader/i386/pc/freedos.c:105 grub-core/loader/i386/pc/linux.c:139
 #: grub-core/loader/i386/pc/linux.c:406 grub-core/loader/i386/pc/ntldr.c:85
@@ -244,8 +245,8 @@ msgstr "ونابلع تو دعتعرمִينع پ‎ارتִيتִيون ووִ�
 #: grub-core/loader/mips/linux.c:238 grub-core/loader/mips/linux.c:429
 #: grub-core/loader/multiboot.c:322 grub-core/loader/multiboot.c:374
 #: grub-core/loader/multiboot.c:384
-#: grub-core/loader/powerpc/ieee1275/linux.c:255
-#: grub-core/loader/powerpc/ieee1275/linux.c:327
+#: grub-core/loader/powerpc/ieee1275/linux.c:280
+#: grub-core/loader/powerpc/ieee1275/linux.c:352
 #: grub-core/loader/sparc64/ieee1275/linux.c:305
 #: grub-core/loader/sparc64/ieee1275/linux.c:381 grub-core/loader/xnu.c:370
 #: grub-core/loader/xnu.c:479 grub-core/loader/xnu.c:797
@@ -278,8 +279,8 @@ msgstr "فִيلعنامع عكسپ‎عصتعد"
 #: util/grub-mkimage.c:78 util/grub-mkimage.c:81 util/grub-mkimage.c:84
 #: util/grub-mklayout.c:52 util/grub-mklayout.c:54 util/grub-mkrescue.c:97
 #: util/grub-mkrescue.c:101 util/grub-mkrescue.c:104 util/grub-mkrescue.c:105
-#: util/grub-mkrescue.c:106 util/grub-mkstandalone.c:47
-#: util/grub-mkstandalone.c:49 util/grub-probe.c:732
+#: util/grub-mkrescue.c:106 util/grub-mkstandalone.c:50
+#: util/grub-mkstandalone.c:52 util/grub-probe.c:732
 #: util/grub-render-label.c:59 util/grub-render-label.c:70
 #: util/grub-render-label.c:72 util/grub-setup.c:78 util/grub-setup.c:80
 #: util/grub-setup.c:84 util/grub-syslinux2cfg.c:74
@@ -293,14 +294,14 @@ msgid "Print a block list."
 msgstr "پ‎رִينت ا بلوصك لִيست."
 
 #: grub-core/commands/boot.c:197 grub-core/commands/legacycfg.c:552
-#: grub-core/commands/legacycfg.c:593 grub-core/loader/efi/linux.c:389
+#: grub-core/commands/legacycfg.c:593 grub-core/loader/efi/linux.c:392
 #: grub-core/loader/i386/bsd.c:1805 grub-core/loader/i386/bsd.c:1906
 #: grub-core/loader/i386/bsd.c:2013 grub-core/loader/i386/bsd.c:2046
-#: grub-core/loader/i386/bsd.c:2095 grub-core/loader/i386/linux.c:1053
+#: grub-core/loader/i386/bsd.c:2095 grub-core/loader/i386/linux.c:1065
 #: grub-core/loader/i386/pc/linux.c:412 grub-core/loader/i386/xen.c:783
 #: grub-core/loader/i386/xen.c:866 grub-core/loader/ia64/efi/linux.c:545
 #: grub-core/loader/mips/linux.c:432 grub-core/loader/multiboot.c:388
-#: grub-core/loader/powerpc/ieee1275/linux.c:333
+#: grub-core/loader/powerpc/ieee1275/linux.c:358
 #: grub-core/loader/sparc64/ieee1275/linux.c:387 grub-core/loader/xnu.c:591
 #: grub-core/loader/xnu.c:687 grub-core/loader/xnu.c:800
 #: grub-core/loader/xnu.c:914 grub-core/loader/xnu.c:1110
@@ -511,17 +512,17 @@ msgstr "روم ִيماغع ִيس پ‎رعسعنت."
 msgid "Can't enable ROM area."
 msgstr "صان'ت عنابلع روم ارعا."
 
-#: grub-core/commands/efi/loadbios.c:210
+#: grub-core/commands/efi/loadbios.c:191
 msgid ""
 "Create BIOS-like structures for backward compatibility with existing OS."
 msgstr ""
 "صرعاتع بִيوس-لִيكع ستروصتورعس فور باصكوارد صومپ‎اتִيبִيلִيتي وִيته عكسִيستִينغ وس."
 
-#: grub-core/commands/efi/loadbios.c:215
+#: grub-core/commands/efi/loadbios.c:196
 msgid "BIOS_DUMP [INT10_DUMP]"
 msgstr "بִيوس_دومپ‎ [ִينت10_دومپ‎]"
 
-#: grub-core/commands/efi/loadbios.c:216
+#: grub-core/commands/efi/loadbios.c:197
 msgid "Load BIOS dump."
 msgstr "لواد بִيوس دومپ‎."
 
@@ -1095,13 +1096,13 @@ msgid "Invalid tempo in %s"
 msgstr "ִينوالִيد تعمپ‎و ִين %s"
 
 #: grub-core/commands/i386/pc/play.c:151 grub-core/commands/macbless.c:172
-#: grub-core/fs/archelp.c:260 grub-core/fs/bfs.c:623 grub-core/fs/bfs.c:706
-#: grub-core/fs/btrfs.c:1855 grub-core/fs/btrfs.c:1884
-#: grub-core/fs/btrfs.c:1928 grub-core/fs/btrfs.c:2016
-#: grub-core/fs/btrfs.c:2040 grub-core/fs/fshelp.c:257 grub-core/fs/jfs.c:707
-#: grub-core/fs/minix.c:430 grub-core/fs/ufs.c:544 grub-core/fs/zfs/zfs.c:2091
-#: grub-core/fs/zfs/zfs.c:2103 grub-core/fs/zfs/zfs.c:2310
-#: grub-core/net/http.c:128
+#: grub-core/fs/archelp.c:268 grub-core/fs/bfs.c:623 grub-core/fs/bfs.c:706
+#: grub-core/fs/btrfs.c:1857 grub-core/fs/btrfs.c:1886
+#: grub-core/fs/btrfs.c:1930 grub-core/fs/btrfs.c:2018
+#: grub-core/fs/btrfs.c:2042 grub-core/fs/fshelp.c:257 grub-core/fs/jfs.c:707
+#: grub-core/fs/minix.c:430 grub-core/fs/ufs.c:544 grub-core/fs/zfs/zfs.c:2093
+#: grub-core/fs/zfs/zfs.c:2105 grub-core/fs/zfs/zfs.c:2312
+#: grub-core/net/http.c:124
 #, c-format
 msgid "file `%s' not found"
 msgstr "فִيلع `%s' نوت فووند"
@@ -1558,7 +1559,7 @@ msgstr "معنو عنتري تيپ‎ع."
 #: grub-core/commands/menuentry.c:39 grub-core/gettext/gettext.c:520
 #: util/grub-fstest.c:526 util/grub-install.c:291 util/grub-install.c:304
 #: util/grub-mknetdir.c:51 util/grub-mkrescue.c:109 util/grub-mkrescue.c:110
-#: util/grub-mount.c:472 util/grub-render-label.c:65
+#: util/grub-mount.c:473 util/grub-render-label.c:65
 msgid "STRING"
 msgstr "سترִينغ"
 
@@ -1788,7 +1789,7 @@ msgstr "[بوس]:[سلوت][.فونص]"
 
 #: grub-core/commands/pcidump.c:109 grub-core/commands/pcidump.c:137
 #: grub-core/commands/setpci.c:183 grub-core/commands/setpci.c:213
-#: grub-core/fs/zfs/zfs.c:3828 grub-core/kern/emu/hostdisk.c:458
+#: grub-core/fs/zfs/zfs.c:3835 grub-core/kern/emu/hostdisk.c:458
 #: grub-core/kern/emu/hostdisk.c:473 grub-core/kern/file.c:44
 #, c-format
 msgid "missing `%c' symbol"
@@ -1827,9 +1828,9 @@ msgstr "باد سִيغناتورع"
 msgid "public key %08"
 msgstr "پ‎وبلִيص كعي %08"
 
-#: grub-core/commands/pgp.c:651 grub-core/disk/diskfilter.c:799
-#: grub-core/disk/diskfilter.c:809 grub-core/fs/ntfs.c:404
-#: grub-core/fs/zfs/zfs.c:1941 grub-core/normal/menu.c:427
+#: grub-core/commands/pgp.c:651 grub-core/disk/diskfilter.c:797
+#: grub-core/disk/diskfilter.c:807 grub-core/fs/ntfs.c:449
+#: grub-core/fs/zfs/zfs.c:1943 grub-core/normal/menu.c:427
 #, c-format
 msgid "module `%s' isn't loaded"
 msgstr "مودولع `%s' ִيسن'ت لوادعد"
@@ -2484,18 +2485,26 @@ msgstr "اداپ‎تعر `%s':\n"
 msgid "  No info available"
 msgstr "  نو ִينفو اواִيلابلع"
 
-#: grub-core/commands/videoinfo.c:198
+#: grub-core/commands/videoinfo.c:196
+msgid ""
+"  A video driver is active, cannot initialize this driver until it is "
+"deactivated\n"
+msgstr ""
+"  ا وִيدعو درִيوعر ִيس اصتִيوع, صاننوت ִينִيتִيالִيزع تهִيس درִيوعر ونتִيل ִيت ִيس "
+"دعاصتִيواتعد\n"
+
+#: grub-core/commands/videoinfo.c:203
 msgid "  Failed to initialize video adapter"
 msgstr "  فاִيلعد تو ִينִيتִيالִيزع وִيدعو اداپ‎تعر"
 
 #. TRANSLATORS: "x" has to be entered in,
 #. like an identifier, so please don't
 #. use better Unicode codepoints.
-#: grub-core/commands/videoinfo.c:239 grub-core/commands/videoinfo.c:248
+#: grub-core/commands/videoinfo.c:244 grub-core/commands/videoinfo.c:253
 msgid "[WxH[xD]]"
 msgstr "[وكسه[كسد]]"
 
-#: grub-core/commands/videoinfo.c:240 grub-core/commands/videoinfo.c:249
+#: grub-core/commands/videoinfo.c:245 grub-core/commands/videoinfo.c:254
 msgid ""
 "List available video modes. If resolution is given show only modes matching "
 "it."
@@ -2606,11 +2615,11 @@ msgstr "رعاد هعادعر فروم فִيلع"
 #: util/grub-editenv.c:198 util/grub-file.c:83 util/grub-fstest.c:128
 #: util/grub-fstest.c:574 util/grub-install-common.c:92
 #: util/grub-install-common.c:94 util/grub-install-common.c:101
-#: util/grub-install-common.c:699 util/grub-menulst2cfg.c:53
+#: util/grub-install-common.c:712 util/grub-menulst2cfg.c:53
 #: util/grub-menulst2cfg.c:68 util/grub-mkimage.c:307 util/grub-mklayout.c:504
 #: util/grub-mklayout.c:516 util/grub-mknetdir.c:134 util/grub-mknetdir.c:152
 #: util/grub-mkrescue.c:651 util/grub-mkrescue.c:655 util/grub-mkrescue.c:922
-#: util/grub-mkrescue.c:926 util/grub-mkstandalone.c:253 util/grub-mount.c:517
+#: util/grub-mkrescue.c:926 util/grub-mkstandalone.c:274 util/grub-mount.c:518
 #: util/grub-render-label.c:169 util/grub-script-check.c:175
 #: util/grub-syslinux2cfg.c:181 util/grub-syslinux2cfg.c:191
 #: util/grub-syslinux2cfg.c:212 util/grub-syslinux2cfg.c:228 util/misc.c:91
@@ -2650,42 +2659,42 @@ msgstr "عنتعر پ‎اسسپ‎هراسع فور %s%s%s (%s): "
 msgid "UNKNOWN"
 msgstr "ونكنوون"
 
-#: grub-core/disk/cryptodisk.c:1292
+#: grub-core/disk/cryptodisk.c:1293
 #, c-format
 msgid "non-numeric or invalid keyfile offset `%s'"
 msgstr "نون-نومعرִيص ور ִينوالִيد كعيفִيلع وففسعت `%s'"
 
-#: grub-core/disk/cryptodisk.c:1303
+#: grub-core/disk/cryptodisk.c:1304
 #, c-format
 msgid "non-numeric or invalid keyfile size `%s'"
 msgstr "نون-نومعرִيص ور ִينوالִيد كعيفִيلع سִيزع `%s'"
 
-#: grub-core/disk/cryptodisk.c:1307
+#: grub-core/disk/cryptodisk.c:1308
 msgid "key file size is 0"
 msgstr "كعي فִيلع سִيزع ִيس 0"
 
-#: grub-core/disk/cryptodisk.c:1311
+#: grub-core/disk/cryptodisk.c:1312
 #, c-format
 msgid "key file size exceeds maximum (%d)"
 msgstr "كعي فִيلع سִيزع عكسصععدس ماكسִيموم (%d)"
 
-#: grub-core/disk/cryptodisk.c:1322
+#: grub-core/disk/cryptodisk.c:1323
 msgid "Keyfile offset, %llu, is greater thankeyfile size, %"
 msgstr "كعيفִيلع وففسعت, %llu, ִيس غرعاتعر تهانكعيفִيلع سִيزع, %"
 
-#: grub-core/disk/cryptodisk.c:1333
+#: grub-core/disk/cryptodisk.c:1334
 msgid "keyfile is too small: requested %llu bytes, but the file only has %"
 msgstr "كعيفִيلع ִيس توو سمالل: رعقوعستعد %llu بيتعس, بوت تهع فִيلع ونلي هاس %"
 
-#: grub-core/disk/cryptodisk.c:1350
+#: grub-core/disk/cryptodisk.c:1351
 msgid "failed to read key file"
 msgstr "فاִيلعد تو رعاد كعي فִيلع"
 
-#: grub-core/disk/cryptodisk.c:1357
+#: grub-core/disk/cryptodisk.c:1358
 msgid "cannot use UUID lookup with detached header"
 msgstr "صاننوت وسع ووִيد لووكوپ‎ وִيته دعتاصهعد هعادعر"
 
-#: grub-core/disk/cryptodisk.c:1577
+#: grub-core/disk/cryptodisk.c:1591
 msgid ""
 "[ [-p password] | [-k keyfile [-O keyoffset] [-S keysize] ] ] [-H file] "
 "<SOURCE|-u UUID|-a|-b>"
@@ -2693,7 +2702,7 @@ msgstr ""
 "[ [-پ‎ پ‎اسسوورد] | [-ك كعيفִيلع [-و كعيوففسعت] [-س كعيسִيزع] ] ] [-ه فִيلع] "
 "<سوورصع|-و ووִيد|-ا|-ب>"
 
-#: grub-core/disk/cryptodisk.c:1580
+#: grub-core/disk/cryptodisk.c:1594
 msgid "Mount a crypto device."
 msgstr "موونت ا صريپ‎تو دعوִيصع."
 
@@ -2760,12 +2769,12 @@ msgstr "سلوت %d وپ‎عنعد\n"
 msgid "attempt to read or write outside of disk `%s'"
 msgstr "اتتعمپ‎ت تو رعاد ور ورִيتع ووتسִيدع وف دִيسك `%s'"
 
-#: grub-core/disk/i386/pc/biosdisk.c:487 grub-core/disk/i386/pc/biosdisk.c:607
+#: grub-core/disk/i386/pc/biosdisk.c:487 grub-core/disk/i386/pc/biosdisk.c:610
 #: grub-core/disk/scsi.c:724
 msgid "cannot write to CD-ROM"
 msgstr "صاننوت ورִيتع تو صد-روم"
 
-#: grub-core/disk/i386/pc/biosdisk.c:658
+#: grub-core/disk/i386/pc/biosdisk.c:661
 msgid ""
 "Native disk drivers are in use. Refusing to use firmware disk interface."
 msgstr ""
@@ -3027,14 +3036,14 @@ msgid "relocation 0x%s is not implemented yet"
 msgstr "رعلوصاتִيون 0كس%s ִيس نوت ִيمپ‎لعمعنتعد يعت"
 
 #: grub-core/efiemu/loadcore.c:200 grub-core/efiemu/loadcore.c:237
-#: grub-core/loader/i386/bsdXX.c:335 util/grub-mkimagexx.c:2487
+#: grub-core/loader/i386/bsdXX.c:339 util/grub-mkimagexx.c:2487
 msgid "no symbol table"
 msgstr "نو سيمبول تابلع"
 
 #: grub-core/efiemu/loadcore.c:346 grub-core/kern/dl.c:629
 #: grub-core/loader/ia64/efi/linux.c:345 grub-core/loader/mips/linux.c:248
 #: grub-core/loader/multiboot_elfxx.c:89
-#: grub-core/loader/powerpc/ieee1275/linux.c:266
+#: grub-core/loader/powerpc/ieee1275/linux.c:291
 #: grub-core/loader/sparc64/ieee1275/linux.c:320
 msgid "this ELF file is not of the right type"
 msgstr "تهִيس علف فִيلع ִيس نوت وف تهع رִيغهت تيپ‎ع"
@@ -3072,8 +3081,17 @@ msgstr "سپ‎عصִيفي ونع ور مورع فونت فִيلعس تو لو
 msgid "List the loaded fonts."
 msgstr "لִيست تهع لوادعد فونتس."
 
-#: grub-core/fs/archelp.c:216 grub-core/fs/archelp.c:278
-#: grub-core/fs/btrfs.c:1944 grub-core/fs/fshelp.c:227 grub-core/fs/jfs.c:747
+#: grub-core/fs/archelp.c:186 grub-core/fs/btrfs.c:1829
+#: grub-core/fs/btrfs.c:2094 grub-core/fs/fshelp.c:189
+#: grub-core/fs/fshelp.c:309 grub-core/fs/jfs.c:442 grub-core/fs/minix.c:418
+#: grub-core/fs/minix.c:580 grub-core/fs/reiserfs.c:732 grub-core/fs/ufs.c:531
+#: grub-core/fs/ufs.c:671 grub-core/fs/zfs/zfs.c:2848
+#: grub-core/fs/zfs/zfs.c:4305
+msgid "not a directory"
+msgstr "نوت ا دִيرعصتوري"
+
+#: grub-core/fs/archelp.c:224 grub-core/fs/archelp.c:286
+#: grub-core/fs/btrfs.c:1946 grub-core/fs/fshelp.c:227 grub-core/fs/jfs.c:747
 #: grub-core/fs/minix.c:371 grub-core/fs/ufs.c:454
 msgid "too deep nesting of symlinks"
 msgstr "توو دععپ‎ نعستִينغ وف سيملִينكس"
@@ -3083,20 +3101,12 @@ msgstr "توو دععپ‎ نعستִينغ وف سيملִينكس"
 msgid "attempt to read past the end of file"
 msgstr "اتتعمپ‎ت تو رعاد پ‎است تهع عند وف فִيلع"
 
-#: grub-core/fs/btrfs.c:1827 grub-core/fs/btrfs.c:2092
-#: grub-core/fs/fshelp.c:189 grub-core/fs/fshelp.c:309 grub-core/fs/jfs.c:442
-#: grub-core/fs/minix.c:418 grub-core/fs/minix.c:580
-#: grub-core/fs/reiserfs.c:732 grub-core/fs/ufs.c:531 grub-core/fs/ufs.c:671
-#: grub-core/fs/zfs/zfs.c:2844 grub-core/fs/zfs/zfs.c:4290
-msgid "not a directory"
-msgstr "نوت ا دִيرعصتوري"
-
-#: grub-core/fs/btrfs.c:2223 grub-core/fs/fshelp.c:307 grub-core/fs/jfs.c:846
-#: grub-core/fs/zfs/zfs.c:3835
+#: grub-core/fs/btrfs.c:2225 grub-core/fs/fshelp.c:307 grub-core/fs/jfs.c:846
+#: grub-core/fs/zfs/zfs.c:3842
 msgid "not a regular file"
 msgstr "نوت ا رعغولار فִيلع"
 
-#: grub-core/fs/btrfs.c:2373 grub-core/fs/zfs/zfs.c:4376
+#: grub-core/fs/btrfs.c:2375 grub-core/fs/zfs/zfs.c:4391
 #: grub-core/partmap/msdos.c:404
 msgid "your core.img is unusually large.  It won't fit in the embedding area"
 msgstr "يوور صورع.ִيمغ ִيس ونوسواللي لارغع.  ִيت وون'ت فִيت ִين تهع عمبعددִينغ ارعا"
@@ -3123,11 +3133,11 @@ msgstr "ִينوالִيد فִيلع نامع `%s'"
 msgid "blocksize too large"
 msgstr "بلوصكسִيزع توو لارغع"
 
-#: grub-core/fs/zfs/zfs.c:457
+#: grub-core/fs/zfs/zfs.c:459
 msgid "checksum verification failed"
 msgstr "صهعصكسوم وعرִيفִيصاتִيون فاִيلعد"
 
-#: grub-core/fs/zfs/zfs.c:1472
+#: grub-core/fs/zfs/zfs.c:1474
 msgid "couldn't find a necessary member device of multi-device filesystem"
 msgstr "صوولدن'ت فִيند ا نعصعسساري معمبعر دعوִيصع وف مولتִي-دعوִيصع فִيلعسيستعم"
 
@@ -3151,7 +3161,7 @@ msgstr "اسسومع ִينپ‎وت ִيس هعكس."
 msgid "Assume input is passphrase."
 msgstr "اسسومع ִينپ‎وت ִيس پ‎اسسپ‎هراسع."
 
-#: grub-core/fs/zfs/zfscrypt.c:442 util/grub-fstest.c:559 util/grub-mount.c:502
+#: grub-core/fs/zfs/zfscrypt.c:442 util/grub-fstest.c:559 util/grub-mount.c:503
 msgid "Enter ZFS password: "
 msgstr "عنتعر زفس پ‎اسسوورد: "
 
@@ -3464,7 +3474,7 @@ msgstr "كسز فִيلع صورروپ‎تعد ور ونسوپ‎پ‎ورتع�
 #: grub-core/loader/i386/bsd.c:1451 grub-core/loader/i386/bsdXX.c:52
 #: grub-core/loader/ia64/efi/linux.c:341 grub-core/loader/mips/linux.c:298
 #: grub-core/loader/multiboot.c:232 grub-core/loader/multiboot_elfxx.c:86
-#: grub-core/loader/powerpc/ieee1275/linux.c:280
+#: grub-core/loader/powerpc/ieee1275/linux.c:305
 #: grub-core/loader/sparc64/ieee1275/linux.c:331
 msgid "invalid arch-dependent ELF magic"
 msgstr "ִينوالִيد ارصه-دعپ‎عندعنت علف ماغִيص"
@@ -3529,15 +3539,15 @@ msgstr "پ‎رִينت ִينفوماتִيون وسعفول فور غدب دع
 msgid "invalid memory address (0x%s > 0x%s)"
 msgstr "ִينوالִيد معموري اددرعسس (0كس%s > 0كس%s)"
 
-#: grub-core/kern/efi/sb.c:171
+#: grub-core/kern/efi/sb.c:179
 msgid "prohibited by secure boot policy"
 msgstr "پ‎روهִيبִيتعد بي سعصورع بووت پ‎ولִيصي"
 
-#: grub-core/kern/efi/sb.c:181
+#: grub-core/kern/efi/sb.c:189
 msgid "shim_lock protocol not found"
 msgstr "سهִيم_لوصك پ‎روتوصول نوت فووند"
 
-#: grub-core/kern/efi/sb.c:184
+#: grub-core/kern/efi/sb.c:192
 msgid "bad shim signature"
 msgstr "باد سهִيم سִيغناتورع"
 
@@ -3640,12 +3650,12 @@ msgstr ""
 msgid "can't open `%s': %s"
 msgstr "صان'ت وپ‎عن `%s': %s"
 
-#: grub-core/kern/emu/main.c:99 util/grub-fstest.c:522 util/grub-mount.c:471
+#: grub-core/kern/emu/main.c:99 util/grub-fstest.c:522 util/grub-mount.c:472
 msgid "DEVICE_NAME"
 msgstr "دعوִيصع_نامع"
 
 #: grub-core/kern/emu/main.c:99 grub-core/loader/i386/bsd.c:137
-#: grub-core/loader/i386/bsd.c:170 util/grub-fstest.c:522 util/grub-mount.c:471
+#: grub-core/loader/i386/bsd.c:170 util/grub-fstest.c:522 util/grub-mount.c:472
 msgid "Set root device."
 msgstr "سعت رووت دعوִيصع."
 
@@ -3668,7 +3678,7 @@ msgstr "وسع غروب فִيلعس ִين تهع دִيرعصتوري دִير
 #: grub-core/kern/emu/main.c:108 include/grub/util/install.h:71
 #: util/grub-editenv.c:58 util/grub-fstest.c:531 util/grub-glue-efi.c:58
 #: util/grub-macbless.c:104 util/grub-mkfont.c:1008 util/grub-mkimage.c:86
-#: util/grub-mklayout.c:56 util/grub-mount.c:477 util/grub-render-label.c:74
+#: util/grub-mklayout.c:56 util/grub-mount.c:478 util/grub-render-label.c:74
 #: util/grub-script-check.c:52 util/grub-setup.c:90 util/grub-syslinux2cfg.c:78
 msgid "print verbose messages."
 msgstr "پ‎رִينت وعربوسع معسساغعس."
@@ -3727,7 +3737,7 @@ msgid "%s: info:"
 msgstr "%s: ִينفو:"
 
 #: grub-core/kern/emu/misc.c:80 util/grub-fstest.c:573 util/grub-fstest.c:582
-#: util/grub-mount.c:516 util/grub-mount.c:524
+#: util/grub-mount.c:517 util/grub-mount.c:525
 #, c-format
 msgid "%s: error:"
 msgstr "%s: عررور:"
@@ -3740,6 +3750,20 @@ msgstr "فִيلع `%s' ִيس توو بִيغ"
 #: grub-core/kern/fs.c:122
 msgid "unknown filesystem"
 msgstr "ونكنوون فִيلعسيستعم"
+
+#: grub-core/kern/ieee1275/init.c:259
+#, c-format
+msgid "Error: ibm,kernel-dump has an unexpected format version '%u'\n"
+msgstr "عررور: ִيبم,كعرنعل-دومپ‎ هاس ان ونعكسپ‎عصتعد فورمات وعرسִيون '%u'\n"
+
+#: grub-core/kern/ieee1275/init.c:266
+#, c-format
+msgid "Error: Too many kernel dump sections: %d\n"
+msgstr "عررور: توو ماني كعرنعل دومپ‎ سعصتִيونس: %d\n"
+
+#: grub-core/kern/ieee1275/init.c:279
+msgid "Error: 'kds' address beyond last available section\n"
+msgstr "عررور: 'كدس' اددرعسس بعيوند لاست اواִيلابلع سعصتִيون\n"
 
 #: grub-core/kern/mips/arc/init.c:273 grub-core/kern/mips/loongson/init.c:301
 msgid "Shutdown failed"
@@ -3892,21 +3916,21 @@ msgstr "ִينوالִيد زִيماغع"
 msgid "invalid device tree"
 msgstr "ִينوالִيد دعوִيصع ترعع"
 
-#: grub-core/loader/arm/linux.c:494 grub-core/loader/efi/linux.c:580
-#: grub-core/loader/emu/linux.c:172 grub-core/loader/i386/linux.c:1145
+#: grub-core/loader/arm/linux.c:494 grub-core/loader/efi/linux.c:583
+#: grub-core/loader/emu/linux.c:172 grub-core/loader/i386/linux.c:1157
 #: grub-core/loader/i386/pc/linux.c:483 grub-core/loader/i386/xen.c:969
 #: grub-core/loader/i386/xen.c:971 grub-core/loader/ia64/efi/linux.c:591
 #: grub-core/loader/mips/linux.c:498
-#: grub-core/loader/powerpc/ieee1275/linux.c:369
+#: grub-core/loader/powerpc/ieee1275/linux.c:406
 #: grub-core/loader/sparc64/ieee1275/linux.c:511
 msgid "Load Linux."
 msgstr "لواد لִينوكس."
 
-#: grub-core/loader/arm/linux.c:496 grub-core/loader/efi/linux.c:582
-#: grub-core/loader/emu/linux.c:174 grub-core/loader/i386/linux.c:1147
+#: grub-core/loader/arm/linux.c:496 grub-core/loader/efi/linux.c:585
+#: grub-core/loader/emu/linux.c:174 grub-core/loader/i386/linux.c:1159
 #: grub-core/loader/i386/pc/linux.c:486 grub-core/loader/i386/xen.c:973
 #: grub-core/loader/ia64/efi/linux.c:594 grub-core/loader/mips/linux.c:500
-#: grub-core/loader/powerpc/ieee1275/linux.c:371
+#: grub-core/loader/powerpc/ieee1275/linux.c:408
 #: grub-core/loader/sparc64/ieee1275/linux.c:513
 msgid "Load initrd."
 msgstr "لواد ִينִيترد."
@@ -3954,7 +3978,7 @@ msgid ""
 msgstr ""
 "پ‎لاִين ִيماغع كعرنعل نوت سوپ‎پ‎ورتعد - رعبوִيلد وִيته صونفִيغ_(و)عفִي_ستوب عنابلعد"
 
-#: grub-core/loader/efi/linux.c:413
+#: grub-core/loader/efi/linux.c:416
 msgid "failed to install protocols"
 msgstr "فاִيلعد تو ִينستالل پ‎روتوصولس"
 
@@ -4143,12 +4167,12 @@ msgstr "لواد كوپ‎عنبسد رامدִيسك."
 msgid "Load another coreboot payload"
 msgstr "لواد انوتهعر صورعبووت پ‎ايلواد"
 
-#: grub-core/loader/i386/linux.c:882
+#: grub-core/loader/i386/linux.c:894
 msgid "Legacy `ask' parameter no longer supported."
 msgstr "لعغاصي `اسك' پ‎ارامعتعر نو لونغعر سوپ‎پ‎ورتعد."
 
-#: grub-core/loader/i386/linux.c:898 grub-core/loader/i386/linux.c:908
-#: grub-core/loader/i386/linux.c:938
+#: grub-core/loader/i386/linux.c:910 grub-core/loader/i386/linux.c:920
+#: grub-core/loader/i386/linux.c:950
 #, c-format
 msgid "%s is deprecated. Use set gfxpayload=%s before linux command instead.\n"
 msgstr ""
@@ -4156,7 +4180,7 @@ msgstr ""
 
 #. TRANSLATORS: "x" has to be entered in, like an identifier,
 #. so please don't use better Unicode codepoints.
-#: grub-core/loader/i386/linux.c:921
+#: grub-core/loader/i386/linux.c:933
 #, c-format
 msgid ""
 "%s is deprecated. VGA mode %d isn't recognized. Use set "
@@ -4165,7 +4189,7 @@ msgstr ""
 "%s ִيس دعپ‎رعصاتعد. وغا مودع %d ִيسن'ت رعصوغنִيزعد. وسع سعت "
 "غفكسپ‎ايلواد=وִيدتهكسهعִيغهت[كسدعپ‎ته] بعفورع لִينوكس صومماند ִينستعاد.\n"
 
-#: grub-core/loader/i386/linux.c:1092
+#: grub-core/loader/i386/linux.c:1104
 msgid "the size of initrd is bigger than addr_max"
 msgstr "تهع سִيزع وف ִينִيترد ִيس بִيغغعر تهان اددر_ماكس"
 
@@ -4508,22 +4532,22 @@ msgstr "اللوص-معم فاִيلعد"
 msgid "free-mem failed"
 msgstr "فرعع-معم فاִيلعد"
 
-#: grub-core/net/http.c:75
+#: grub-core/net/http.c:71
 msgid "invalid HTTP header - LF without CR"
 msgstr "ִينوالִيد هتتپ‎ هعادعر - لف وִيتهووت صر"
 
-#: grub-core/net/http.c:113
+#: grub-core/net/http.c:109
 msgid "unsupported HTTP response"
 msgstr "ونسوپ‎پ‎ورتعد هتتپ‎ رعسپ‎ونسع"
 
 #. TRANSLATORS: GRUB HTTP code is pretty young. So even perfectly
 #. valid answers like 403 will trigger this very generic message.
-#: grub-core/net/http.c:134
+#: grub-core/net/http.c:130
 #, c-format
 msgid "unsupported HTTP error %d: %s"
 msgstr "ونسوپ‎پ‎ورتعد هتتپ‎ عررور %d: %s"
 
-#: grub-core/net/http.c:446 grub-core/net/tftp.c:400
+#: grub-core/net/http.c:442 grub-core/net/tftp.c:400
 #, c-format
 msgid "time out opening `%s'"
 msgstr "تִيمع ووت وپ‎عنִينغ `%s'"
@@ -5102,22 +5126,22 @@ msgstr "صوولدن'ت فִيند غعوم `پ‎ارت' صلاسس"
 msgid "unaligned device size"
 msgstr "ونالִيغنعد دعوִيصع سִيزع"
 
-#: grub-core/osdep/generic/blocklist.c:56
+#: grub-core/osdep/generic/blocklist.c:80
 #, c-format
 msgid "attempting to read the core image `%s' from GRUB"
 msgstr "اتتعمپ‎تִينغ تو رعاد تهع صورع ִيماغع `%s' فروم غروب"
 
-#: grub-core/osdep/generic/blocklist.c:57
+#: grub-core/osdep/generic/blocklist.c:81
 #, c-format
 msgid "attempting to read the core image `%s' from GRUB again"
 msgstr "اتتعمپ‎تִينغ تو رعاد تهع صورع ִيماغع `%s' فروم غروب اغاִين"
 
-#: grub-core/osdep/generic/blocklist.c:115
+#: grub-core/osdep/generic/blocklist.c:139
 #, c-format
 msgid "cannot read `%s' correctly"
 msgstr "صاننوت رعاد `%s' صوررعصتلي"
 
-#: grub-core/osdep/generic/blocklist.c:126
+#: grub-core/osdep/generic/blocklist.c:150
 msgid "failed to read the sectors of the core image"
 msgstr "فاִيلعد تو رعاد تهع سعصتورس وف تهع صورع ִيماغع"
 
@@ -5235,7 +5259,7 @@ msgstr "`وبپ‎پ‎اته' نوت فووند ִين پ‎ارعنت دִير
 
 #: grub-core/osdep/linux/ofpath.c:222 grub-core/osdep/unix/getroot.c:501
 #: grub-core/osdep/unix/getroot.c:525 grub-core/osdep/unix/relpath.c:49
-#: util/grub-install.c:1010 util/grub-install.c:1383 util/grub-probe.c:323
+#: util/grub-install.c:1010 util/grub-install.c:1406 util/grub-probe.c:323
 #, c-format
 msgid "failed to get canonical path of `%s'"
 msgstr "فاִيلعد تو غعت صانونִيصال پ‎اته وف `%s'"
@@ -5582,20 +5606,20 @@ msgstr "ִينصوررعصت ممִيو اددرعسس سينتاكس"
 msgid "incorrect MMIO access size"
 msgstr "ִينصوررعصت ممִيو اصصعسس سִيزع"
 
-#: grub-core/term/serial.c:276
+#: grub-core/term/serial.c:279
 #, c-format
 msgid "serial port `%s' isn't found"
 msgstr "سعرִيال پ‎ورت `%s' ִيسن'ت فووند"
 
-#: grub-core/term/serial.c:312
+#: grub-core/term/serial.c:315
 msgid "unsupported serial port flow control"
 msgstr "ونسوپ‎پ‎ورتعد سعرִيال پ‎ورت فلوو صونترول"
 
-#: grub-core/term/serial.c:487
+#: grub-core/term/serial.c:490
 msgid "[OPTIONS...]"
 msgstr "[وپ‎تִيونس...]"
 
-#: grub-core/term/serial.c:488
+#: grub-core/term/serial.c:491
 msgid "Configure serial port."
 msgstr "صونفִيغورع سعرִيال پ‎ورت."
 
@@ -5781,7 +5805,7 @@ msgstr "سبات معتاداتا"
 msgid "disable shim_lock verifier"
 msgstr "دִيسابلع سهִيم_لوصك وعرִيفִيعر"
 
-#: util/editenv.c:71 util/grub-editenv.c:207 util/grub-install-common.c:705
+#: util/editenv.c:71 util/grub-editenv.c:207 util/grub-install-common.c:718
 #: util/grub-mkimage.c:331 util/setup.c:794
 #, c-format
 msgid "cannot sync `%s': %s"
@@ -5794,8 +5818,8 @@ msgstr "صاننوت رعنامع تهع فִيلع %s تو %s"
 
 #: util/editenv.c:94 util/editenv.c:131
 #, c-format
-msgid "cannot rename the file %s to %s: %m"
-msgstr "صاننوت رعنامع تهع فִيلع %s تو %s: %m"
+msgid "cannot rename the file %s to %s: %s"
+msgstr "صاننوت رعنامع تهع فִيلع %s تو %s: %s"
 
 #: util/getroot.c:402
 #, c-format
@@ -5914,12 +5938,12 @@ msgstr "صومپ‎ارع فاִيل ات وففسعت %llu"
 msgid "OS file %s open error: %s"
 msgstr "وس فִيلع %s وپ‎عن عررور: %s"
 
-#: util/grub-fstest.c:408 util/grub-mount.c:411
+#: util/grub-fstest.c:408 util/grub-mount.c:412
 #, c-format
 msgid "`loopback' command fails: %s"
 msgstr "`لووپ‎باصك' صومماند فاִيلس: %s"
 
-#: util/grub-fstest.c:419 util/grub-mount.c:421
+#: util/grub-fstest.c:419 util/grub-mount.c:422
 #, c-format
 msgid "`cryptomount' command fails: %s"
 msgstr "`صريپ‎توموونت' صومماند فاִيلس: %s"
@@ -6012,20 +6036,20 @@ msgstr "هاندلع ن بيتعس ִين ووتپ‎وت فִيلع."
 msgid "Specify the number of input files."
 msgstr "سپ‎عصִيفي تهع نومبعر وف ִينپ‎وت فִيلعس."
 
-#: util/grub-fstest.c:526 util/grub-mount.c:472
+#: util/grub-fstest.c:526 util/grub-mount.c:473
 msgid "Set debug environment variable."
 msgstr "سعت دعبوغ عنوִيرونمعنت وارִيابلع."
 
-#: util/grub-fstest.c:527 util/grub-mount.c:473
+#: util/grub-fstest.c:527 util/grub-mount.c:474
 msgid "Mount crypto devices."
 msgstr "موونت صريپ‎تو دعوִيصعس."
 
 #. TRANSLATORS: "prompt" is a keyword.
-#: util/grub-fstest.c:530 util/grub-mount.c:476
+#: util/grub-fstest.c:530 util/grub-mount.c:477
 msgid "FILE|prompt"
 msgstr "فִيلع|پ‎رومپ‎ت"
 
-#: util/grub-fstest.c:530 util/grub-mount.c:476
+#: util/grub-fstest.c:530 util/grub-mount.c:477
 msgid "Load zfs crypto key."
 msgstr "لواد زفس صريپ‎تو كعي."
 
@@ -6061,7 +6085,7 @@ msgstr "ִينوالִيد صومماند %s.\n"
 msgid "IMAGE_PATH COMMANDS"
 msgstr "ִيماغع_پ‎اته صومماندس"
 
-#: util/grub-fstest.c:731 util/grub-mount.c:572
+#: util/grub-fstest.c:731 util/grub-mount.c:575
 msgid "Debug tool for filesystem driver."
 msgstr "دعبوغ توول فور فִيلعسيستعم درִيوعر."
 
@@ -6105,8 +6129,8 @@ msgstr "صان'ت صومپ‎رعسس `%s' تو `%s'"
 msgid "failed to make directory: '%s'"
 msgstr "فاִيلعد تو ماكع دִيرعصتوري: '%s'"
 
-#: util/grub-install-common.c:239 util/grub-install-common.c:722
-#: util/grub-install-common.c:749 util/grub-install-common.c:794
+#: util/grub-install-common.c:239 util/grub-install-common.c:735
+#: util/grub-install-common.c:762 util/grub-install-common.c:807
 #, c-format
 msgid "cannot open directory `%s': %s"
 msgstr "صاننوت وپ‎عن دִيرعصتوري `%s': %s"
@@ -6140,27 +6164,27 @@ msgstr "ونكنوون صومپ‎رعسسִيون فورمات %s"
 msgid "Unrecognized compression `%s'"
 msgstr "ونرعصوغنִيزعد صومپ‎رعسسִيون `%s'"
 
-#: util/grub-install-common.c:678
+#: util/grub-install-common.c:691
 #, c-format
 msgid "unknown target format %s"
 msgstr "ونكنوون تارغعت فورمات %s"
 
-#: util/grub-install-common.c:873
+#: util/grub-install-common.c:886
 #, c-format
 msgid "cannot find locale `%s'"
 msgstr "صاننوت فִيند لوصالع `%s'"
 
-#: util/grub-install-common.c:1113
+#: util/grub-install-common.c:1126
 #, c-format
 msgid "%s doesn't exist. Please specify --target or --directory"
 msgstr "%s دوعسن'ت عكسִيست. پ‎لعاسع سپ‎عصִيفي --تارغعت ور --دִيرعصتوري"
 
-#: util/grub-install-common.c:1122 util/grub-install-common.c:1125
+#: util/grub-install-common.c:1135 util/grub-install-common.c:1138
 #, c-format
 msgid "invalid modinfo file `%s'"
 msgstr "ִينوالִيد مودִينفو فִيلع `%s'"
 
-#: util/grub-install-common.c:1140
+#: util/grub-install-common.c:1153
 #, c-format
 msgid "Unknown platform `%s-%s'"
 msgstr "ونكنوون پ‎لاتفورم `%s-%s'"
@@ -6326,14 +6350,14 @@ msgstr "ִينستالل دعوִيصع ִيسن'ت سپ‎عصִيفִيعد"
 msgid "cannot find EFI directory"
 msgstr "صاننوت فִيند عفִي دִيرعصتوري"
 
-#: util/grub-install.c:1101 util/grub-install.c:1261 util/grub-install.c:1306
+#: util/grub-install.c:1101 util/grub-install.c:1261 util/grub-install.c:1299
 #: util/grub-macbless.c:76 util/grub-probe.c:329 util/setup.c:320
 #, c-format
 msgid "cannot find a device for %s (is /dev mounted?)"
 msgstr "صاننوت فִيند ا دعوִيصع فور %s (ִيس /دعو موونتعد?)"
 
-#: util/grub-install.c:1110 util/grub-install.c:1269 util/grub-install.c:1322
-#: util/grub-install.c:1417 util/grub-macbless.c:80 util/grub-probe.c:372
+#: util/grub-install.c:1110 util/grub-install.c:1269 util/grub-install.c:1315
+#: util/grub-install.c:1387 util/grub-macbless.c:80 util/grub-probe.c:372
 #, c-format
 msgid "cannot find a GRUB drive for %s.  Check your device.map"
 msgstr "صاننوت فִيند ا غروب درִيوع فور %s.  صهعصك يوور دعوִيصع.ماپ‎"
@@ -6348,7 +6372,7 @@ msgstr "%s دوعسن'ت لووك لִيكع ان عفִي پ‎ارتִيتִي
 msgid "%s doesn't look like an EFI partition"
 msgstr "%s دوعسن'ت لووك لִيكع ان عفִي پ‎ارتִيتִيون"
 
-#: util/grub-install.c:1178 util/grub-install.c:1668
+#: util/grub-install.c:1178 util/grub-install.c:1670
 msgid "You've found a bug"
 msgstr "يوو'وع فووند ا بوغ"
 
@@ -6357,7 +6381,7 @@ msgstr "يوو'وع فووند ا بوغ"
 msgid "filesystem on %s is neither HFS nor HFS+"
 msgstr "فִيلعسيستعم ون %s ִيس نعִيتهعر هفس نور هفس+"
 
-#: util/grub-install.c:1351
+#: util/grub-install.c:1344
 #, c-format
 msgid ""
 "attempt to install to encrypted disk without cryptodisk enabled. Set `%s' in "
@@ -6366,30 +6390,30 @@ msgstr ""
 "اتتعمپ‎ت تو ִينستالل تو عنصريپ‎تعد دִيسك وִيتهووت صريپ‎تودִيسك عنابلعد. سعت `%s' ִين "
 "فִيلع `%s'"
 
-#: util/grub-install.c:1462 util/grub-install.c:1838 util/grub-install.c:1943
+#: util/grub-install.c:1464 util/grub-install.c:1840 util/grub-install.c:1945
 #, c-format
 msgid "Can't create file: %s"
 msgstr "صان'ت صرعاتع فִيلع: %s"
 
-#: util/grub-install.c:1544
+#: util/grub-install.c:1546
 msgid "no hints available for your platform. Expect reduced performance"
 msgstr "نو هִينتس اواִيلابلع فور يوور پ‎لاتفورم. عكسپ‎عصت رعدوصعد پ‎عرفورمانصع"
 
 #. TRANSLATORS: This is a prefix in the log to indicate that usually
 #. a command would be executed but due to an option was skipped.
-#: util/grub-install.c:1757
+#: util/grub-install.c:1759
 msgid "NOT RUNNING: "
 msgstr "نوت روننִينغ: "
 
-#: util/grub-install.c:1874
+#: util/grub-install.c:1876
 msgid "the chosen partition is not a PReP partition"
 msgstr "تهع صهوسعن پ‎ارتִيتִيون ִيس نوت ا پ‎رعپ‎ پ‎ارتִيتִيون"
 
-#: util/grub-install.c:1879
+#: util/grub-install.c:1881
 msgid "failed to copy Grub to the PReP partition"
 msgstr "فاִيلعد تو صوپ‎ي غروب تو تهع پ‎رعپ‎ پ‎ارتִيتִيون"
 
-#: util/grub-install.c:1885
+#: util/grub-install.c:1887
 #, c-format
 msgid ""
 "the PReP partition is not empty. If you are sure you want to use it, run dd "
@@ -6398,20 +6422,20 @@ msgstr ""
 "تهع پ‎رعپ‎ پ‎ارتִيتִيون ִيس نوت عمپ‎تي. ִيف يوو ارع سورع يوو وانت تو وسع ִيت, رون دد "
 "تو صلعار ִيت: `%s'"
 
-#: util/grub-install.c:1961 util/grub-install.c:2009
+#: util/grub-install.c:1963 util/grub-install.c:2011
 #, c-format
 msgid "efibootmgr failed to register the boot entry: %s"
 msgstr "عفִيبووتمغر فاִيلعد تو رعغִيستعر تهع بووت عنتري: %s"
 
-#: util/grub-install.c:1993
+#: util/grub-install.c:1995
 msgid "EFI bootloader id isn't specified."
 msgstr "عفִي بووتلوادعر ִيد ִيسن'ت سپ‎عصִيفִيعد."
 
-#: util/grub-install.c:2027
+#: util/grub-install.c:2029
 msgid "WARNING: no platform-specific install was performed"
 msgstr "وارنִينغ: نو پ‎لاتفورم-سپ‎عصִيفִيص ִينستالل واس پ‎عرفورمعد"
 
-#: util/grub-install.c:2042
+#: util/grub-install.c:2044
 msgid "Installation finished. No error reported."
 msgstr "ִينستاللاتִيون فִينִيسهعد. نو عررور رعپ‎ورتعد."
 
@@ -6500,7 +6524,7 @@ msgstr "ونسوپ‎پ‎ورتعد صووعراغع سپ‎عصִيفִيصا�
 msgid "WARNING: unsupported font feature parameters: %x\n"
 msgstr "وارنִينغ: ونسوپ‎پ‎ورتعد فونت فعاتورع پ‎ارامعتعرس: %x\n"
 
-#: util/grub-mkfont.c:982 util/grub-mkrescue.c:98 util/grub-mkstandalone.c:48
+#: util/grub-mkfont.c:982 util/grub-mkrescue.c:98 util/grub-mkstandalone.c:51
 #: util/grub-kbdcomp.in:29
 msgid "save output in FILE [required]"
 msgstr "ساوع ووتپ‎وت ִين فִيلع [رعقوִيرعد]"
@@ -6576,7 +6600,7 @@ msgid "Convert common font file formats into PF2"
 msgstr "صونوعرت صوممون فونت فִيلع فورماتس ִينتو پ‎ف2"
 
 #: util/grub-mkfont.c:1228 util/grub-mkrescue.c:503
-#: util/grub-mkstandalone.c:306 util/grub-kbdcomp.in:70
+#: util/grub-mkstandalone.c:327 util/grub-kbdcomp.in:70
 msgid "output file must be specified"
 msgstr "ووتپ‎وت فִيلع موست بع سپ‎عصִيفִيعد"
 
@@ -6631,15 +6655,15 @@ msgstr "ووتپ‎وت ا غعنعراتعد ִيماغع تو فִيلع [دع
 msgid "FORMAT"
 msgstr "فورمات"
 
-#: util/grub-mkimage.c:102 util/grub-mkstandalone.c:62
+#: util/grub-mkimage.c:102 util/grub-mkstandalone.c:65
 msgid "generate an image in FORMAT"
 msgstr "غعنعراتع ان ִيماغع ִين فورمات"
 
-#: util/grub-mkimage.c:103 util/grub-mkstandalone.c:63
+#: util/grub-mkimage.c:103 util/grub-mkstandalone.c:66
 msgid "available formats:"
 msgstr "اواִيلابلع فورماتس:"
 
-#: util/grub-mkimage.c:156 util/grub-mkstandalone.c:96
+#: util/grub-mkimage.c:156 util/grub-mkstandalone.c:99
 #, c-format
 msgid "unknown target format %s\n"
 msgstr "ونكنوون تارغعت فورمات %s\n"
@@ -6652,7 +6676,7 @@ msgstr "[وپ‎تִيون]... [مودولعس]"
 msgid "Make a bootable image of GRUB."
 msgstr "ماكع ا بووتابلع ִيماغع وف غروب."
 
-#: util/grub-mkimage.c:288 util/grub-mkstandalone.c:309
+#: util/grub-mkimage.c:288 util/grub-mkstandalone.c:330
 msgid "Target format not specified (use the -O option)."
 msgstr "تارغعت فورمات نوت سپ‎عصִيفִيعد (وسع تهع -و وپ‎تִيون)."
 
@@ -6837,7 +6861,7 @@ msgstr "وپ‎تִيون -- سوִيتصهعس تو ناتִيوع كسوررִ
 msgid "Mail xorriso support requests to <bug-xorriso@gnu.org>."
 msgstr "ماִيل كسوررִيسو سوپ‎پ‎ورت رعقوعستس تو <بوغ-كسوررִيسو@غنو.ورغ>."
 
-#: util/grub-mkrescue.c:221 util/grub-mkstandalone.c:114
+#: util/grub-mkrescue.c:221 util/grub-mkstandalone.c:117
 msgid "[OPTION] SOURCE..."
 msgstr "[وپ‎تִيون] سوورصع..."
 
@@ -6866,21 +6890,26 @@ msgstr ""
 "يوور كسوررִيسو دوعسن'ت سوپ‎پ‎ورت `--غروب2-بووت-ִينفو'. يوور صورع ִيماغع ִيس توو "
 "بִيغ. بووت اس دִيسك ִيس دִيسابلعد. پ‎لعاسع وسع كسوررִيسو 1.2.9 ور لاتعر."
 
-#: util/grub-mkstandalone.c:115
+#: util/grub-mkstandalone.c:118
 msgid ""
 "Generate a standalone image (containing all modules) in the selected format"
 msgstr ""
 "غعنعراتع ا ستاندالونع ִيماغع (صونتاִينִينغ الل مودولعس) ִين تهع سعلعصتعد فورمات"
 
-#: util/grub-mkstandalone.c:115
+#: util/grub-mkstandalone.c:118
 msgid "Graft point syntax (E.g. /boot/grub/grub.cfg=./grub.cfg) is accepted"
 msgstr "غرافت پ‎وִينت سينتاكس (ع.غ. /بووت/غروب/غروب.صفغ=./غروب.صفغ) ִيس اصصعپ‎تعد"
 
-#: util/grub-mount.c:571
+#: util/grub-mount.c:567
+#, c-format
+msgid "cannot find `%s': %s"
+msgstr "صاننوت فִيند `%s': %s"
+
+#: util/grub-mount.c:574
 msgid "IMAGE1 [IMAGE2 ...] MOUNTPOINT"
 msgstr "ִيماغع1 [ִيماغع2 ...] موونتپ‎وִينت"
 
-#: util/grub-mount.c:594
+#: util/grub-mount.c:597
 msgid "need an image and mountpoint"
 msgstr "نععد ان ִيماغع اند موونتپ‎وִينت"
 

@@ -20,7 +20,7 @@ Patch-Name: mkconfig-loopback.patch
  3 files changed, 34 insertions(+)
 
 diff --git a/util/grub-mkconfig_lib.in b/util/grub-mkconfig_lib.in
-index 0895328..86a3a53 100644
+index 33e1750..cc3c4f0 100644
 --- a/util/grub-mkconfig_lib.in
 +++ b/util/grub-mkconfig_lib.in
 @@ -133,6 +133,22 @@ prepare_grub_to_access_device ()
@@ -78,7 +78,7 @@ index e661e9d..cc6ae58 100644
  esac
  
 diff --git a/util/grub.d/20_linux_xen.in b/util/grub.d/20_linux_xen.in
-index e46b757..fb9bf72 100644
+index 94dd8be..f496beb 100644
 --- a/util/grub.d/20_linux_xen.in
 +++ b/util/grub.d/20_linux_xen.in
 @@ -40,6 +40,11 @@ fi

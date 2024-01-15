@@ -13,7 +13,7 @@ Patch-Name: mkconfig-nonexistent-loopback.patch
  2 files changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/util/grub-mkconfig_lib.in b/util/grub-mkconfig_lib.in
-index 86a3a53..f0c8860 100644
+index cc3c4f0..121df9a 100644
 --- a/util/grub-mkconfig_lib.in
 +++ b/util/grub-mkconfig_lib.in
 @@ -143,7 +143,7 @@ prepare_grub_to_access_device ()

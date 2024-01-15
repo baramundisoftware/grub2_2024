@@ -45,7 +45,8 @@ static grub_guid_t rng_protocol_guid = GRUB_EFI_RNG_PROTOCOL_GUID;
  */
 static grub_efi_uint8_t stack_chk_guard_buf[32];
 
-grub_addr_t __stack_chk_guard;
+/* Initialize canary in case there is no RNG protocol. */
+grub_addr_t __stack_chk_guard = (grub_addr_t) GRUB_STACK_PROTECTOR_INIT;
 
 void __attribute__ ((noreturn))
 __stack_chk_fail (void)
@@ -102,7 +103,7 @@ stack_protector_init (void)
 
 grub_addr_t grub_modbase;
 
-void
+__attribute__ ((__optimize__ ("-fno-stack-protector"))) void
 grub_efi_init (void)
 {
   grub_modbase = grub_efi_section_addr ("mods");

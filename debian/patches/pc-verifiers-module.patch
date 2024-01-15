@@ -38,7 +38,7 @@ Patch-Name: pc-verifiers-module.patch
  5 files changed, 39 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/Makefile.am b/grub-core/Makefile.am
-index f0cb2f2..7a5a878 100644
+index f18550c..f9d4aa2 100644
 --- a/grub-core/Makefile.am
 +++ b/grub-core/Makefile.am
 @@ -93,7 +93,9 @@ KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/partition.h
@@ -52,7 +52,7 @@ index f0cb2f2..7a5a878 100644
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/net.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/memory.h
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index a9b9c20..0b4d6b7 100644
+index 044e53c..333d3fe 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -152,7 +152,7 @@ kernel = {

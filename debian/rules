@@ -49,14 +49,14 @@ else
 with_check := yes
 endif
 
-CC := gcc-12
-
 confflags = \
 	PACKAGE_VERSION="$(deb_version)" PACKAGE_STRING="GRUB $(deb_version)" \
 	CC=$(CC) TARGET_CC=$(CC) \
 	--libdir=\$${prefix}/lib --libexecdir=\$${prefix}/lib \
 	--enable-grub-mkfont \
-	--disable-grub-emu-usb
+	--disable-grub-emu-usb \
+	--enable-grub-themes \
+	--with-dejavufont=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
 substvars =
 
 AUTOGEN_DEB_FILES = config templates preinst postinst postrm dirs install links maintscript bash-completion

@@ -198,6 +198,7 @@ fuse_getattr (const char *path, struct stat *st,
   (fs->fs_dir) (dev, path2, fuse_getattr_find_file, &ctx);
 
   grub_free (path2);
+  free (pathname);
   if (!ctx.file_exists)
     {
       grub_errno = GRUB_ERR_NONE;
@@ -562,6 +563,8 @@ argp_parser (int key, char *arg, struct argp_state *state)
 
   images = xrealloc (images, (num_disks + 1) * sizeof (images[0]));
   images[num_disks] = grub_canonicalize_file_name (arg);
+  if (images[num_disks] == NULL)
+    grub_util_error (_("cannot find `%s': %s"), arg, strerror (errno));
   num_disks++;
 
   return 0;

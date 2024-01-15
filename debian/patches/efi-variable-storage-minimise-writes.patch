@@ -59,7 +59,7 @@ Patch-Name: efi-variable-storage-minimise-writes.patch
  create mode 100644 grub-core/osdep/unix/efivar.c
 
 diff --git a/INSTALL b/INSTALL
-index b93fe9c..ba64b7d 100644
+index 8d9207c..276bf86 100644
 --- a/INSTALL
 +++ b/INSTALL
 @@ -28,6 +28,11 @@ configuring the GRUB.
@@ -75,7 +75,7 @@ index b93fe9c..ba64b7d 100644
  
  * libdevmapper 1.02.34 or later (recommended)
 diff --git a/Makefile.util.def b/Makefile.util.def
-index 61d9f62..4a02d9b 100644
+index 970a003..2d5b1d9 100644
 --- a/Makefile.util.def
 +++ b/Makefile.util.def
 @@ -579,6 +579,8 @@ program = {
@@ -179,7 +179,7 @@ index 61d9f62..4a02d9b 100644
  
  script = {
 diff --git a/configure.ac b/configure.ac
-index a65a9b1..6b9807f 100644
+index 7f43651..db46f6f 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -461,6 +461,18 @@ AC_CHECK_HEADER([util.h], [
@@ -871,10 +871,10 @@ index ca102b4..af929aa 100644
  grub_install_register_efi (grub_device_t efidir_grub_dev,
  			   const char *efifile_path,
 diff --git a/util/grub-install.c b/util/grub-install.c
-index bd77e7b..16b5474 100644
+index ddce04c..c36a286 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -2004,7 +2004,7 @@ main (int argc, char *argv[])
+@@ -2006,7 +2006,7 @@ main (int argc, char *argv[])
  					       "\\System\\Library\\CoreServices",
  					       efi_distributor);
  	      if (ret)
@@ -883,7 +883,7 @@ index bd77e7b..16b5474 100644
  				 strerror (ret));
  	    }
  
-@@ -2052,7 +2052,7 @@ main (int argc, char *argv[])
+@@ -2054,7 +2054,7 @@ main (int argc, char *argv[])
  	  ret = grub_install_register_efi (efidir_grub_dev,
  					   efifile_path, efi_distributor);
  	  if (ret)

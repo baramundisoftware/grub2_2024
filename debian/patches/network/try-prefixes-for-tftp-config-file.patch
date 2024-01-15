@@ -11,10 +11,10 @@ Signed-off-by: Robbie Harwood <rharwood@redhat.com>
  3 files changed, 81 insertions(+), 76 deletions(-)
 
 diff --git a/grub-core/kern/ieee1275/init.c b/grub-core/kern/ieee1275/init.c
-index b014ef1..d36b80d 100644
+index ed62c4b..97bf33f 100644
 --- a/grub-core/kern/ieee1275/init.c
 +++ b/grub-core/kern/ieee1275/init.c
-@@ -175,23 +175,25 @@ grub_machine_get_bootlocation (char **device, char **path)
+@@ -180,23 +180,25 @@ grub_machine_get_bootlocation (char **device, char **path)
        grub_free (canon);
      }
    else

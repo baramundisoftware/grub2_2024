@@ -241,7 +241,7 @@ index 3dbe880..3a4a92f 100644
      }
  
 diff --git a/include/grub/efi/api.h b/include/grub/efi/api.h
-index 689167e..1aa56a1 100644
+index 9515d56..b64fd49 100644
 --- a/include/grub/efi/api.h
 +++ b/include/grub/efi/api.h
 @@ -367,6 +367,15 @@

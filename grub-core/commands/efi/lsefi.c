@@ -29,7 +29,7 @@
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
-struct known_protocol
+static struct known_protocol
 {
   grub_guid_t guid;
   const char *name;
@@ -96,7 +96,7 @@ grub_cmd_lsefi (grub_command_t cmd __attribute__ ((unused)),
       grub_efi_handle_t handle = handles[i];
       grub_efi_status_t status;
       grub_efi_uintn_t num_protocols;
-      grub_guid_t **protocols;
+      grub_packed_guid_t **protocols;
       grub_efi_device_path_t *dp;
 
       grub_printf ("Handle %p\n", handle);

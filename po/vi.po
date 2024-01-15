@@ -3,14 +3,14 @@
 # Copyright © 2013 Free Software Foundation, Inc.
 # This file is distributed under the same license as the grub package.
 # Clytie Siddall <clytie@riverland.net.au>, 2010.
-# Trần Ngọc Quân <vnwildman@gmail.com>, 2012-2022.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2012-2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: grub 2.06-pre2\n"
+"Project-Id-Version: grub 2.12-rc1\n"
 "Report-Msgid-Bugs-To: bug-grub@gnu.org\n"
-"POT-Creation-Date: 2023-07-10 17:58+0200\n"
-"PO-Revision-Date: 2022-07-02 14:00+0700\n"
+"POT-Creation-Date: 2023-12-20 17:09+0100\n"
+"PO-Revision-Date: 2023-07-18 09:34+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi\n"
@@ -19,7 +19,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 3.38.0\n"
 
 #: grub-core/bus/usb/serial/ftdi.c:145 grub-core/bus/usb/serial/pl2303.c:158
 #: grub-core/term/ieee1275/escc.c:169 grub-core/term/ns8250.c:262
@@ -28,14 +27,14 @@ msgstr "không hỗ trợ tốc độ của cổng nối tiếp"
 
 #: grub-core/bus/usb/serial/ftdi.c:151 grub-core/bus/usb/serial/pl2303.c:164
 #: grub-core/term/efi/serial.c:116 grub-core/term/ieee1275/escc.c:175
-#: grub-core/term/ns8250.c:268 grub-core/term/serial.c:285
-#: grub-core/term/serial.c:301
+#: grub-core/term/ns8250.c:268 grub-core/term/serial.c:288
+#: grub-core/term/serial.c:304
 msgid "unsupported serial port parity"
 msgstr "không hỗ trợ tính chẵn lẻ của cổng nối tiếp"
 
 #: grub-core/bus/usb/serial/ftdi.c:157 grub-core/bus/usb/serial/pl2303.c:170
 #: grub-core/term/efi/serial.c:122 grub-core/term/ieee1275/escc.c:181
-#: grub-core/term/ns8250.c:273 grub-core/term/serial.c:325
+#: grub-core/term/ns8250.c:273 grub-core/term/serial.c:328
 msgid "unsupported serial port stop bits number"
 msgstr "không hỗ trợ bit dừng của của cổng nối tiếp"
 
@@ -91,7 +90,7 @@ msgstr ""
 "một số BIOS nào đó, nhưng mà làm cho nó mất hiệu lực khi HĐH không nhận RDSP "
 "từ GRUB."
 
-#: grub-core/commands/acpi.c:655 grub-core/commands/acpi.c:672
+#: grub-core/commands/acpi.c:666 grub-core/commands/acpi.c:683
 #: grub-core/commands/i386/pc/play.c:105 grub-core/commands/keylayouts.c:230
 #: grub-core/commands/keylayouts.c:245 grub-core/commands/keylayouts.c:263
 #: grub-core/efiemu/loadcore.c:350 grub-core/kern/elf.c:117
@@ -100,17 +99,17 @@ msgstr ""
 #: grub-core/loader/arm64/xen_boot.c:342 grub-core/loader/efi/chainloader.c:283
 #: grub-core/loader/efi/chainloader.c:304
 #: grub-core/loader/efi/chainloader.c:336 grub-core/loader/efi/fdt.c:145
-#: grub-core/loader/efi/linux.c:527 grub-core/loader/i386/bsd.c:1282
+#: grub-core/loader/efi/linux.c:530 grub-core/loader/i386/bsd.c:1282
 #: grub-core/loader/i386/bsd.c:2123 grub-core/loader/i386/bsdXX.c:20
 #: grub-core/loader/i386/bsdXX.c:39 grub-core/loader/i386/bsdXX.c:70
-#: grub-core/loader/i386/bsdXX.c:375 grub-core/loader/i386/bsdXX.c:394
-#: grub-core/loader/i386/bsdXX.c:541 grub-core/loader/i386/bsdXX.c:557
-#: grub-core/loader/i386/bsdXX.c:643 grub-core/loader/i386/bsdXX.c:666
+#: grub-core/loader/i386/bsdXX.c:379 grub-core/loader/i386/bsdXX.c:398
+#: grub-core/loader/i386/bsdXX.c:545 grub-core/loader/i386/bsdXX.c:561
+#: grub-core/loader/i386/bsdXX.c:647 grub-core/loader/i386/bsdXX.c:670
 #: grub-core/loader/i386/coreboot/chainloader.c:112
 #: grub-core/loader/i386/coreboot/chainloader.c:148
 #: grub-core/loader/i386/coreboot/chainloader.c:170
-#: grub-core/loader/i386/linux.c:675 grub-core/loader/i386/linux.c:791
-#: grub-core/loader/i386/linux.c:1011 grub-core/loader/i386/multiboot_mbi.c:171
+#: grub-core/loader/i386/linux.c:687 grub-core/loader/i386/linux.c:803
+#: grub-core/loader/i386/linux.c:1023 grub-core/loader/i386/multiboot_mbi.c:171
 #: grub-core/loader/i386/pc/chainloader.c:202
 #: grub-core/loader/i386/pc/linux.c:150 grub-core/loader/i386/pc/linux.c:326
 #: grub-core/loader/i386/pc/linux.c:368 grub-core/loader/i386/pc/plan9.c:457
@@ -136,7 +135,7 @@ msgstr ""
 msgid "premature end of file %s"
 msgstr "gặp kết thúc tập tin %s quá sớm"
 
-#: grub-core/commands/acpi.c:784
+#: grub-core/commands/acpi.c:795
 msgid ""
 "[-1|-2] [--exclude=TABLE1,TABLE2|--load-only=TABLE1,TABLE2] FILE1 [FILE2] "
 "[...]"
@@ -144,7 +143,7 @@ msgstr ""
 "[-1|-2] [--exclude=BẢNG1,BẢNG2|--load-only=BẢNG1,BẢNG2] TẬP_TIN1 [TẬP_TIN2] "
 "[…]"
 
-#: grub-core/commands/acpi.c:787
+#: grub-core/commands/acpi.c:798
 msgid "Load host ACPI tables and tables specified by arguments."
 msgstr "Tải các bảng ACPI chủ và các bảng được đối số chỉ rõ."
 
@@ -163,10 +162,11 @@ msgstr "lỗi: %s.\n"
 #: grub-core/lib/relocator.c:1443 grub-core/lib/relocator.c:1542
 #: grub-core/loader/arm/linux.c:260 grub-core/loader/arm64/xen_boot.c:330
 #: grub-core/loader/arm64/xen_boot.c:353 grub-core/loader/efi/chainloader.c:296
-#: grub-core/loader/efi/linux.c:408 grub-core/loader/efi/linux.c:430
-#: grub-core/loader/efi/linux.c:518 grub-core/loader/efi/linux.c:537
+#: grub-core/loader/efi/linux.c:411 grub-core/loader/efi/linux.c:433
+#: grub-core/loader/efi/linux.c:521 grub-core/loader/efi/linux.c:540
 #: grub-core/osdep/unix/dl.c:48 grub-core/osdep/windows/dl.c:46
 #: grub-core/script/lexer.c:161 grub-core/script/lexer.c:197
+#: grub-core/video/efi_gop.c:485
 msgid "out of memory"
 msgstr "hết bộ nhớ"
 
@@ -176,8 +176,8 @@ msgstr "hết bộ nhớ"
 #: grub-core/osdep/linux/ofpath.c:195 grub-core/osdep/linux/ofpath.c:521
 #: grub-core/osdep/linux/ofpath.c:534 util/glue-efi.c:90 util/glue-efi.c:104
 #: util/grub-editenv.c:161 util/grub-fstest.c:583
-#: util/grub-install-common.c:1117 util/grub-mkrescue.c:658
-#: util/grub-mkrescue.c:931 util/grub-mount.c:525 util/grub-render-label.c:176
+#: util/grub-install-common.c:1130 util/grub-mkrescue.c:658
+#: util/grub-mkrescue.c:931 util/grub-mount.c:526 util/grub-render-label.c:176
 #: util/misc.c:95 util/setup.c:817 util/setup.c:836
 #, c-format
 msgid "cannot read `%s': %s"
@@ -193,37 +193,35 @@ msgid "List devices."
 msgstr "Liệt kê thiết bị."
 
 #: grub-core/commands/bli.c:49
-#, fuzzy, c-format
+#, c-format
 msgid "cannot open device: %s"
-msgstr "không thể mở “%s”: %s"
+msgstr "không thể mở thiết bị: %s"
 
 #: grub-core/commands/bli.c:54
-#, fuzzy, c-format
+#, c-format
 msgid "cannot open disk: %s"
-msgstr "không thể mở “%s”: %s"
+msgstr "không thể mở ổ đĩa: %s"
 
 #: grub-core/commands/bli.c:62
 #, c-format
 msgid "this is not a GPT partition table: %s"
-msgstr ""
+msgstr "đây không phải là một bảng phân vùng GPT: %s"
 
 #: grub-core/commands/bli.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "read error: %s"
-msgstr "lỗi: %s.\n"
+msgstr "lỗi đọc: %s"
 
 #: grub-core/commands/bli.c:94 grub-core/commands/bli.c:98
-#, fuzzy
 msgid "unable to find boot device"
-msgstr "Đặt thiết bị gốc."
+msgstr "không thể tìm thiết bị khởi động"
 
 #: grub-core/commands/bli.c:107
-#, fuzzy
 msgid "unable to determine partition UUID of boot device"
-msgstr "Xác định UUID phân vùng."
+msgstr "không thể xác định UUID phân vùng của thiết bị khởi động"
 
 #: grub-core/commands/blocklist.c:124 grub-core/commands/cat.c:57
-#: grub-core/commands/configfile.c:35 grub-core/commands/efi/loadbios.c:169
+#: grub-core/commands/configfile.c:35 grub-core/commands/efi/loadbios.c:150
 #: grub-core/commands/file.c:160 grub-core/commands/hexdump.c:47
 #: grub-core/commands/legacycfg.c:228 grub-core/commands/legacycfg.c:334
 #: grub-core/commands/minicmd.c:44 grub-core/commands/syslinuxcfg.c:146
@@ -233,12 +231,12 @@ msgstr "Xác định UUID phân vùng."
 #: grub-core/loader/arm/linux.c:365 grub-core/loader/arm/linux.c:410
 #: grub-core/loader/arm/linux.c:473 grub-core/loader/arm64/xen_boot.c:384
 #: grub-core/loader/arm64/xen_boot.c:397 grub-core/loader/arm64/xen_boot.c:448
-#: grub-core/loader/efi/chainloader.c:232 grub-core/loader/efi/linux.c:377
-#: grub-core/loader/efi/linux.c:480 grub-core/loader/emu/linux.c:119
+#: grub-core/loader/efi/chainloader.c:232 grub-core/loader/efi/linux.c:380
+#: grub-core/loader/efi/linux.c:483 grub-core/loader/emu/linux.c:119
 #: grub-core/loader/emu/linux.c:152 grub-core/loader/i386/bsd.c:1468
 #: grub-core/loader/i386/bsd.c:1813 grub-core/loader/i386/bsd.c:2091
 #: grub-core/loader/i386/coreboot/chainloader.c:438
-#: grub-core/loader/i386/linux.c:664 grub-core/loader/i386/linux.c:1047
+#: grub-core/loader/i386/linux.c:676 grub-core/loader/i386/linux.c:1059
 #: grub-core/loader/i386/pc/chainloader.c:290
 #: grub-core/loader/i386/pc/freedos.c:105 grub-core/loader/i386/pc/linux.c:139
 #: grub-core/loader/i386/pc/linux.c:406 grub-core/loader/i386/pc/ntldr.c:85
@@ -251,8 +249,8 @@ msgstr "Xác định UUID phân vùng."
 #: grub-core/loader/mips/linux.c:238 grub-core/loader/mips/linux.c:429
 #: grub-core/loader/multiboot.c:322 grub-core/loader/multiboot.c:374
 #: grub-core/loader/multiboot.c:384
-#: grub-core/loader/powerpc/ieee1275/linux.c:255
-#: grub-core/loader/powerpc/ieee1275/linux.c:327
+#: grub-core/loader/powerpc/ieee1275/linux.c:280
+#: grub-core/loader/powerpc/ieee1275/linux.c:352
 #: grub-core/loader/sparc64/ieee1275/linux.c:305
 #: grub-core/loader/sparc64/ieee1275/linux.c:381 grub-core/loader/xnu.c:370
 #: grub-core/loader/xnu.c:479 grub-core/loader/xnu.c:797
@@ -285,8 +283,8 @@ msgstr "cần tên tập tin"
 #: util/grub-mkimage.c:78 util/grub-mkimage.c:81 util/grub-mkimage.c:84
 #: util/grub-mklayout.c:52 util/grub-mklayout.c:54 util/grub-mkrescue.c:97
 #: util/grub-mkrescue.c:101 util/grub-mkrescue.c:104 util/grub-mkrescue.c:105
-#: util/grub-mkrescue.c:106 util/grub-mkstandalone.c:47
-#: util/grub-mkstandalone.c:49 util/grub-probe.c:732
+#: util/grub-mkrescue.c:106 util/grub-mkstandalone.c:50
+#: util/grub-mkstandalone.c:52 util/grub-probe.c:732
 #: util/grub-render-label.c:59 util/grub-render-label.c:70
 #: util/grub-render-label.c:72 util/grub-setup.c:78 util/grub-setup.c:80
 #: util/grub-setup.c:84 util/grub-syslinux2cfg.c:74
@@ -300,14 +298,14 @@ msgid "Print a block list."
 msgstr "In ra một danh sách cấm."
 
 #: grub-core/commands/boot.c:197 grub-core/commands/legacycfg.c:552
-#: grub-core/commands/legacycfg.c:593 grub-core/loader/efi/linux.c:389
+#: grub-core/commands/legacycfg.c:593 grub-core/loader/efi/linux.c:392
 #: grub-core/loader/i386/bsd.c:1805 grub-core/loader/i386/bsd.c:1906
 #: grub-core/loader/i386/bsd.c:2013 grub-core/loader/i386/bsd.c:2046
-#: grub-core/loader/i386/bsd.c:2095 grub-core/loader/i386/linux.c:1053
+#: grub-core/loader/i386/bsd.c:2095 grub-core/loader/i386/linux.c:1065
 #: grub-core/loader/i386/pc/linux.c:412 grub-core/loader/i386/xen.c:783
 #: grub-core/loader/i386/xen.c:866 grub-core/loader/ia64/efi/linux.c:545
 #: grub-core/loader/mips/linux.c:432 grub-core/loader/multiboot.c:388
-#: grub-core/loader/powerpc/ieee1275/linux.c:333
+#: grub-core/loader/powerpc/ieee1275/linux.c:358
 #: grub-core/loader/sparc64/ieee1275/linux.c:387 grub-core/loader/xnu.c:591
 #: grub-core/loader/xnu.c:687 grub-core/loader/xnu.c:800
 #: grub-core/loader/xnu.c:914 grub-core/loader/xnu.c:1110
@@ -351,9 +349,8 @@ msgid "Show the contents of a file."
 msgstr "Hiển thị nội dung của một tập tin."
 
 #: grub-core/commands/cmp.c:34
-#, fuzzy
 msgid "Enable verbose output"
-msgstr "Tắt tất cả các kết xuất khởi động."
+msgstr "Bật kết xuất chi tiết"
 
 #: grub-core/commands/cmp.c:51 grub-core/commands/i386/pc/drivemap.c:236
 #: grub-core/commands/i386/wrmsr.c:61 grub-core/commands/iorw.c:86
@@ -437,6 +434,7 @@ msgstr "Hiển thị một dòng văn bản."
 #: grub-core/commands/efi/efifwsetup.c:48
 msgid "reboot to firmware setup is not supported by the current firmware"
 msgstr ""
+"khởi động lại để cài đặt firmware không được hỗ trợ bởi firmware hiện tại"
 
 #: grub-core/commands/efi/efifwsetup.c:95
 msgid "Reboot into firmware setup menu."
@@ -444,69 +442,68 @@ msgstr "Khởi động lại vào trình đơn cài đặt firmware."
 
 #: grub-core/commands/efi/efitextmode.c:44
 msgid "device error: could not set requested mode"
-msgstr ""
+msgstr "lỗi thiết bị: không thể đặt chế độ được yêu cầu"
 
 #: grub-core/commands/efi/efitextmode.c:47
 msgid "invalid mode: number not valid"
-msgstr ""
+msgstr "chế độ không hợp lệ: số không hợp lệ"
 
 #: grub-core/commands/efi/efitextmode.c:50
-#, fuzzy, c-format
+#, c-format
 msgid "unexpected EFI error number: `%u'"
-msgstr "gặp lỗi EFI đột xuất"
+msgstr "gặp lỗi EFI đột xuất số: `%u'"
 
 #: grub-core/commands/efi/efitextmode.c:69
 msgid "no UEFI output console interface"
-msgstr ""
+msgstr "không có giao diện bảng điều khiển đầu ra UEFI"
 
 #: grub-core/commands/efi/efitextmode.c:72
 msgid "no mode struct for UEFI output console"
-msgstr ""
+msgstr "không có cấu trúc chế độ cho bảng điều khiển đầu ra UEFI"
 
 #: grub-core/commands/efi/efitextmode.c:75
-#, fuzzy
 msgid "at most two arguments expected"
-msgstr "cần hai đối số"
+msgstr "cần nhiều nhất hai đối số"
 
 #: grub-core/commands/efi/efitextmode.c:79
 msgid "Available modes for console output device.\n"
-msgstr ""
+msgstr "Các chế độ có sẵn cho thiết bị đầu ra giao diện điều khiển.\n"
 
 #: grub-core/commands/efi/efitextmode.c:83
 msgid " [%"
-msgstr ""
+msgstr " [%"
 
 #: grub-core/commands/efi/efitextmode.c:100
 #, c-format
 msgid "non-numeric or invalid mode `%s'"
-msgstr ""
+msgstr "chế độ không phải là số hoặc không hợp lệ `%s'"
 
 #: grub-core/commands/efi/efitextmode.c:111
 #, c-format
 msgid "invalid mode: `%lu' is greater than maximum mode `%lu'"
-msgstr ""
+msgstr "chế độ không hợp lệ: `%lu' lớn hơn chế độ tối đa `%lu'"
 
 #: grub-core/commands/efi/efitextmode.c:122
 #, c-format
 msgid "non-numeric or invalid columns number `%s'"
-msgstr ""
+msgstr "số cột không phải là số hoặc không hợp lệ `%s'"
 
 #: grub-core/commands/efi/efitextmode.c:128
 #, c-format
 msgid "non-numeric or invalid rows number `%s'"
-msgstr ""
+msgstr "số hàng không phải là số hoặc không hợp lệ `%s'"
 
 #: grub-core/commands/efi/efitextmode.c:136
 msgid "no mode found with requested columns and rows"
-msgstr ""
+msgstr "không tìm thấy chế độ nào với các cột và hàng được yêu cầu"
 
 #: grub-core/commands/efi/efitextmode.c:146
 msgid "[min | max | <mode_num> | <cols> <rows>]"
-msgstr ""
+msgstr "[t.thiểu | t.đa | <số_chế_độ> | <cột> <hàng>]"
 
 #: grub-core/commands/efi/efitextmode.c:147
 msgid "Get or set EFI text mode."
-msgstr ""
+msgstr "Lấy hay đặt chế độ văn bản EFI"
 
 #: grub-core/commands/efi/fixvideo.c:107
 msgid "Fix video problem."
@@ -520,51 +517,46 @@ msgstr "Ảnh ROM có hiện diện."
 msgid "Can't enable ROM area."
 msgstr "Không thể cho phép vùng ROM."
 
-#: grub-core/commands/efi/loadbios.c:210
+#: grub-core/commands/efi/loadbios.c:191
 msgid ""
 "Create BIOS-like structures for backward compatibility with existing OS."
 msgstr "Tạo cấu trúc giống BIOS để tương thích ngược với các HĐH sẵn có."
 
-#: grub-core/commands/efi/loadbios.c:215
+#: grub-core/commands/efi/loadbios.c:196
 msgid "BIOS_DUMP [INT10_DUMP]"
 msgstr "BIOS_DUMP [INT10_DUMP]"
 
-#: grub-core/commands/efi/loadbios.c:216
+#: grub-core/commands/efi/loadbios.c:197
 msgid "Load BIOS dump."
 msgstr "Tải bản đổ BIOS."
 
 #: grub-core/commands/efi/tpm.c:141
-#, fuzzy
 msgid "command failed"
-msgstr "Lệnh gặp lỗi"
+msgstr "lệnh gặp lỗi"
 
 #: grub-core/commands/efi/tpm.c:143
-#, fuzzy
 msgid "invalid parameter"
-msgstr "Tham số không hợp lệ"
+msgstr "tham số không hợp lệ"
 
 #: grub-core/commands/efi/tpm.c:145
-#, fuzzy
 msgid "output buffer too small"
-msgstr "Vùng đệm xuất quá nhỏ"
+msgstr "vùng đệm xuất quá nhỏ"
 
 #: grub-core/commands/efi/tpm.c:147
 msgid "TPM unavailable"
 msgstr "TMP không sẵn có"
 
 #: grub-core/commands/efi/tpm.c:149
-#, fuzzy
 msgid "unknown TPM error"
-msgstr "Không biết lỗi TPM"
+msgstr "không biết lỗi TPM"
 
 #: grub-core/commands/efi/tpm.c:174 grub-core/commands/efi/tpm.c:208
 msgid "cannot allocate TPM event buffer"
 msgstr "không thể cấp phát bộ nhớ đệm sự kiện cho TPM"
 
 #: grub-core/commands/efi/tpm.c:249
-#, fuzzy
 msgid "cannot allocate CC event buffer"
-msgstr "không thể cấp phát bộ nhớ đệm sự kiện cho TPM"
+msgstr "không thể cấp phát bộ nhớ đệm sự kiện cho CC"
 
 #: grub-core/commands/eval.c:63
 msgid "STRING ..."
@@ -1116,13 +1108,13 @@ msgid "Invalid tempo in %s"
 msgstr "Nhịp độ không hợp lệ trong %s"
 
 #: grub-core/commands/i386/pc/play.c:151 grub-core/commands/macbless.c:172
-#: grub-core/fs/archelp.c:260 grub-core/fs/bfs.c:623 grub-core/fs/bfs.c:706
-#: grub-core/fs/btrfs.c:1855 grub-core/fs/btrfs.c:1884
-#: grub-core/fs/btrfs.c:1928 grub-core/fs/btrfs.c:2016
-#: grub-core/fs/btrfs.c:2040 grub-core/fs/fshelp.c:257 grub-core/fs/jfs.c:707
-#: grub-core/fs/minix.c:430 grub-core/fs/ufs.c:544 grub-core/fs/zfs/zfs.c:2091
-#: grub-core/fs/zfs/zfs.c:2103 grub-core/fs/zfs/zfs.c:2310
-#: grub-core/net/http.c:128
+#: grub-core/fs/archelp.c:268 grub-core/fs/bfs.c:623 grub-core/fs/bfs.c:706
+#: grub-core/fs/btrfs.c:1857 grub-core/fs/btrfs.c:1886
+#: grub-core/fs/btrfs.c:1930 grub-core/fs/btrfs.c:2018
+#: grub-core/fs/btrfs.c:2042 grub-core/fs/fshelp.c:257 grub-core/fs/jfs.c:707
+#: grub-core/fs/minix.c:430 grub-core/fs/ufs.c:544 grub-core/fs/zfs/zfs.c:2093
+#: grub-core/fs/zfs/zfs.c:2105 grub-core/fs/zfs/zfs.c:2312
+#: grub-core/net/http.c:124
 #, c-format
 msgid "file `%s' not found"
 msgstr "không tìm thấy tập tin “%s”"
@@ -1564,16 +1556,15 @@ msgstr "Ghi GIÁ_TRỊ 32-bit vào ĐỊA_CHỈ."
 
 #: grub-core/commands/memtools.c:140
 msgid "List free and allocated memory blocks."
-msgstr ""
+msgstr "Liệt kê các khối bộ nhớ trống và được cấp phát."
 
 #: grub-core/commands/memtools.c:142
-#, fuzzy
 msgid "List free memory blocks."
-msgstr "Liệt kê các thiết bị hoặc tập tin."
+msgstr "Liệt kê các khối nhớ còn trống."
 
 #: grub-core/commands/memtools.c:144
 msgid "Stress test large allocations."
-msgstr ""
+msgstr "Kiểm tra căng thẳng phân bổ lớn."
 
 #: grub-core/commands/menuentry.c:31
 msgid "Menu entry type."
@@ -1583,7 +1574,7 @@ msgstr "Kiểu mục menu."
 #: grub-core/commands/menuentry.c:39 grub-core/gettext/gettext.c:520
 #: util/grub-fstest.c:526 util/grub-install.c:291 util/grub-install.c:304
 #: util/grub-mknetdir.c:51 util/grub-mkrescue.c:109 util/grub-mkrescue.c:110
-#: util/grub-mount.c:472 util/grub-render-label.c:65
+#: util/grub-mount.c:473 util/grub-render-label.c:65
 msgid "STRING"
 msgstr "CHUỖI"
 
@@ -1813,7 +1804,7 @@ msgstr "[bus]:[slot][.func]"
 
 #: grub-core/commands/pcidump.c:109 grub-core/commands/pcidump.c:137
 #: grub-core/commands/setpci.c:183 grub-core/commands/setpci.c:213
-#: grub-core/fs/zfs/zfs.c:3828 grub-core/kern/emu/hostdisk.c:458
+#: grub-core/fs/zfs/zfs.c:3835 grub-core/kern/emu/hostdisk.c:458
 #: grub-core/kern/emu/hostdisk.c:473 grub-core/kern/file.c:44
 #, c-format
 msgid "missing `%c' symbol"
@@ -1852,9 +1843,9 @@ msgstr "chữ ký sai"
 msgid "public key %08"
 msgstr "khóa công %08x"
 
-#: grub-core/commands/pgp.c:651 grub-core/disk/diskfilter.c:799
-#: grub-core/disk/diskfilter.c:809 grub-core/fs/ntfs.c:404
-#: grub-core/fs/zfs/zfs.c:1941 grub-core/normal/menu.c:427
+#: grub-core/commands/pgp.c:651 grub-core/disk/diskfilter.c:797
+#: grub-core/disk/diskfilter.c:807 grub-core/fs/ntfs.c:449
+#: grub-core/fs/zfs/zfs.c:1943 grub-core/normal/menu.c:427
 #, c-format
 msgid "module `%s' isn't loaded"
 msgstr "chưa tải mô_đun “%s”"
@@ -1940,12 +1931,11 @@ msgstr "Lấy thông tin về thiết bị."
 
 #: grub-core/commands/read.c:33
 msgid "Do not echo input"
-msgstr ""
+msgstr "Đừng lặp lại đầu vào nữa"
 
 #: grub-core/commands/read.c:96
-#, fuzzy
 msgid "[-s] [ENVVAR]"
-msgstr "[BIẾN_MÔI_TRƯỜNG]"
+msgstr "[-s] [BIẾN_MÔI_TRƯỜNG]"
 
 #: grub-core/commands/read.c:97
 msgid "Set variable with user input."
@@ -2036,7 +2026,7 @@ msgstr "Không tìm thấy bất kỳ đĩa mềm nào."
 
 #: grub-core/commands/search_wrap.c:43
 msgid "Only probe EFI disks."
-msgstr ""
+msgstr "Chỉ thăm dò đĩa EFI"
 
 #: grub-core/commands/search_wrap.c:45
 msgid ""
@@ -2515,18 +2505,24 @@ msgstr "Bộ tiếp hợp “%s”:\n"
 msgid "  No info available"
 msgstr " Không có thông tin sẵn có nào"
 
-#: grub-core/commands/videoinfo.c:198
+#: grub-core/commands/videoinfo.c:196
+msgid ""
+"  A video driver is active, cannot initialize this driver until it is "
+"deactivated\n"
+msgstr ""
+
+#: grub-core/commands/videoinfo.c:203
 msgid "  Failed to initialize video adapter"
 msgstr " Gặp lỗi khi khởi tạo phần điều khiển video"
 
 #. TRANSLATORS: "x" has to be entered in,
 #. like an identifier, so please don't
 #. use better Unicode codepoints.
-#: grub-core/commands/videoinfo.c:239 grub-core/commands/videoinfo.c:248
+#: grub-core/commands/videoinfo.c:244 grub-core/commands/videoinfo.c:253
 msgid "[WxH[xD]]"
 msgstr "[WxH[xD]]"
 
-#: grub-core/commands/videoinfo.c:240 grub-core/commands/videoinfo.c:249
+#: grub-core/commands/videoinfo.c:245 grub-core/commands/videoinfo.c:254
 msgid ""
 "List available video modes. If resolution is given show only modes matching "
 "it."
@@ -2602,23 +2598,23 @@ msgstr "Gắn toàn bộ các vùng có cờ “boot” được đặt."
 
 #: grub-core/disk/cryptodisk.c:56
 msgid "Password to open volumes."
-msgstr ""
+msgstr "Mật khẩu để mở phân vùng"
 
 #: grub-core/disk/cryptodisk.c:57
 msgid "Key file"
-msgstr ""
+msgstr "Tập tin khóa"
 
 #: grub-core/disk/cryptodisk.c:58
 msgid "Key file offset (bytes)"
-msgstr ""
+msgstr "Vị trí bù tập tin khóa (byte)"
 
 #: grub-core/disk/cryptodisk.c:59
 msgid "Key file data size (bytes)"
-msgstr ""
+msgstr "Kích cỡ dữ lieu tập tin khóa (byte)"
 
 #: grub-core/disk/cryptodisk.c:60
 msgid "Read header from file"
-msgstr ""
+msgstr "Đọc phần đầu từ tập tin"
 
 #. TRANSLATORS: The first %s is the file being looked at, the second %s is
 #. the error message.
@@ -2637,11 +2633,11 @@ msgstr ""
 #: util/grub-editenv.c:198 util/grub-file.c:83 util/grub-fstest.c:128
 #: util/grub-fstest.c:574 util/grub-install-common.c:92
 #: util/grub-install-common.c:94 util/grub-install-common.c:101
-#: util/grub-install-common.c:699 util/grub-menulst2cfg.c:53
+#: util/grub-install-common.c:712 util/grub-menulst2cfg.c:53
 #: util/grub-menulst2cfg.c:68 util/grub-mkimage.c:307 util/grub-mklayout.c:504
 #: util/grub-mklayout.c:516 util/grub-mknetdir.c:134 util/grub-mknetdir.c:152
 #: util/grub-mkrescue.c:651 util/grub-mkrescue.c:655 util/grub-mkrescue.c:922
-#: util/grub-mkrescue.c:926 util/grub-mkstandalone.c:253 util/grub-mount.c:517
+#: util/grub-mkrescue.c:926 util/grub-mkstandalone.c:274 util/grub-mount.c:518
 #: util/grub-render-label.c:169 util/grub-script-check.c:175
 #: util/grub-syslinux2cfg.c:181 util/grub-syslinux2cfg.c:191
 #: util/grub-syslinux2cfg.c:212 util/grub-syslinux2cfg.c:228 util/misc.c:91
@@ -2654,7 +2650,7 @@ msgstr "không thể mở “%s”: %s"
 #: grub-core/disk/cryptodisk.c:740
 #, c-format
 msgid "failed to query size of device `%s': %s"
-msgstr ""
+msgstr "gặp lỗi khi truy vấn kích cỡ của thiết bị `%s': %s"
 
 #: grub-core/disk/cryptodisk.c:802 grub-core/disk/cryptodisk.c:846
 #: grub-core/kern/emu/hostdisk.c:270 grub-core/kern/emu/hostfs.c:142
@@ -2665,14 +2661,12 @@ msgid "cannot seek `%s': %s"
 msgstr "không thể di chuyển vị trị đầu đọc “%s”: %s"
 
 #: grub-core/disk/cryptodisk.c:1039
-#, fuzzy
 msgid "header file not found"
-msgstr "không tìm thấy địa chỉ"
+msgstr "không tìm thấy phần đầu tập tin"
 
 #: grub-core/disk/cryptodisk.c:1049
-#, fuzzy
 msgid "header file too small"
-msgstr "“%s” có kích cỡ quá nhỏ"
+msgstr "phần đầu tập tin quá nhỏ"
 
 #: grub-core/disk/cryptodisk.c:1122
 #, c-format
@@ -2681,52 +2675,52 @@ msgstr "Gõ cụm từ mật khẩu cho %s%s%s (%s): "
 
 #: grub-core/disk/cryptodisk.c:1124 grub-core/disk/plainmount.c:374
 msgid "UNKNOWN"
-msgstr ""
+msgstr "KHÔNG HIỂU"
 
-#: grub-core/disk/cryptodisk.c:1292
+#: grub-core/disk/cryptodisk.c:1293
 #, c-format
 msgid "non-numeric or invalid keyfile offset `%s'"
-msgstr ""
+msgstr "phần bù vị trí tập tin khóa không phải là số hoặc không hợp lệ `%s'"
 
-#: grub-core/disk/cryptodisk.c:1303
-#, fuzzy, c-format
+#: grub-core/disk/cryptodisk.c:1304
+#, c-format
 msgid "non-numeric or invalid keyfile size `%s'"
-msgstr "tên tập tin “%s” không hợp lệ"
+msgstr "kích cỡ tập tin khóa không phải là số hoặc không hợp lệ “%s”"
 
-#: grub-core/disk/cryptodisk.c:1307
-#, fuzzy
+#: grub-core/disk/cryptodisk.c:1308
 msgid "key file size is 0"
-msgstr "Kích thước tập tin: %s\n"
+msgstr "kích thước tập tin là 0"
 
-#: grub-core/disk/cryptodisk.c:1311
+#: grub-core/disk/cryptodisk.c:1312
 #, c-format
 msgid "key file size exceeds maximum (%d)"
-msgstr ""
+msgstr "kích cỡ tập tin khóa đã vượt quá mức tối đa (%d)"
 
-#: grub-core/disk/cryptodisk.c:1322
+#: grub-core/disk/cryptodisk.c:1323
 msgid "Keyfile offset, %llu, is greater thankeyfile size, %"
-msgstr ""
+msgstr "Bù vị trí tập tin khóa, %llu, lớn hơn kích thước tập tin khóa, %"
 
-#: grub-core/disk/cryptodisk.c:1333
+#: grub-core/disk/cryptodisk.c:1334
 msgid "keyfile is too small: requested %llu bytes, but the file only has %"
-msgstr ""
+msgstr "tập tin khóa quá nhỏ: yêu cầu %llu byte nhưng tập tin chỉ có %"
 
-#: grub-core/disk/cryptodisk.c:1350
-#, fuzzy
+#: grub-core/disk/cryptodisk.c:1351
 msgid "failed to read key file"
-msgstr "gặp lỗi khi lấy FDT"
+msgstr "gặp lỗi khi đọc tập tin khóa"
 
-#: grub-core/disk/cryptodisk.c:1357
+#: grub-core/disk/cryptodisk.c:1358
 msgid "cannot use UUID lookup with detached header"
-msgstr ""
+msgstr "không thể sử dụng tra cứu UUID với phần đầu tách rời"
 
-#: grub-core/disk/cryptodisk.c:1577
+#: grub-core/disk/cryptodisk.c:1591
 msgid ""
 "[ [-p password] | [-k keyfile [-O keyoffset] [-S keysize] ] ] [-H file] "
 "<SOURCE|-u UUID|-a|-b>"
 msgstr ""
+"[ [-p mật_khẩu] | [-k tập_tin_khóa [-O bù_vtr_khóa] [-S cỡ_khóa] ] ] [-H "
+"tập_tin] <NGUỒN|-u UUID|-a|-b>"
 
-#: grub-core/disk/cryptodisk.c:1580
+#: grub-core/disk/cryptodisk.c:1594
 msgid "Mount a crypto device."
 msgstr "Gắn thiết bị mã hóa."
 
@@ -2793,12 +2787,12 @@ msgstr "Khe %d mở\n"
 msgid "attempt to read or write outside of disk `%s'"
 msgstr "đang thử đọc hay ghi ngoài đĩa “%s”"
 
-#: grub-core/disk/i386/pc/biosdisk.c:487 grub-core/disk/i386/pc/biosdisk.c:607
+#: grub-core/disk/i386/pc/biosdisk.c:487 grub-core/disk/i386/pc/biosdisk.c:610
 #: grub-core/disk/scsi.c:724
 msgid "cannot write to CD-ROM"
 msgstr "không thể ghi CD-ROM"
 
-#: grub-core/disk/i386/pc/biosdisk.c:658
+#: grub-core/disk/i386/pc/biosdisk.c:661
 msgid ""
 "Native disk drivers are in use. Refusing to use firmware disk interface."
 msgstr ""
@@ -2831,12 +2825,11 @@ msgstr "Xóa ổ đĩa (loopback) vòng ngược đã chỉ ra."
 
 #: grub-core/disk/loopback.c:46
 msgid "Transparently decompress backing file."
-msgstr ""
+msgstr "Tập tin phía sau giải nén trong suốt."
 
 #: grub-core/disk/loopback.c:233
-#, fuzzy
 msgid "[-d] [-D] DEVICENAME FILE."
-msgstr "[-d] TÊN_THIẾT_BỊ TẬP_TIN."
+msgstr "[-d] [-D] TÊN_THIẾT_BỊ TẬP_TIN."
 
 #. TRANSLATORS: The file itself is not destroyed
 #. or transformed into drive.
@@ -2846,11 +2839,11 @@ msgstr "Tạo thiết bị ảo từ một tập tin."
 
 #: grub-core/disk/luks2.c:388
 msgid "could not unescape Base64 string"
-msgstr ""
+msgstr "không thể thoát chuỗi Base64"
 
 #: grub-core/disk/luks2.c:393
 msgid "could not decode Base64 string"
-msgstr ""
+msgstr "không thể giải mã chuỗi Base64"
 
 #. TRANSLATORS: It's a cryptographic key slot: one element of an array
 #. where each element is either empty or holds a key.
@@ -2862,191 +2855,185 @@ msgstr "Khe \"%s\" mở\n"
 
 #. TRANSLATORS: It's still restricted to this module only.
 #: grub-core/disk/plainmount.c:49
-#, fuzzy
 msgid "Password hash"
-msgstr "Tạo mã băm mật khẩu kiểu PBKDF2."
+msgstr "Mã băm mật khẩu"
 
 #: grub-core/disk/plainmount.c:50
 msgid "Password cipher"
-msgstr ""
+msgstr "Kiểu mã hóa mật khẩu"
 
 #: grub-core/disk/plainmount.c:51
 msgid "Key size (in bits)"
-msgstr ""
+msgstr "Kích cỡ khóa (tính bằng bít)"
 
 #: grub-core/disk/plainmount.c:52
-#, fuzzy
 msgid "Device sector size"
-msgstr " - Kích thước cung từ %uB"
+msgstr "Kích thước cung từ thiết bị"
 
 #: grub-core/disk/plainmount.c:53
 msgid "Password (key)"
-msgstr ""
+msgstr "Mật khẩu (khóa)"
 
 #: grub-core/disk/plainmount.c:54
 msgid "Keyfile path"
-msgstr ""
+msgstr "Đường dẫn tập tin khóa"
 
 #: grub-core/disk/plainmount.c:55
-#, fuzzy
 msgid "Keyfile offset"
-msgstr "bù"
+msgstr "Bù vị trí tập tin khóa"
 
 #: grub-core/disk/plainmount.c:56
-#, fuzzy
 msgid "Set device UUID"
-msgstr "Đặt thiết bị gốc."
+msgstr "Đặt UUID thiết bị"
 
 #: grub-core/disk/plainmount.c:69
-#, fuzzy
 msgid "cannot set specified key"
-msgstr "chưa chỉ ra máy chủ"
+msgstr "không thể đặt khóa chỉ định"
 
 #: grub-core/disk/plainmount.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "cannot determine disk %s size"
-msgstr "chưa xác định được kiểu hệ thống tập tin trên %s"
+msgstr "không thể quyết định kích cỡ đĩa %s"
 
 #: grub-core/disk/plainmount.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "cannot set specified sector size on disk %s"
-msgstr "không thể lấy vị trí tập tin “%s”: %s"
+msgstr "không thể đặt cỡ cung từ đã cho trên đĩa %s"
 
 #: grub-core/disk/plainmount.c:188
-#, fuzzy, c-format
+#, c-format
 msgid "cannot open keyfile %s"
-msgstr "không thể mở tập tin OS “%s”: %s"
+msgstr "không thể mở tập khóa %s"
 
 #: grub-core/disk/plainmount.c:193
-#, fuzzy
 msgid "cannot seek keyfile at offset %"
-msgstr "so sánh gặp lỗi tại offset %llu"
+msgstr "không thể di chuyển vị trí đọc tập tin đến vị trí bù %llu"
 
 #: grub-core/disk/plainmount.c:197
 msgid "Specified key size (%"
-msgstr ""
+msgstr "Chỉ định kích cỡ khóa (%"
 
 #: grub-core/disk/plainmount.c:203
 msgid "error reading key file"
-msgstr ""
+msgstr "lỗi khi đọc tập tin khóa"
 
 #: grub-core/disk/plainmount.c:222
 msgid "device name required"
-msgstr ""
+msgstr "yêu cầu tên thiết bị"
 
 #: grub-core/disk/plainmount.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "couldn't load hash %s"
-msgstr "Không thể tải sha256"
+msgstr "không thể tải mã băm %s"
 
 #: grub-core/disk/plainmount.c:240
 msgid "hash length %"
-msgstr ""
+msgstr "độ dài mã băm %"
 
 #: grub-core/disk/plainmount.c:248
 msgid "invalid cipher mode, must be of format cipher-mode"
-msgstr ""
+msgstr "chế độ mật mã không hợp lệ, phải ở định dạng cipher-mode"
 
 #: grub-core/disk/plainmount.c:254
 msgid "password exceeds maximium size"
-msgstr ""
+msgstr "mật khẩu vượt quá kích cỡ tối đa"
 
 #: grub-core/disk/plainmount.c:260
 msgid "specified UUID exceeds maximum size"
-msgstr ""
+msgstr "UUID đã cho vượt quá kích cỡ tối đa"
 
 #: grub-core/disk/plainmount.c:262
 msgid "specified UUID too short"
-msgstr ""
+msgstr "UUID đã cho quá ngắn"
 
 #: grub-core/disk/plainmount.c:271
-#, fuzzy
 msgid "unrecognized keyfile offset"
-msgstr "Không thừa nhận trạng thái kho ZFS"
+msgstr "không thừa nhận bù vị trí tập tin khóa"
 
 #: grub-core/disk/plainmount.c:278
-#, fuzzy
 msgid "unrecognized sector size"
-msgstr "không thừa nhận số"
+msgstr "không thừa nhận kích thước cung từ"
 
 #: grub-core/disk/plainmount.c:284
-#, fuzzy
 msgid "unrecognized key size"
-msgstr "không thừa nhận số"
+msgstr "không thừa nhận kích cỡ khóa"
 
 #: grub-core/disk/plainmount.c:287
 #, c-format
 msgid "key size is not multiple of %d bits"
-msgstr ""
+msgstr "kích cỡ khóa không phải là bội số của %d bít"
 
 #: grub-core/disk/plainmount.c:291
-#, fuzzy
 msgid "key size %"
-msgstr "Kích thước tập tin: %s\n"
+msgstr "Kích thước tập tin: %s"
 
 #: grub-core/disk/plainmount.c:298
 #, c-format
 msgid "sector size -S must be at least %d"
-msgstr ""
+msgstr "kích cỡ cung từ -S phải ít nhất là %d"
 
 #: grub-core/disk/plainmount.c:302
-#, fuzzy
 msgid "sector size -S %"
-msgstr " - Kích thước cung từ %uB"
+msgstr "kích cỡ cung từ -S %"
 
 #: grub-core/disk/plainmount.c:341
-#, fuzzy, c-format
+#, c-format
 msgid "invalid cipher %s"
-msgstr "tham số không hợp lệ %s"
+msgstr "mật mã %s không hợp lệ"
 
 #: grub-core/disk/plainmount.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "invalid mode %s"
-msgstr "tập tin modinfo (thông tin mô đun) “%s” không hợp lệ"
+msgstr "chế độ sai %s"
 
 #: grub-core/disk/plainmount.c:345
-#, fuzzy, c-format
+#, c-format
 msgid "invalid cipher %s or mode %s"
-msgstr "định dạng dòng không hợp lệ: %s"
+msgstr "mật mã %s hoặc chế độ %s không hợp lệ"
 
 #: grub-core/disk/plainmount.c:364
-#, fuzzy, c-format
+#, c-format
 msgid "cannot open disk %s"
-msgstr "không thể mở “%s”: %s"
+msgstr "không thể mở đĩa %s"
 
 #: grub-core/disk/plainmount.c:372
-#, fuzzy, c-format
+#, c-format
 msgid "Enter passphrase for %s%s%s: "
-msgstr "Gõ cụm từ mật khẩu cho %s%s%s (%s): "
+msgstr "Gõ cụm từ mật khẩu cho %s%s%s: "
 
 #: grub-core/disk/plainmount.c:379
-#, fuzzy
 msgid "error reading password"
-msgstr "đọc mật khẩu thất bại"
+msgstr "gặp lỗi khi đọc mật khẩu"
 
 #: grub-core/disk/plainmount.c:391
 msgid "warning: hash is ignored if keyfile is specified\n"
-msgstr ""
+msgstr "cảnh báo: hàm băm bị bỏ qua nếu tập tin khóa được chỉ định\n"
 
 #: grub-core/disk/plainmount.c:395
 msgid ""
 "warning: password specified with -p option is ignored if keyfile is "
 "provided\n"
 msgstr ""
+"cảnh báo: mật khẩu được chỉ định với tùy chọn -p bị bỏ qua nếu tập tin khóa "
+"được cung cấp\n"
 
 #: grub-core/disk/plainmount.c:400
 msgid "warning: keyfile offset option -O specified without keyfile option -d\n"
 msgstr ""
+"cảnh báo: tùy chọn bù vị trí tập tin khóa -O được chỉ ra mà không có tùy "
+"chọn tập tin khóa -d\n"
 
 #: grub-core/disk/plainmount.c:448
 msgid ""
 "-c cipher -s key-size [-h hash] [-S sector-size] [-o offset] [-p password] [-"
 "u uuid]  [[-d keyfile] [-O keyfile offset]] <SOURCE>"
 msgstr ""
+"-c cipher -s key-size [-h mã_băm] [-S cỡ_cung_từ] [-o vtr_bù] [-p mật_khẩu] "
+"[-u uuid]  [[-d tập_tin_khóa] [-O tập_tin_khóa vtrí_bù]] <NGUỒN>"
 
 #: grub-core/disk/plainmount.c:451
 msgid "Open partition encrypted in plain mode."
-msgstr ""
+msgstr "Mở phân vùng được mã hóa ở chế độ đơn giản."
 
 #: grub-core/efiemu/i386/loadcore32.c:111 grub-core/kern/arm/dl.c:256
 #: grub-core/kern/i386/dl.c:75 grub-core/kern/mips/dl.c:258
@@ -3071,14 +3058,14 @@ msgid "relocation 0x%s is not implemented yet"
 msgstr "tái định vị 0x%s vẫn chưa được thực hiện"
 
 #: grub-core/efiemu/loadcore.c:200 grub-core/efiemu/loadcore.c:237
-#: grub-core/loader/i386/bsdXX.c:335 util/grub-mkimagexx.c:2487
+#: grub-core/loader/i386/bsdXX.c:339 util/grub-mkimagexx.c:2487
 msgid "no symbol table"
 msgstr "không có bảng ký hiệu"
 
 #: grub-core/efiemu/loadcore.c:346 grub-core/kern/dl.c:629
 #: grub-core/loader/ia64/efi/linux.c:345 grub-core/loader/mips/linux.c:248
 #: grub-core/loader/multiboot_elfxx.c:89
-#: grub-core/loader/powerpc/ieee1275/linux.c:266
+#: grub-core/loader/powerpc/ieee1275/linux.c:291
 #: grub-core/loader/sparc64/ieee1275/linux.c:320
 msgid "this ELF file is not of the right type"
 msgstr "tập tin ELF này không phải là một kiểu đúng"
@@ -3116,8 +3103,17 @@ msgstr "Chỉ định một hay nhiều phông chữ cần tải."
 msgid "List the loaded fonts."
 msgstr "Liệt kê phông chữ đã tải."
 
-#: grub-core/fs/archelp.c:216 grub-core/fs/archelp.c:278
-#: grub-core/fs/btrfs.c:1944 grub-core/fs/fshelp.c:227 grub-core/fs/jfs.c:747
+#: grub-core/fs/archelp.c:186 grub-core/fs/btrfs.c:1829
+#: grub-core/fs/btrfs.c:2094 grub-core/fs/fshelp.c:189
+#: grub-core/fs/fshelp.c:309 grub-core/fs/jfs.c:442 grub-core/fs/minix.c:418
+#: grub-core/fs/minix.c:580 grub-core/fs/reiserfs.c:732 grub-core/fs/ufs.c:531
+#: grub-core/fs/ufs.c:671 grub-core/fs/zfs/zfs.c:2848
+#: grub-core/fs/zfs/zfs.c:4305
+msgid "not a directory"
+msgstr "không phải một thư mục"
+
+#: grub-core/fs/archelp.c:224 grub-core/fs/archelp.c:286
+#: grub-core/fs/btrfs.c:1946 grub-core/fs/fshelp.c:227 grub-core/fs/jfs.c:747
 #: grub-core/fs/minix.c:371 grub-core/fs/ufs.c:454
 msgid "too deep nesting of symlinks"
 msgstr "liên kết mềm lồng nhau quá sâu"
@@ -3127,20 +3123,12 @@ msgstr "liên kết mềm lồng nhau quá sâu"
 msgid "attempt to read past the end of file"
 msgstr "thử đọc sau phần cuối thật của tập tin"
 
-#: grub-core/fs/btrfs.c:1827 grub-core/fs/btrfs.c:2092
-#: grub-core/fs/fshelp.c:189 grub-core/fs/fshelp.c:309 grub-core/fs/jfs.c:442
-#: grub-core/fs/minix.c:418 grub-core/fs/minix.c:580
-#: grub-core/fs/reiserfs.c:732 grub-core/fs/ufs.c:531 grub-core/fs/ufs.c:671
-#: grub-core/fs/zfs/zfs.c:2844 grub-core/fs/zfs/zfs.c:4290
-msgid "not a directory"
-msgstr "không phải một thư mục"
-
-#: grub-core/fs/btrfs.c:2223 grub-core/fs/fshelp.c:307 grub-core/fs/jfs.c:846
-#: grub-core/fs/zfs/zfs.c:3835
+#: grub-core/fs/btrfs.c:2225 grub-core/fs/fshelp.c:307 grub-core/fs/jfs.c:846
+#: grub-core/fs/zfs/zfs.c:3842
 msgid "not a regular file"
 msgstr "không phải tập tin thường"
 
-#: grub-core/fs/btrfs.c:2373 grub-core/fs/zfs/zfs.c:4376
+#: grub-core/fs/btrfs.c:2375 grub-core/fs/zfs/zfs.c:4391
 #: grub-core/partmap/msdos.c:404
 msgid "your core.img is unusually large.  It won't fit in the embedding area"
 msgstr "bạn có một core.img quá lớn. Nó không vừa với vùng nhúng"
@@ -3167,11 +3155,11 @@ msgstr "tên tập tin “%s” không hợp lệ"
 msgid "blocksize too large"
 msgstr "cỡ khối quá lớn"
 
-#: grub-core/fs/zfs/zfs.c:457
+#: grub-core/fs/zfs/zfs.c:459
 msgid "checksum verification failed"
 msgstr "xác minh mã tổng kiểm tra gặp lỗi"
 
-#: grub-core/fs/zfs/zfs.c:1472
+#: grub-core/fs/zfs/zfs.c:1474
 msgid "couldn't find a necessary member device of multi-device filesystem"
 msgstr ""
 "không thể tìm thấy thiết bị số cần thiết của hệ thống tập tin đa-thiết-bị"
@@ -3196,7 +3184,7 @@ msgstr "Coi đầu vào dạng thập lục phân."
 msgid "Assume input is passphrase."
 msgstr "Coi đầu vào là passpharse (mật khẩu cho tập tin)."
 
-#: grub-core/fs/zfs/zfscrypt.c:442 util/grub-fstest.c:559 util/grub-mount.c:502
+#: grub-core/fs/zfs/zfscrypt.c:442 util/grub-fstest.c:559 util/grub-mount.c:503
 msgid "Enter ZFS password: "
 msgstr "Nhập mật khẩu ZFS: "
 
@@ -3510,7 +3498,7 @@ msgstr "tập tin zx sai hỏng hoặc không hỗ trợ tùy chọn khối"
 #: grub-core/loader/i386/bsd.c:1451 grub-core/loader/i386/bsdXX.c:52
 #: grub-core/loader/ia64/efi/linux.c:341 grub-core/loader/mips/linux.c:298
 #: grub-core/loader/multiboot.c:232 grub-core/loader/multiboot_elfxx.c:86
-#: grub-core/loader/powerpc/ieee1275/linux.c:280
+#: grub-core/loader/powerpc/ieee1275/linux.c:305
 #: grub-core/loader/sparc64/ieee1275/linux.c:331
 msgid "invalid arch-dependent ELF magic"
 msgstr "sai số màu nhiệm ELF phụ_thuộc_kiến_trúc"
@@ -3568,74 +3556,74 @@ msgstr "số màu nhiệm ELF độc_lập_kiến_trúc không hợp lệ"
 
 #: grub-core/kern/efi/debug.c:37
 msgid "Print infomation useful for GDB debugging"
-msgstr ""
+msgstr "In thông tin hữu ích để gỡ lỗi GDB"
 
 #: grub-core/kern/efi/mm.c:135
 #, c-format
 msgid "invalid memory address (0x%s > 0x%s)"
 msgstr "địa chỉ bộ nhớ không hợp lệ (0x%s > 0x%s)"
 
-#: grub-core/kern/efi/sb.c:171
+#: grub-core/kern/efi/sb.c:179
 msgid "prohibited by secure boot policy"
-msgstr ""
+msgstr "bị cấm bởi chính sách khởi động an toàn"
 
-#: grub-core/kern/efi/sb.c:181
+#: grub-core/kern/efi/sb.c:189
 msgid "shim_lock protocol not found"
 msgstr "không tìm thấy giao thức shim_lock"
 
-#: grub-core/kern/efi/sb.c:184
+#: grub-core/kern/efi/sb.c:192
 msgid "bad shim signature"
 msgstr "chữ ký shim sai"
 
 #: grub-core/kern/elfXX.c:215
 msgid "NULL pointer passed for shnum"
-msgstr ""
+msgstr "đã truyền con trỏ NULL cho shnum"
 
 #: grub-core/kern/elfXX.c:221 grub-core/kern/elfXX.c:255
 #: grub-core/kern/elfXX.c:288
 msgid "NULL pointer passed for elf header"
-msgstr ""
+msgstr "đã truyền con trỏ NULL cho phần đầu elf"
 
 #: grub-core/kern/elfXX.c:227 grub-core/kern/elfXX.c:261
 #: grub-core/kern/elfXX.c:294
 msgid "invalid section header table offset in e_shoff"
-msgstr ""
+msgstr "phần bù bảng tiêu đề phần không hợp lệ trong e_shoff"
 
 #: grub-core/kern/elfXX.c:232
 msgid "invalid number of section header table entries in sh_size: %"
-msgstr ""
+msgstr "số mục trong bảng tiêu đề phần không hợp lệ trong sh_size: %"
 
 #: grub-core/kern/elfXX.c:237
 msgid "invalid number of section header table entries in e_shnum: %"
-msgstr ""
+msgstr "số mục nhập bảng đầu đề của phần không hợp lệ trong e_shnum: %"
 
 #: grub-core/kern/elfXX.c:249
 msgid "NULL pointer passed for shstrndx"
-msgstr ""
+msgstr "đã truyền con trỏ NULL cho shstrndx"
 
 #: grub-core/kern/elfXX.c:266
 #, c-format
 msgid "invalid section header table index in sh_link: %d"
-msgstr ""
+msgstr "chỉ mục bảng phần đầu của phần không hợp lệ trong sh_link: %d"
 
 #: grub-core/kern/elfXX.c:271
 #, c-format
 msgid "invalid section header table index in e_shstrndx: %d"
-msgstr ""
+msgstr "chỉ mục bảng phần đầu của phần không hợp lệ trong e_shstrndx: %d"
 
 #: grub-core/kern/elfXX.c:282
 msgid "NULL pointer passed for phnum"
-msgstr ""
+msgstr "đã truyền con trỏ NULL cho shnum"
 
 #: grub-core/kern/elfXX.c:299
 #, c-format
 msgid "invalid number of program header table entries in sh_info: %d"
-msgstr ""
+msgstr "số mục nhập bảng phần đầu chương trình không hợp lệ trong sh_info: %d"
 
 #: grub-core/kern/elfXX.c:304
 #, c-format
 msgid "invalid number of program header table entries in e_phnum: %d"
-msgstr ""
+msgstr "số mục nhập bảng phần đầu chương trình không hợp lệ trong e_phnum: %d"
 
 #. TRANSLATORS: it refers to the lack of free slots.
 #: grub-core/kern/emu/hostdisk.c:208 grub-core/kern/emu/hostdisk.c:466
@@ -3686,12 +3674,12 @@ msgstr ""
 msgid "can't open `%s': %s"
 msgstr "không thể mở “%s”: %s"
 
-#: grub-core/kern/emu/main.c:99 util/grub-fstest.c:522 util/grub-mount.c:471
+#: grub-core/kern/emu/main.c:99 util/grub-fstest.c:522 util/grub-mount.c:472
 msgid "DEVICE_NAME"
 msgstr "TÊN_THIẾT_BỊ"
 
 #: grub-core/kern/emu/main.c:99 grub-core/loader/i386/bsd.c:137
-#: grub-core/loader/i386/bsd.c:170 util/grub-fstest.c:522 util/grub-mount.c:471
+#: grub-core/loader/i386/bsd.c:170 util/grub-fstest.c:522 util/grub-mount.c:472
 msgid "Set root device."
 msgstr "Đặt thiết bị gốc."
 
@@ -3714,7 +3702,7 @@ msgstr "dùng các tập tin GRUB trong thư mục TMỤC [mặc định=%s]"
 #: grub-core/kern/emu/main.c:108 include/grub/util/install.h:71
 #: util/grub-editenv.c:58 util/grub-fstest.c:531 util/grub-glue-efi.c:58
 #: util/grub-macbless.c:104 util/grub-mkfont.c:1008 util/grub-mkimage.c:86
-#: util/grub-mklayout.c:56 util/grub-mount.c:477 util/grub-render-label.c:74
+#: util/grub-mklayout.c:56 util/grub-mount.c:478 util/grub-render-label.c:74
 #: util/grub-script-check.c:52 util/grub-setup.c:90 util/grub-syslinux2cfg.c:78
 msgid "print verbose messages."
 msgstr "hiển thị thông tin chi tiết."
@@ -3732,6 +3720,8 @@ msgid ""
 "use kexec to boot Linux kernels via systemctl (pass twice to enable "
 "dangerous fallback to non-systemctl)."
 msgstr ""
+"sử dụng kexec để khởi động các nhân Linux thông qua systemctl (vượt qua hai "
+"lần để kích hoạt dự phòng nguy hiểm cho non-systemctl)."
 
 #: grub-core/kern/emu/main.c:175 util/grub-macbless.c:143
 #: util/grub-mkrelpath.c:61 util/grub-probe.c:875 util/grub-script-check.c:75
@@ -3771,7 +3761,7 @@ msgid "%s: info:"
 msgstr "%s: ttin:"
 
 #: grub-core/kern/emu/misc.c:80 util/grub-fstest.c:573 util/grub-fstest.c:582
-#: util/grub-mount.c:516 util/grub-mount.c:524
+#: util/grub-mount.c:517 util/grub-mount.c:525
 #, c-format
 msgid "%s: error:"
 msgstr "%s: lỗi:"
@@ -3785,6 +3775,20 @@ msgstr "tập tin “%s” quá lớn"
 msgid "unknown filesystem"
 msgstr "không hiểu hệ thống tập tin"
 
+#: grub-core/kern/ieee1275/init.c:259
+#, c-format
+msgid "Error: ibm,kernel-dump has an unexpected format version '%u'\n"
+msgstr ""
+
+#: grub-core/kern/ieee1275/init.c:266
+#, c-format
+msgid "Error: Too many kernel dump sections: %d\n"
+msgstr ""
+
+#: grub-core/kern/ieee1275/init.c:279
+msgid "Error: 'kds' address beyond last available section\n"
+msgstr ""
+
 #: grub-core/kern/mips/arc/init.c:273 grub-core/kern/mips/loongson/init.c:301
 msgid "Shutdown failed"
 msgstr "Tắt máy gặp lỗi"
@@ -3795,7 +3799,7 @@ msgstr "Thoát ra gặp lỗi"
 
 #: grub-core/kern/misc.c:1342
 msgid "string too long"
-msgstr ""
+msgstr "chuỗi quá dài"
 
 #: grub-core/kern/partition.c:51 grub-core/partmap/bsdlabel.c:108
 #, c-format
@@ -3881,25 +3885,25 @@ msgstr "GRUB chưa biết làm cách nào để tắt máy này!"
 
 #: grub-core/lib/json/json.c:274
 msgid "output parameters are not set"
-msgstr ""
+msgstr "chưa đặt các tham số đầu ra"
 
 #: grub-core/lib/json/json.c:287
 msgid "expected escaped character"
-msgstr ""
+msgstr "cần ký tự đã thoát"
 
 #: grub-core/lib/json/json.c:333
 msgid "unicode sequence too short"
-msgstr ""
+msgstr "chuỗi unicode quá ngắn"
 
 #: grub-core/lib/json/json.c:350
 #, c-format
 msgid "unicode sequence with invalid character '%c'"
-msgstr ""
+msgstr "chuỗi unicode có ký tự không hợp lệ '%c'"
 
 #: grub-core/lib/json/json.c:366
-#, fuzzy, c-format
+#, c-format
 msgid "unrecognized escaped character '%c'"
-msgstr "%s: không nhận ra tùy chọn “%c%s”\n"
+msgstr "không nhận ra ký tự thoát chuỗi “%c”"
 
 #: grub-core/lib/legacy_parse.c:75
 msgid "Default server is ${net_default_server}"
@@ -3936,21 +3940,21 @@ msgstr "zImage (ảnh nén) không hợp lệ"
 msgid "invalid device tree"
 msgstr "cây thiết bị không hợp lệ"
 
-#: grub-core/loader/arm/linux.c:494 grub-core/loader/efi/linux.c:580
-#: grub-core/loader/emu/linux.c:172 grub-core/loader/i386/linux.c:1145
+#: grub-core/loader/arm/linux.c:494 grub-core/loader/efi/linux.c:583
+#: grub-core/loader/emu/linux.c:172 grub-core/loader/i386/linux.c:1157
 #: grub-core/loader/i386/pc/linux.c:483 grub-core/loader/i386/xen.c:969
 #: grub-core/loader/i386/xen.c:971 grub-core/loader/ia64/efi/linux.c:591
 #: grub-core/loader/mips/linux.c:498
-#: grub-core/loader/powerpc/ieee1275/linux.c:369
+#: grub-core/loader/powerpc/ieee1275/linux.c:406
 #: grub-core/loader/sparc64/ieee1275/linux.c:511
 msgid "Load Linux."
 msgstr "Tải Linux."
 
-#: grub-core/loader/arm/linux.c:496 grub-core/loader/efi/linux.c:582
-#: grub-core/loader/emu/linux.c:174 grub-core/loader/i386/linux.c:1147
+#: grub-core/loader/arm/linux.c:496 grub-core/loader/efi/linux.c:585
+#: grub-core/loader/emu/linux.c:174 grub-core/loader/i386/linux.c:1159
 #: grub-core/loader/i386/pc/linux.c:486 grub-core/loader/i386/xen.c:973
 #: grub-core/loader/ia64/efi/linux.c:594 grub-core/loader/mips/linux.c:500
-#: grub-core/loader/powerpc/ieee1275/linux.c:371
+#: grub-core/loader/powerpc/ieee1275/linux.c:408
 #: grub-core/loader/sparc64/ieee1275/linux.c:513
 msgid "Load initrd."
 msgstr "Tải initrd."
@@ -3999,38 +4003,37 @@ msgstr ""
 "hạt nhân ảnh loại thường không được hỗ trợ - hãy dịch lại với tùy chọn bật "
 "CONFIG_(U)EFI_STUB"
 
-#: grub-core/loader/efi/linux.c:413
-#, fuzzy
+#: grub-core/loader/efi/linux.c:416
 msgid "failed to install protocols"
-msgstr "không thể cài đặt cung từ khởi động"
+msgstr "gặp lỗi khi cài đặt giao thức"
 
 #: grub-core/loader/emu/linux.c:65
 msgid "error trying to perform kexec load operation"
-msgstr ""
+msgstr "lỗi khi cố thực hiện thao tác tải kexec"
 
 #: grub-core/loader/emu/linux.c:71
 msgid "use '"
-msgstr ""
+msgstr "dùng '"
 
 #: grub-core/loader/emu/linux.c:82
 #, c-format
 msgid "error trying to perform 'systemctl kexec': %d"
-msgstr ""
+msgstr "lỗi khi cố thực hiện 'systemctl kexec': %d"
 
 #: grub-core/loader/emu/linux.c:93
 #, c-format
 msgid "error trying to directly perform 'kexec -ex': %d"
-msgstr ""
+msgstr "lỗi khi cố thực hiện trực tiếp 'kexec -ex': %d"
 
 #: grub-core/loader/emu/linux.c:123
-#, fuzzy, c-format
+#, c-format
 msgid "cannot find kernel file %s"
-msgstr "không tìm thấy miền địa phương “%s”"
+msgstr "không tìm thấy tập tin hạt nhân “%s”"
 
 #: grub-core/loader/emu/linux.c:156
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find initrd file %s"
-msgstr "không tìm thấy miền địa phương “%s”"
+msgstr "không tìm thấy tập tin initrd “%s”"
 
 #: grub-core/loader/i386/bsd.c:104
 msgid "Display output on all consoles."
@@ -4189,12 +4192,12 @@ msgstr "Tải đĩa RAM kOpenBSD."
 msgid "Load another coreboot payload"
 msgstr "Tải một vùng tải lõi_khởi_động (coreboot payload) khác"
 
-#: grub-core/loader/i386/linux.c:882
+#: grub-core/loader/i386/linux.c:894
 msgid "Legacy `ask' parameter no longer supported."
 msgstr "Tham số cũ “ask” hiện tại không còn được hỗ trợ."
 
-#: grub-core/loader/i386/linux.c:898 grub-core/loader/i386/linux.c:908
-#: grub-core/loader/i386/linux.c:938
+#: grub-core/loader/i386/linux.c:910 grub-core/loader/i386/linux.c:920
+#: grub-core/loader/i386/linux.c:950
 #, c-format
 msgid "%s is deprecated. Use set gfxpayload=%s before linux command instead.\n"
 msgstr ""
@@ -4202,7 +4205,7 @@ msgstr ""
 
 #. TRANSLATORS: "x" has to be entered in, like an identifier,
 #. so please don't use better Unicode codepoints.
-#: grub-core/loader/i386/linux.c:921
+#: grub-core/loader/i386/linux.c:933
 #, c-format
 msgid ""
 "%s is deprecated. VGA mode %d isn't recognized. Use set "
@@ -4211,9 +4214,9 @@ msgstr ""
 "không tán thành sử dụng %s. Chế độ VGA %d không được chấp nhận. Sử dụng đặt "
 "gfxpayload=RỘNGxCAO[xSÂU] trước câu lệnh linux để thay thế.\n"
 
-#: grub-core/loader/i386/linux.c:1092
+#: grub-core/loader/i386/linux.c:1104
 msgid "the size of initrd is bigger than addr_max"
-msgstr ""
+msgstr "kích thước của initrd lớn hơn addr_max"
 
 #: grub-core/loader/i386/pc/chainloader.c:302
 msgid "[--force|--bpb] FILE"
@@ -4329,11 +4332,11 @@ msgstr "Tải một mô_đun đa khởi động (multiboot)."
 
 #: grub-core/loader/multiboot_elfxx.c:208
 msgid "memory being set is larger than allocated memory"
-msgstr ""
+msgstr "bộ nhớ được đặt lớn hơn bộ nhớ được phân bổ"
 
 #: grub-core/loader/multiboot_elfxx.c:254
 msgid "ELF section header region is larger than the file size"
-msgstr ""
+msgstr "Vùng đầu phần ELF lớn hơn kích thước tập tin"
 
 #: grub-core/loader/xnu.c:674
 msgid "missing p-list filename"
@@ -4537,7 +4540,7 @@ msgstr "Liệt kê máy chủ DNS"
 
 #: grub-core/net/drivers/efi/efinet.c:44
 msgid "network protocol not available, can't send packet"
-msgstr ""
+msgstr "giao thức mạng không khả dụng, không thể gửi gói"
 
 #: grub-core/net/drivers/efi/efinet.c:52 grub-core/net/drivers/efi/efinet.c:68
 #: grub-core/net/drivers/efi/efinet.c:80 grub-core/net/drivers/emu/emunet.c:62
@@ -4555,22 +4558,22 @@ msgstr "alloc-mem gặp lỗi"
 msgid "free-mem failed"
 msgstr "free-mem gặp lỗi"
 
-#: grub-core/net/http.c:75
+#: grub-core/net/http.c:71
 msgid "invalid HTTP header - LF without CR"
-msgstr ""
+msgstr "phần đầu HTTP không hợp lệ - LF mà không có CR"
 
-#: grub-core/net/http.c:113
+#: grub-core/net/http.c:109
 msgid "unsupported HTTP response"
 msgstr "đáp ứng trả lời HTTP không được hỗ trợ"
 
 #. TRANSLATORS: GRUB HTTP code is pretty young. So even perfectly
 #. valid answers like 403 will trigger this very generic message.
-#: grub-core/net/http.c:134
+#: grub-core/net/http.c:130
 #, c-format
 msgid "unsupported HTTP error %d: %s"
 msgstr "đáp ứng trả lời lỗi HTTP không được hỗ trợ %d: %s"
 
-#: grub-core/net/http.c:446 grub-core/net/tftp.c:400
+#: grub-core/net/http.c:442 grub-core/net/tftp.c:400
 #, c-format
 msgid "time out opening `%s'"
 msgstr "gặp lỗi quá giờ khi mở “%s”"
@@ -4629,17 +4632,16 @@ msgstr "không tìm thấy card"
 #: grub-core/net/net.c:1205
 #, c-format
 msgid "non-numeric or invalid number `%s'"
-msgstr ""
+msgstr "số không phải là số hoặc không hợp lệ `%s'"
 
 #: grub-core/net/net.c:1209
 #, c-format
 msgid "vlan id `%s' not in the valid range of 0-4094"
-msgstr ""
+msgstr "id vlan `%s' không nằm trong phạm vi hợp lệ 0-4094"
 
 #: grub-core/net/net.c:1222
-#, fuzzy
 msgid "network interface not found"
-msgstr "không tìm thấy card mạng nào"
+msgstr "không tìm thấy giao diện mạng nào"
 
 #. TRANSLATORS: it refers to the network address.
 #: grub-core/net/net.c:1232
@@ -4657,11 +4659,11 @@ msgstr "chưa chỉ ra máy chủ"
 
 #: grub-core/net/net.c:1383
 msgid "mismatched [ in address"
-msgstr ""
+msgstr "chưa khớp [ trong địa chỉ"
 
 #: grub-core/net/net.c:1393 grub-core/net/net.c:1422
 msgid "bad port number"
-msgstr ""
+msgstr "số cổng sai"
 
 #: grub-core/net/net.c:1772
 #, c-format
@@ -4708,13 +4710,12 @@ msgid "Delete a network route."
 msgstr "Xóa một định tuyến mạng."
 
 #: grub-core/net/net.c:2053
-#, fuzzy
 msgid "SHORTNAME VLANID"
-msgstr "TÊN_NGẮN"
+msgstr "TÊN_NGẮN VLANID"
 
 #: grub-core/net/net.c:2054
 msgid "Set an interface's vlan id."
-msgstr ""
+msgstr "Đặt một id vlan của giao diện"
 
 #: grub-core/net/net.c:2056
 msgid "list network routes"
@@ -4812,7 +4813,7 @@ msgid "ESC at any time exits."
 msgstr "Phím ESC lúc nào cũng thoát."
 
 #: grub-core/normal/main.c:381
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Minimal BASH-like line editing is supported. For the first word, TAB lists "
 "possible command completions. Anywhere else TAB lists possible device or "
@@ -4820,8 +4821,8 @@ msgid ""
 msgstr ""
 "Hỗ trợ chức năng chỉnh sửa dòng kiểu-BASH dạng tối giản. Đối với từ đầu tiên "
 "thì phím TAB liệt kê các từ gợi ý là tên các lệnh có thể điền vào. Ở thời "
-"điểm khác, phím TAB liệt kê các từ liên quan đến tên thiết bị hay tập tin có "
-"thể điền vào. %s"
+"điểm khác, phím TAB liệt kê các thiết bị hay tập tin có thể điền vào. Để bật "
+"phân trang giống-less(1), \"set pager=1\". %s"
 
 #. TRANSLATORS: it's command line prompt.
 #: grub-core/normal/main.c:414
@@ -5066,65 +5067,65 @@ msgid "can't mount encrypted volume `%s': %s"
 msgstr "không thể gắn vùng được mã hóa “%s”: %s"
 
 #: grub-core/osdep/devmapper/getroot.c:218
-#, fuzzy, c-format
+#, c-format
 msgid "cannot open grub disk `%s'"
-msgstr "không thể mở tập tin OS “%s”: %s"
+msgstr "không thể mở đĩa grub “%s”"
 
 #: grub-core/osdep/devmapper/getroot.c:221
 #, c-format
 msgid "cannot get cryptodisk from source disk `%s'"
-msgstr ""
+msgstr "không thể lấy cryptodisk từ đĩa nguồn `%s'"
 
 #: grub-core/osdep/devmapper/getroot.c:230
 #, c-format
 msgid "cannot get dm node name for grub dev `%s'"
-msgstr ""
+msgstr "không thể lấy tên nút dm cho dev grub `%s'"
 
 #: grub-core/osdep/devmapper/getroot.c:237
 msgid "can't create dm task DM_DEVICE_TABLE"
-msgstr ""
+msgstr "không thể tạo nhiệm vụ dm DM_DEVICE_TABLE"
 
 #: grub-core/osdep/devmapper/getroot.c:239
 #, c-format
 msgid "can't set dm task name to `%s'"
-msgstr ""
+msgstr "không thể đặt tên nhiệm vụ dm thành `%s'"
 
 #: grub-core/osdep/devmapper/getroot.c:241
-#, fuzzy, c-format
+#, c-format
 msgid "can't run dm task for `%s'"
-msgstr "không thể tìm thấy lệnh “%s”"
+msgstr "không thể chạy nhiệm vụ dm cho “%s”"
 
 #: grub-core/osdep/devmapper/getroot.c:249
 #, c-format
 msgid "dm target of type `%s' is not `crypt'"
-msgstr ""
+msgstr "đích dm của kiểu `%s' không phải là `crypt'"
 
 #: grub-core/osdep/devmapper/getroot.c:261
 #, c-format
 msgid "can't get cipher from dm-crypt parameters `%s'"
-msgstr ""
+msgstr "không thể lấy mã hóa từ tham số dm-crypt `%s'"
 
 #: grub-core/osdep/devmapper/getroot.c:265
 msgid "could not strndup cipher of length `%"
-msgstr ""
+msgstr "không thể strndup cipher của chiều dài `%"
 
 #: grub-core/osdep/devmapper/getroot.c:272
 #, c-format
 msgid "can't get cipher mode from dm-crypt parameters `%s'"
-msgstr ""
+msgstr "không thể lấy chế độ mã hóa từ tham số dm-crypt `%s'"
 
 #: grub-core/osdep/devmapper/getroot.c:276
 msgid "could not strndup cipher_mode of length `%"
-msgstr ""
+msgstr "không thể strndup cipher_mode của chiều dài `%"
 
 #: grub-core/osdep/devmapper/getroot.c:283
 #, c-format
 msgid "can't set cipher of cryptodisk `%s' to `%s' with mode `%s'"
-msgstr ""
+msgstr "không thể đặt mật mã của đĩa mã hóa `%s' thành `%s' với chế độ `%s'"
 
 #: grub-core/osdep/devmapper/getroot.c:297
 msgid "can't lookup hash sha256 by name"
-msgstr ""
+msgstr "không thể tìm kiếm mã băm sha256 theo tên"
 
 #. TRANSLATORS: geom is the name of (k)FreeBSD device framework.
 #. Usually left untranslated.
@@ -5153,22 +5154,22 @@ msgstr "không tìm thấy lớp geom “part”"
 msgid "unaligned device size"
 msgstr "kích thước thiết bị chưa căn chỉnh"
 
-#: grub-core/osdep/generic/blocklist.c:56
+#: grub-core/osdep/generic/blocklist.c:80
 #, c-format
 msgid "attempting to read the core image `%s' from GRUB"
 msgstr "đang thử đọc ảnh lõi “%s” từ GRUB"
 
-#: grub-core/osdep/generic/blocklist.c:57
+#: grub-core/osdep/generic/blocklist.c:81
 #, c-format
 msgid "attempting to read the core image `%s' from GRUB again"
 msgstr "đang thử đọc ảnh lõi “%s” từ GRUB lần nữa"
 
-#: grub-core/osdep/generic/blocklist.c:115
+#: grub-core/osdep/generic/blocklist.c:139
 #, c-format
 msgid "cannot read `%s' correctly"
 msgstr "không thể đọc “%s” cho đúng"
 
-#: grub-core/osdep/generic/blocklist.c:126
+#: grub-core/osdep/generic/blocklist.c:150
 msgid "failed to read the sectors of the core image"
 msgstr "lỗi đọc các cung từ của ảnh lõi"
 
@@ -5289,7 +5290,7 @@ msgstr ""
 
 #: grub-core/osdep/linux/ofpath.c:222 grub-core/osdep/unix/getroot.c:501
 #: grub-core/osdep/unix/getroot.c:525 grub-core/osdep/unix/relpath.c:49
-#: util/grub-install.c:1010 util/grub-install.c:1383 util/grub-probe.c:323
+#: util/grub-install.c:1010 util/grub-install.c:1406 util/grub-probe.c:323
 #, c-format
 msgid "failed to get canonical path of `%s'"
 msgstr "gặp lỗi khi lấy đường dẫn canonical của %s"
@@ -5632,26 +5633,26 @@ msgstr "Bật/tắt RTS/CTS."
 
 #: grub-core/term/serial.c:181
 msgid "incorrect MMIO address syntax"
-msgstr ""
+msgstr "cú pháp địa chỉ MMIO không đúng"
 
 #: grub-core/term/serial.c:205
 msgid "incorrect MMIO access size"
-msgstr ""
+msgstr "kích cỡ truy cập MMIO không đúng"
 
-#: grub-core/term/serial.c:276
+#: grub-core/term/serial.c:279
 #, c-format
 msgid "serial port `%s' isn't found"
 msgstr "không tìm thấy cổng nối tiếp “%s”"
 
-#: grub-core/term/serial.c:312
+#: grub-core/term/serial.c:315
 msgid "unsupported serial port flow control"
 msgstr "không hỗ trợ điều khiển luồng cổng nối tiếp"
 
-#: grub-core/term/serial.c:487
+#: grub-core/term/serial.c:490
 msgid "[OPTIONS...]"
 msgstr "[CÁC_TÙY_CHỌN…]"
 
-#: grub-core/term/serial.c:488
+#: grub-core/term/serial.c:491
 msgid "Configure serial port."
 msgstr "Cấu hình cổng nối tiếp."
 
@@ -5837,7 +5838,7 @@ msgstr "siêu dữ liệu SEAT"
 msgid "disable shim_lock verifier"
 msgstr "tắt xác nhận shim_lock"
 
-#: util/editenv.c:71 util/grub-editenv.c:207 util/grub-install-common.c:705
+#: util/editenv.c:71 util/grub-editenv.c:207 util/grub-install-common.c:718
 #: util/grub-mkimage.c:331 util/setup.c:794
 #, c-format
 msgid "cannot sync `%s': %s"
@@ -5849,8 +5850,8 @@ msgid "cannot rename the file %s to %s"
 msgstr "không thể đổi tên tập tin %s thành %s"
 
 #: util/editenv.c:94 util/editenv.c:131
-#, c-format
-msgid "cannot rename the file %s to %s: %m"
+#, fuzzy, c-format
+msgid "cannot rename the file %s to %s: %s"
 msgstr "không thể đổi tên tập tin %s thành %s: %m"
 
 #: util/getroot.c:402
@@ -5970,12 +5971,12 @@ msgstr "so sánh gặp lỗi tại offset %llu"
 msgid "OS file %s open error: %s"
 msgstr "Lỗi mở tập tin OS “%s”: %s"
 
-#: util/grub-fstest.c:408 util/grub-mount.c:411
+#: util/grub-fstest.c:408 util/grub-mount.c:412
 #, c-format
 msgid "`loopback' command fails: %s"
 msgstr "lệnh “loopback” gặp lỗi: %s"
 
-#: util/grub-fstest.c:419 util/grub-mount.c:421
+#: util/grub-fstest.c:419 util/grub-mount.c:422
 #, c-format
 msgid "`cryptomount' command fails: %s"
 msgstr "lệnh “cryptomount” gặp lỗi: %s"
@@ -6062,26 +6063,26 @@ msgstr "Bỏ qua N byte từ tập tin đầu vào."
 
 #: util/grub-fstest.c:524
 msgid "Handle N bytes in output file."
-msgstr "Lấy N byte từ tập tin xuất."
+msgstr "Xử lý byte từ tập tin xuất."
 
 #: util/grub-fstest.c:525
 msgid "Specify the number of input files."
 msgstr "Ghi rõ số lượng tập tin đầu vào."
 
-#: util/grub-fstest.c:526 util/grub-mount.c:472
+#: util/grub-fstest.c:526 util/grub-mount.c:473
 msgid "Set debug environment variable."
 msgstr "Đặt biến môi trường gỡ lỗi."
 
-#: util/grub-fstest.c:527 util/grub-mount.c:473
+#: util/grub-fstest.c:527 util/grub-mount.c:474
 msgid "Mount crypto devices."
 msgstr "Gắn thiết bị mã hóa."
 
 #. TRANSLATORS: "prompt" is a keyword.
-#: util/grub-fstest.c:530 util/grub-mount.c:476
+#: util/grub-fstest.c:530 util/grub-mount.c:477
 msgid "FILE|prompt"
-msgstr "TẬP_TIN|prompt"
+msgstr "TẬP_TIN|nhắc"
 
-#: util/grub-fstest.c:530 util/grub-mount.c:476
+#: util/grub-fstest.c:530 util/grub-mount.c:477
 msgid "Load zfs crypto key."
 msgstr "Tải khóa mã hóa zfs."
 
@@ -6117,7 +6118,7 @@ msgstr "Lệnh %s không hợp lệ.\n"
 msgid "IMAGE_PATH COMMANDS"
 msgstr "ĐƯỜNG_DẪN_ẢNH CÁC_LỆNH"
 
-#: util/grub-fstest.c:731 util/grub-mount.c:572
+#: util/grub-fstest.c:731 util/grub-mount.c:575
 msgid "Debug tool for filesystem driver."
 msgstr "Công cụ gỡ lỗi cho ổ đĩa hệ thống tập tin."
 
@@ -6157,25 +6158,25 @@ msgid "can't compress `%s' to `%s'"
 msgstr "không thể nén “%s” thành “%s”"
 
 #: util/grub-install-common.c:182 util/grub-install-common.c:189
-#, fuzzy, c-format
+#, c-format
 msgid "failed to make directory: '%s'"
-msgstr "không thể tạo thư mục tạm: %s"
+msgstr "gặp lỗi khi tạo thư mục: '%s'"
 
-#: util/grub-install-common.c:239 util/grub-install-common.c:722
-#: util/grub-install-common.c:749 util/grub-install-common.c:794
+#: util/grub-install-common.c:239 util/grub-install-common.c:735
+#: util/grub-install-common.c:762 util/grub-install-common.c:807
 #, c-format
 msgid "cannot open directory `%s': %s"
 msgstr "không thể mở thư mục “%s”: %s"
 
 #: util/grub-install-common.c:264
-#, fuzzy, c-format
+#, c-format
 msgid "cannot backup `%s': %s"
-msgstr "không thể đọc “%s”: %s"
+msgstr "không thể sao lưu dự phòng “%s”: %s"
 
 #: util/grub-install-common.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "cannot restore `%s': %s"
-msgstr "không thể ghi vào “%s”: %s"
+msgstr "không thể khôi phục lại “%s”: %s"
 
 #: util/grub-install-common.c:281
 #, c-format
@@ -6196,27 +6197,27 @@ msgstr "Chưa biết định dạng nén %s"
 msgid "Unrecognized compression `%s'"
 msgstr "Không chấp nhận kiểu nén “%s”"
 
-#: util/grub-install-common.c:678
+#: util/grub-install-common.c:691
 #, c-format
 msgid "unknown target format %s"
 msgstr "không hiểu định dạng đích %s"
 
-#: util/grub-install-common.c:873
+#: util/grub-install-common.c:886
 #, c-format
 msgid "cannot find locale `%s'"
 msgstr "không tìm thấy miền địa phương “%s”"
 
-#: util/grub-install-common.c:1113
+#: util/grub-install-common.c:1126
 #, c-format
 msgid "%s doesn't exist. Please specify --target or --directory"
 msgstr "%s không tồn tại. Hãy chỉ định thông qua --target hoặc --directory"
 
-#: util/grub-install-common.c:1122 util/grub-install-common.c:1125
+#: util/grub-install-common.c:1135 util/grub-install-common.c:1138
 #, c-format
 msgid "invalid modinfo file `%s'"
 msgstr "tập tin modinfo (thông tin mô đun) “%s” không hợp lệ"
 
-#: util/grub-install-common.c:1140
+#: util/grub-install-common.c:1153
 #, c-format
 msgid "Unknown platform `%s-%s'"
 msgstr "Không hiểu nền tảng “%s-%s”"
@@ -6361,9 +6362,9 @@ msgid "the drive %s is defined multiple times in the device map %s"
 msgstr "đĩa %s được định nghĩa nhiều lần trong ánh xạ ổ đĩa %s"
 
 #: util/grub-install.c:841
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s: %s"
-msgstr "Không thể mở dòng dữ liệu từ %s: %s"
+msgstr "Không thể mở %s: %s"
 
 #: util/grub-install.c:902
 msgid "Unable to determine your platform. Use --target."
@@ -6382,29 +6383,31 @@ msgstr "cài đặt THIẾT_BỊ mà nó chưa được chỉ ra"
 msgid "cannot find EFI directory"
 msgstr "không thể tìm thấy thư mục EFI"
 
-#: util/grub-install.c:1101 util/grub-install.c:1261 util/grub-install.c:1306
+#: util/grub-install.c:1101 util/grub-install.c:1261 util/grub-install.c:1299
 #: util/grub-macbless.c:76 util/grub-probe.c:329 util/setup.c:320
 #, c-format
 msgid "cannot find a device for %s (is /dev mounted?)"
 msgstr "không tìm thấy thiết bị cho %s (/dev đã gắn chưa?)"
 
-#: util/grub-install.c:1110 util/grub-install.c:1269 util/grub-install.c:1322
-#: util/grub-install.c:1417 util/grub-macbless.c:80 util/grub-probe.c:372
+#: util/grub-install.c:1110 util/grub-install.c:1269 util/grub-install.c:1315
+#: util/grub-install.c:1387 util/grub-macbless.c:80 util/grub-probe.c:372
 #, c-format
 msgid "cannot find a GRUB drive for %s.  Check your device.map"
 msgstr "không tìm thấy ổ đĩa GRUB cho %s.  Kiểm tra tập tin device.map"
 
 #: util/grub-install.c:1130
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't look like an EFI partition, system may not boot"
-msgstr "%s có vẻ không giống như là một phân vùng EFI"
+msgstr ""
+"%s có vẻ không giống như là một phân vùng EFI, hệ thống có thể không thể "
+"khởi động"
 
 #: util/grub-install.c:1132
 #, c-format
 msgid "%s doesn't look like an EFI partition"
 msgstr "%s có vẻ không giống như là một phân vùng EFI"
 
-#: util/grub-install.c:1178 util/grub-install.c:1668
+#: util/grub-install.c:1178 util/grub-install.c:1670
 msgid "You've found a bug"
 msgstr "Bạn vừa tìm thấy một lỗi"
 
@@ -6413,7 +6416,7 @@ msgstr "Bạn vừa tìm thấy một lỗi"
 msgid "filesystem on %s is neither HFS nor HFS+"
 msgstr "hệ thống tập tin trên %s không là HFS cũng không phải HFS+"
 
-#: util/grub-install.c:1351
+#: util/grub-install.c:1344
 #, c-format
 msgid ""
 "attempt to install to encrypted disk without cryptodisk enabled. Set `%s' in "
@@ -6422,12 +6425,12 @@ msgstr ""
 "cố cài đặt vào đĩa đã mã hóa mà cryptodisk không được bật. Đặt “%s” trong "
 "tập tin “%s”."
 
-#: util/grub-install.c:1462 util/grub-install.c:1838 util/grub-install.c:1943
+#: util/grub-install.c:1464 util/grub-install.c:1840 util/grub-install.c:1945
 #, c-format
 msgid "Can't create file: %s"
 msgstr "Không thể tạo tập tin: %s"
 
-#: util/grub-install.c:1544
+#: util/grub-install.c:1546
 msgid "no hints available for your platform. Expect reduced performance"
 msgstr ""
 "không có gợi ý nào cho nền tảng này của bạn. Khả năng là hiệu năng sẽ bị "
@@ -6435,19 +6438,19 @@ msgstr ""
 
 #. TRANSLATORS: This is a prefix in the log to indicate that usually
 #. a command would be executed but due to an option was skipped.
-#: util/grub-install.c:1757
+#: util/grub-install.c:1759
 msgid "NOT RUNNING: "
 msgstr "KHÔNG CHẠY: "
 
-#: util/grub-install.c:1874
+#: util/grub-install.c:1876
 msgid "the chosen partition is not a PReP partition"
 msgstr "phân vùng đã chọn không thuộc kiểu PReP"
 
-#: util/grub-install.c:1879
+#: util/grub-install.c:1881
 msgid "failed to copy Grub to the PReP partition"
 msgstr "gặp lỗi khi sao chép Grub vào phân vùng PReP"
 
-#: util/grub-install.c:1885
+#: util/grub-install.c:1887
 #, c-format
 msgid ""
 "the PReP partition is not empty. If you are sure you want to use it, run dd "
@@ -6456,22 +6459,22 @@ msgstr ""
 "phân vùng PReP không rỗng. Nếu bạn chắc chắn muốn sử dụng nó, hãy sử dụng "
 "lệnh dd để xóa nó đi: “%s”"
 
-#: util/grub-install.c:1961 util/grub-install.c:2009
+#: util/grub-install.c:1963 util/grub-install.c:2011
 #, c-format
 msgid "efibootmgr failed to register the boot entry: %s"
 msgstr "efibootmgr gặp lỗi khi đăng ký mục khởi động: %s"
 
-#: util/grub-install.c:1993
+#: util/grub-install.c:1995
 msgid "EFI bootloader id isn't specified."
 msgstr "Chưa chỉ ra id phần tải khởi động EFI."
 
-#: util/grub-install.c:2027
+#: util/grub-install.c:2029
 msgid "WARNING: no platform-specific install was performed"
 msgstr ""
 "CẢNH BÁO: không có cài đặt platform-specific (nền-tảng-đặc-thù) nào được "
 "thực hiện"
 
-#: util/grub-install.c:2042
+#: util/grub-install.c:2044
 msgid "Installation finished. No error reported."
 msgstr "Cài đặt đã hoàn thành. Không có lỗi nào phát sinh."
 
@@ -6529,9 +6532,9 @@ msgid " (rightmost)"
 msgstr " (cực hữu)"
 
 #: util/grub-mkfont.c:486
-#, fuzzy, c-format
+#, c-format
 msgid "Out of range substitution (%d, %u)\n"
-msgstr "Ngoài phạm vi thay_thế (substitution) (%d, %d)\n"
+msgstr "Ngoài phạm vi thay thế (substitution) (%d, %u)\n"
 
 #. TRANSLATORS: "lookup" is taken directly from font specifications
 #. which are formulated as "Under condition X replace LOOKUP with
@@ -6547,9 +6550,9 @@ msgid "Unsupported substitution type: %d\n"
 msgstr "Kiểu thay_thế (substitution) không được hỗ trợ: %d\n"
 
 #: util/grub-mkfont.c:566
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported substitution specification: %u\n"
-msgstr "Đặc tả thay_thế (substitution) không được hỗ trợ: %d\n"
+msgstr "Đặc tả thay_thế (substitution) không được hỗ trợ: %u\n"
 
 #. TRANSLATORS: It refers to the range of characters in font.
 #: util/grub-mkfont.c:600 util/grub-mkfont.c:1105 util/grub-mkfont.c:1121
@@ -6557,16 +6560,16 @@ msgid "invalid font range"
 msgstr "phạm vi phông chữ không hợp lệ"
 
 #: util/grub-mkfont.c:613
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported coverage specification: %u\n"
-msgstr "Đặc tả thù hình của phông chữ không được hỗ trợ: %d\n"
+msgstr "Thông số độ bao phủ không được hỗ trợ: %u\n"
 
 #: util/grub-mkfont.c:665
 #, c-format
 msgid "WARNING: unsupported font feature parameters: %x\n"
 msgstr "CẢNH BÁO: các tham số đặc điểm phông chữ không được hỗ trợ: %x\n"
 
-#: util/grub-mkfont.c:982 util/grub-mkrescue.c:98 util/grub-mkstandalone.c:48
+#: util/grub-mkfont.c:982 util/grub-mkrescue.c:98 util/grub-mkstandalone.c:51
 #: util/grub-kbdcomp.in:29
 msgid "save output in FILE [required]"
 msgstr "ghi kết xuất vào TẬP_TIN [bắt buộc]"
@@ -6642,7 +6645,7 @@ msgid "Convert common font file formats into PF2"
 msgstr "Chuyển đổi định dạng phông chữ chung sang PF2"
 
 #: util/grub-mkfont.c:1228 util/grub-mkrescue.c:503
-#: util/grub-mkstandalone.c:306 util/grub-kbdcomp.in:70
+#: util/grub-mkstandalone.c:327 util/grub-kbdcomp.in:70
 msgid "output file must be specified"
 msgstr "tập tin đầu vào cần phải được chỉ ra"
 
@@ -6698,15 +6701,15 @@ msgstr "xuất ảnh đã tạo ra TẬP_TIN [mặc định=stdout]"
 msgid "FORMAT"
 msgstr "ĐỊNH_DẠNG"
 
-#: util/grub-mkimage.c:102 util/grub-mkstandalone.c:62
+#: util/grub-mkimage.c:102 util/grub-mkstandalone.c:65
 msgid "generate an image in FORMAT"
 msgstr "tạo ảnh theo ĐỊNH_DẠNG"
 
-#: util/grub-mkimage.c:103 util/grub-mkstandalone.c:63
+#: util/grub-mkimage.c:103 util/grub-mkstandalone.c:66
 msgid "available formats:"
 msgstr "các định dạng có thể sử dụng:"
 
-#: util/grub-mkimage.c:156 util/grub-mkstandalone.c:96
+#: util/grub-mkimage.c:156 util/grub-mkstandalone.c:99
 #, c-format
 msgid "unknown target format %s\n"
 msgstr "không hiểu định dạng đích %s\n"
@@ -6719,7 +6722,7 @@ msgstr "[TÙY_CHỌN]… [MÔ_ĐUN]"
 msgid "Make a bootable image of GRUB."
 msgstr "Tạo ảnh có thể khởi động của GRUB."
 
-#: util/grub-mkimage.c:288 util/grub-mkstandalone.c:309
+#: util/grub-mkimage.c:288 util/grub-mkstandalone.c:330
 msgid "Target format not specified (use the -O option)."
 msgstr "Định dạng đích chưa được chỉ ra (sử dụng tùy chọn -O)."
 
@@ -6906,7 +6909,7 @@ msgstr "Tùy chọn -- chuyển tới chế độ lệnh xorriso nguyên gốc."
 msgid "Mail xorriso support requests to <bug-xorriso@gnu.org>."
 msgstr "Gửi thư yêu cầu hỗ trợ về xorriso tới <bug-xorriso@gnu.org>."
 
-#: util/grub-mkrescue.c:221 util/grub-mkstandalone.c:114
+#: util/grub-mkrescue.c:221 util/grub-mkstandalone.c:117
 msgid "[OPTION] SOURCE..."
 msgstr "[TÙY_CHỌN] NGUỒN…"
 
@@ -6935,20 +6938,25 @@ msgstr ""
 "xorriso của bạn không hỗ trợ “--grub2-boot-info”. Ảnh lõi của bạn quá lớn. "
 "Tính năng coi Boot như là đĩa bị tắt. Hãy dùng xorriso 1.2.9 hay mới hơn."
 
-#: util/grub-mkstandalone.c:115
+#: util/grub-mkstandalone.c:118
 msgid ""
 "Generate a standalone image (containing all modules) in the selected format"
 msgstr "Tạo ảnh đĩa dạng gộp (chứa toàn bộ các mô_đun) theo định dạng đã chọn"
 
-#: util/grub-mkstandalone.c:115
+#: util/grub-mkstandalone.c:118
 msgid "Graft point syntax (E.g. /boot/grub/grub.cfg=./grub.cfg) is accepted"
 msgstr "Cú pháp điểm Graft được chấp nhận (Vd: /boot/grub/grub.cfg=./grub.cfg)"
 
-#: util/grub-mount.c:571
+#: util/grub-mount.c:567
+#, fuzzy, c-format
+msgid "cannot find `%s': %s"
+msgstr "không thể đọc “%s”: %s"
+
+#: util/grub-mount.c:574
 msgid "IMAGE1 [IMAGE2 ...] MOUNTPOINT"
 msgstr "ẢNH1 [ẢNH2 …] ĐIỂN_GẮN"
 
-#: util/grub-mount.c:594
+#: util/grub-mount.c:597
 msgid "need an image and mountpoint"
 msgstr "cần một ảnh và điểm_gắn"
 
@@ -6958,7 +6966,7 @@ msgstr "đưa ra tham số là thiết bị hệ thống, không phải đườn
 
 #: util/grub-probe.c:736
 msgid "print verbose messages (pass twice to enable debug printing)."
-msgstr ""
+msgstr "in thông báo chi tiết (chuyển qua hai lần để cho phép in gỡ lỗi)."
 
 #: util/grub-probe.c:737
 msgid "separate items in output using ASCII NUL characters"
@@ -7152,7 +7160,7 @@ msgstr "định dạng dòng không hợp lệ: %s"
 #: util/resolve.c:132
 #, c-format
 msgid "line too long, length greater than %zu: module %s"
-msgstr ""
+msgstr "dòng quá dài, độ dài lớn hơn %zu: mô-đun %s"
 
 #: util/setup.c:167
 msgid "the first sector of the core file is not sector-aligned"
@@ -7499,7 +7507,7 @@ msgstr "Tìm thấy theme: %s\\n"
 #: util/grub.d/00_header.in:268
 #, c-format
 msgid "Found background: %s\\n"
-msgstr "Tìm thấy nền: %s\\n"
+msgstr "Tìm thấy ảnh nền: %s\\n"
 
 #: util/grub.d/00_header.in:273
 #, c-format
@@ -7756,7 +7764,7 @@ msgstr "%s vẫn chưa được hỗ trợ bởi grub-mkconfig.\\n"
 #: util/grub.d/30_uefi-firmware.in:31
 #, c-format
 msgid "Adding boot menu entry for UEFI Firmware Settings ...\\n"
-msgstr "Đang thêm mục trình đơn khởi động cho Cài đặt phần dẻo UEFI ...\\n"
+msgstr "Đang thêm mục trình đơn khởi động cho Cài đặt firmware UEFI ...\\n"
 
 #~ msgid "SOURCE|-u UUID|-a|-b"
 #~ msgstr "NGUỒN|-u UUID|-a|-b"

@@ -93,7 +93,7 @@ index 510958d..9fc5a4d 100644
  	loaded_fdt = blob;
        else
 diff --git a/include/grub/efi/api.h b/include/grub/efi/api.h
-index 3d88dc0..51de2c3 100644
+index ae02e6d..a89bf3d 100644
 --- a/include/grub/efi/api.h
 +++ b/include/grub/efi/api.h
 @@ -354,6 +354,11 @@

@@ -367,7 +367,7 @@ index 5d7cad2..3dbe880 100644
  	grub_dprintf ("efinet", "device: `%s' path: `%s'\n", *device, *path);
        }
 diff --git a/include/grub/efi/api.h b/include/grub/efi/api.h
-index d84cee0..689167e 100644
+index ad8b697..9515d56 100644
 --- a/include/grub/efi/api.h
 +++ b/include/grub/efi/api.h
 @@ -882,6 +882,8 @@ struct grub_efi_ipv4_device_path

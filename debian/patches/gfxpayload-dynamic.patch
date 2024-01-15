@@ -21,10 +21,10 @@ Patch-Name: gfxpayload-dynamic.patch
  create mode 100644 grub-core/commands/i386/pc/hwmatch.c
 
 diff --git a/configure.ac b/configure.ac
-index 73948d1..a793eea 100644
+index 6084381..6812742 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2025,6 +2025,17 @@ else
+@@ -2090,6 +2090,17 @@ else
  fi
  AC_SUBST([QUICK_BOOT])
  
@@ -43,7 +43,7 @@ index 73948d1..a793eea 100644
  
  AC_SUBST([FONT_SOURCE])
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index d2cf295..b0bd361 100644
+index 1571421..15be5db 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -993,6 +993,14 @@ module = {
