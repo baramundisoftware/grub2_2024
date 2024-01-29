@@ -811,7 +811,14 @@ generate_grub_menu() {
     if [ "${GRUB_DISTRIBUTOR}" = "" ] ; then
         OS=GNU/Linux
     else
-        OS="${GRUB_DISTRIBUTOR} GNU/Linux"
+        case ${GRUB_DISTRIBUTOR} in
+            Ubuntu|Kubuntu)
+            OS="${GRUB_DISTRIBUTOR}"
+            ;;
+            *)
+            OS="${GRUB_DISTRIBUTOR} GNU/Linux"
+            ;;
+        esac
         CLASS="--class $(echo ${GRUB_DISTRIBUTOR} | tr 'A-Z' 'a-z' | cut -d' ' -f1 | LC_ALL=C sed 's,[^[:alnum:]_],_,g') ${CLASS}"
     fi
 
