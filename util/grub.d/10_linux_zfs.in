@@ -788,10 +788,6 @@ zfs_linux_entry () {
     # FIXME: We need an interface to select vesafb in case efifb can't be used.
     if [ "${GRUB_GFXPAYLOAD_LINUX}" = "" ]; then
         echo "${submenu_indentation}	load_video"
-        if grep -qx "CONFIG_FB_EFI=y" "${config}" 2> /dev/null \
-            && grep -qx "CONFIG_VT_HW_CONSOLE_BINDING=y" "${config}" 2> /dev/null; then
-            echo "${submenu_indentation}	set gfxpayload=keep"
-        fi
     else
         if [ "${GRUB_GFXPAYLOAD_LINUX}" != "text" ]; then
             echo "${submenu_indentation}	load_video"
