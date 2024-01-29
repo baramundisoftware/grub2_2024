@@ -39,6 +39,16 @@ imported_pools=""
 MNTDIR="$(mktemp -d ${TMPDIR:-/tmp}/zfsmnt.XXXXXX)"
 ZFSTMP="$(mktemp -d ${TMPDIR:-/tmp}/zfstmp.XXXXXX)"
 
+
+machine="$(uname -m)"
+case "${machine}" in
+    i?86) GENKERNEL_ARCH="x86" ;;
+    mips|mips64) GENKERNEL_ARCH="mips" ;;
+    mipsel|mips64el) GENKERNEL_ARCH="mipsel" ;;
+    arm*) GENKERNEL_ARCH="arm" ;;
+    *) GENKERNEL_ARCH="${machine}" ;;
+esac
+
 RC=0
 on_exit() {
     # Restore initial zpool import state
@@ -405,15 +415,6 @@ get_dataset_info() {
         umount "${mntdir}"
         return
     fi
-
-    machine="$(uname -m)"
-    case "${machine}" in
-        i?86) GENKERNEL_ARCH="x86" ;;
-        mips|mips64) GENKERNEL_ARCH="mips" ;;
-        mipsel|mips64el) GENKERNEL_ARCH="mipsel" ;;
-        arm*) GENKERNEL_ARCH="arm" ;;
-        *) GENKERNEL_ARCH="${machine}" ;;
-    esac
 
     initrd_list=""
     kernel_list=""
@@ -923,6 +924,11 @@ generate_grub_menu() {
     if [ "${ubuntu_recovery}" = 1 ]; then
         GRUB_CMDLINE_LINUX_RECOVERY="${GRUB_CMDLINE_LINUX_RECOVERY} nomodeset"
     fi
+
+    case "$GENKERNEL_ARCH" in
+        x86*) GRUB_CMDLINE_LINUX_RECOVERY="$GRUB_CMDLINE_LINUX_RECOVERY dis_ucode_ldr";;
+    esac
+
 
     if [ "${vt_handoff}" = 1 ]; then
         for word in ${GRUB_CMDLINE_LINUX_DEFAULT}; do
