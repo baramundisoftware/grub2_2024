@@ -158,10 +158,12 @@ if [ "x${GRUB_EARLY_INITRD_LINUX_STOCK}" = "x" ]; then
 fi
 
 if test -f ${sysconfdir}/default/grub ; then
+  gettext_printf "Sourcing file \`%s'\n" "${sysconfdir}/default/grub" 1>&2
   . ${sysconfdir}/default/grub
 fi
 for x in ${sysconfdir}/default/grub.d/*.cfg ; do
   if [ -e "${x}" ]; then
+    gettext_printf "Sourcing file \`%s'\n" "${x}" 1>&2
     . "${x}"
   fi
 done
