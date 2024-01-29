@@ -186,10 +186,16 @@ linux_entry ()
 	echo	'$(echo "$message" | grub_quote)'
 EOF
   fi
-  sed "s/^/$submenu_indentation/" << EOF
-	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} ro ${args}
+  if [ x"$GRUB_FORCE_PARTUUID" = x ]; then
+      sed "s/^/$submenu_indentation/" << EOF
+        linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} ro ${args}
 EOF
-  if test -n "${initrd}" ; then
+  else
+      sed "s/^/$submenu_indentation/" << EOF
+        linux	${rel_dirname}/${basename} root=PARTUUID=${GRUB_FORCE_PARTUUID} ro ${args}
+EOF
+  fi
+  if test -n "${initrd}" && [ x"$GRUB_DISABLE_INITRD" != xtrue ]; then
     # TRANSLATORS: ramdisk isn't identifier. Should be translated.
     if [ x"$quiet_boot" = x0 ] || [ x"$type" != xsimple ]; then
       message="$(gettext_printf "Loading initial ramdisk ...")"
