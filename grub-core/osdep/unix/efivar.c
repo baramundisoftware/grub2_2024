@@ -269,9 +269,10 @@ remove_from_boot_order (struct efi_variable *order, uint16_t num)
 }
 
 static void
-add_to_boot_order (struct efi_variable *order, uint16_t num)
+add_to_boot_order (struct efi_variable *order, uint16_t num,
+		   uint16_t *alt_nums, size_t n_alt_nums, bool is_boot_efi)
 {
-  int i;
+  int i, j, position = -1;
   size_t new_data_size;
   uint8_t *new_data;
 
@@ -281,10 +282,36 @@ add_to_boot_order (struct efi_variable *order, uint16_t num)
     if (GET_ORDER (order->data, i) == num)
       return;
 
+  if (!is_boot_efi)
+    {
+      for (i = 0; i < order->data_size / sizeof (uint16_t); ++i)
+	for (j = 0; j < n_alt_nums; j++)
+	  if (GET_ORDER (order->data, i) == alt_nums[j])
+	    position = i;
+    }
+
   new_data_size = order->data_size + sizeof (uint16_t);
   new_data = xmalloc (new_data_size);
-  SET_ORDER (new_data, 0, num);
-  memcpy (new_data + sizeof (uint16_t), order->data, order->data_size);
+
+  if (position != -1)
+    {
+      /* So we should be inserting after something else, as we're not the
+	 preferred ESP. Could write this as memcpy(), but this is far more
+	 readable. */
+      for (i = 0; i <= position; ++i)
+	SET_ORDER (new_data, i, GET_ORDER (order->data, i));
+
+      SET_ORDER (new_data, position + 1, num);
+
+      for (i = position + 1; i < order->data_size / sizeof (uint16_t); ++i)
+	SET_ORDER (new_data, i + 1, GET_ORDER (order->data, i));
+    }
+  else
+    {
+      SET_ORDER (new_data, 0, num);
+      memcpy (new_data + sizeof (uint16_t), order->data, order->data_size);
+    }
+
   free (order->data);
   order->data = new_data;
   order->data_size = new_data_size;
@@ -512,7 +539,7 @@ devices_equal (const_efidp a, const_efidp b)
 
 int
 grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
-				  const char *efifile_path,
+				  const char *efidir, const char *efifile_path,
 				  const char *efi_distributor)
 {
   const char *efidir_disk;
@@ -522,7 +549,10 @@ grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
   efidp *alternatives;
   efidp this;
   int entry_num = -1;
+  uint16_t *alt_nums = NULL;
+  size_t n_alt_nums = 0;
   int rc;
+  bool is_boot_efi;
 
   /* Check if EFI variable can be written */
   if (!efivar_is_rw ())
@@ -532,6 +562,7 @@ grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
       return 0;
     }
 
+  is_boot_efi = strstr (efidir, "/boot/efi") != NULL;
   efidir_disk = grub_util_biosdisk_get_osdev (efidir_grub_dev->disk);
   efidir_part = efidir_grub_dev->disk->partition ? efidir_grub_dev->disk->partition->number + 1 : 1;
   alternatives = get_alternative_esps ();
@@ -610,6 +641,10 @@ grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
 	    {
 	      grub_util_info ("not deleting alternative EFI variable %s (%s)",
 			      entry->name, label);
+
+	      alt_nums
+		  = xrealloc (alt_nums, (++n_alt_nums) * sizeof (*alt_nums));
+	      alt_nums[n_alt_nums - 1] = entry->num;
 	      continue;
 	    }
 	}
@@ -645,7 +680,8 @@ grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
   if (rc < 0)
     goto err;
 
-  add_to_boot_order (order, (uint16_t) entry_num);
+  add_to_boot_order (order, (uint16_t)entry_num, alt_nums, n_alt_nums,
+		     is_boot_efi);
 
   grub_util_info ("setting EFI variable BootOrder");
   rc = set_efi_variable ("BootOrder", order);

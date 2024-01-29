@@ -208,7 +208,7 @@ set_efi_variable_bootn (grub_uint16_t n, void *in, grub_size_t len)
 }
 
 int
-grub_install_register_efi (grub_device_t efidir_grub_dev,
+grub_install_register_efi (grub_device_t efidir_grub_dev, const char *efidir,
 			   const char *efifile_path,
 			   const char *efi_distributor)
 {
