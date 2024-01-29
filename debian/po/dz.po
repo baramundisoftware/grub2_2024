@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub2\n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-07-28 14:49+0200\n"
+"POT-Creation-Date: 2024-01-29 10:53+0000\n"
 "PO-Revision-Date: 2001-12-31 19:57-0500\n"
 "Last-Translator: Dawa <dpemo@dit.gov.bt>\n"
 "Language-Team: Dzongkha <LL@li.org>\n"
@@ -70,6 +70,7 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../grub-pc.templates.in:3001 ../grub-pc.templates.in:4001
+#: ../templates.in:7001
 msgid "GRUB install devices:"
 msgstr "GRUB གཞི་བཙུགས་ ཐབས་འཕྲུལ་ཚུ :"
 
@@ -85,7 +86,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:3001
+#: ../grub-pc.templates.in:3001 ../templates.in:6001
 msgid ""
 "Running grub-install automatically is recommended in most situations, to "
 "prevent the installed GRUB core image from getting out of sync with GRUB "
@@ -123,7 +124,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:4001
+#: ../grub-pc.templates.in:4001 ../templates.in:7001
 msgid ""
 "The GRUB boot loader was previously installed to a disk that is no longer "
 "present, or whose unique identifier has changed for some reason. It is "
@@ -154,7 +155,7 @@ msgstr "- ${DEVICE} (${SIZE} MB; ${PATH})"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid "Writing GRUB to boot device failed - continue?"
 msgstr " GRUB བུཊི་ ཐབས་འཕྲུལ་ལུ་འབྲི་ནི་ འཐུས་ཤོར་འབྱུང་ཡོདཔ - འཕྲོ་མཐུད་དེ་འབད་ནི་ཨིན་ན?"
 
@@ -163,12 +164,13 @@ msgstr " GRUB བུཊི་ ཐབས་འཕྲུལ་ལུ་འབྲ�
 #. Type: boolean
 #. Description
 #: ../grub-pc.templates.in:7001 ../grub-pc.templates.in:8001
+#: ../templates.in:9001
 msgid "GRUB failed to install to the following devices:"
 msgstr "GRUB འདི་ འོག་གི་ཐབས་འཕྲུལ་ཚུ་ནང་གཞི་བཙུགས་འབད་མ་ཚུགས་པས:"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid ""
 "Do you want to continue anyway? If you do, your computer may not start up "
 "properly."
@@ -196,7 +198,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid "Continue without installing GRUB?"
 msgstr "GRUB གཞི་བཙུགས་མ་འབད་བར་འཕྲོ་མཐུད་ནི་ཨིན་ན?"
 
@@ -218,7 +220,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid ""
 "If you are already using a different boot loader and want to carry on doing "
 "so, or if this is a special environment where you do not need a boot loader, "
@@ -327,7 +329,7 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates.in:3001
-msgid "Force extra installation to the EFI removable media path?"
+msgid "Skip extra installation to the EFI removable media path?"
 msgstr ""
 
 #. Type: boolean
@@ -335,12 +337,12 @@ msgstr ""
 #: ../templates.in:3001
 msgid ""
 "Some EFI-based systems are buggy and do not handle new bootloaders "
-"correctly. If you force an extra installation of GRUB to the EFI removable "
-"media path, this should ensure that this system will boot Debian correctly "
-"despite such a problem. However, it may remove the ability to boot any other "
-"operating systems that also depend on this path. If so, you will need to "
-"make sure that GRUB is configured successfully to be able to boot any other "
-"OS installations correctly."
+"correctly. If you do not make an extra installation of GRUB to the EFI "
+"removable media path, this may prevent your system from booting Debian "
+"correctly in case it is affected by this problem. However, it may remove the "
+"ability to boot any other operating systems that also depend on this path. "
+"If so, you will need to make sure that GRUB is configured successfully to be "
+"able to boot any other OS installations correctly."
 msgstr ""
 
 #. Type: boolean
@@ -384,15 +386,67 @@ msgid ""
 "those guest OSes as it mounts filesystems to look for things."
 msgstr ""
 
-#. Type: string
+#. Type: multiselect
 #. Description
 #: ../templates.in:6001
+msgid "GRUB EFI system partitions:"
+msgstr ""
+
+#. Type: multiselect
+#. Description
+#: ../templates.in:6001
+#, fuzzy
+#| msgid ""
+#| "The grub-pc package is being upgraded. This menu allows you to select "
+#| "which devices you'd like grub-install to be automatically run for, if any."
+msgid ""
+"The grub-efi package is being upgraded. This menu allows you to select which "
+"EFI system partions you'd like grub-install to be automatically run for, if "
+"any."
+msgstr ""
+"grub-pc ཐུམ་སྒྲིལ་འདི་ ཡར་བསྐྱེད་འབད་ཡོདཔ། དཀར་ཆག་འདི་གིས་ རང་བཞིན་ གཡོག་བཀོལ་ grub-གཞི་"
+"བཙུགས་ གང་རུང་ཡོད་པ་ཅིན་ ཐབས་འཕྲུལ་ སེལ་འཐུ་འབད་བཅུགཔ་ཨིན།"
+
+#. Type: text
+#. Description
+#: ../templates.in:8001
+#, fuzzy
+#| msgid "${DEVICE} (${SIZE} MB; ${MODEL})"
+msgid "${DEVICE} (${SIZE} MB; ${PATH}) on ${DISK_SIZE} MB ${DISK_MODEL}"
+msgstr "${DEVICE} (${SIZE} MB; ${MODEL})"
+
+#. Type: boolean
+#. Description
+#: ../templates.in:10001
+#, fuzzy
+#| msgid ""
+#| "You chose not to install GRUB to any devices. If you continue, the boot "
+#| "loader may not be properly configured, and when this computer next starts "
+#| "up it will use whatever was previously in the boot sector. If there is an "
+#| "earlier version of GRUB 2 in the boot sector, it may be unable to load "
+#| "modules or handle the current configuration file."
+msgid ""
+"You chose not to install GRUB to any devices. If you continue, the boot "
+"loader may not be properly configured, and when this computer next starts up "
+"it will use whatever was previously configured. If there is an earlier "
+"version of GRUB 2 in the EFI system partition, it may be unable to load "
+"modules or handle the current configuration file."
+msgstr ""
+"ཁྱོད་ཀྱིས་ ཐབས་འཕྲུལ་གང་རུང་ནང་ GRUB གཞི་བཙུགས་མ་འབད་ནི་སྦེ་གདམ་ཁ་བརྐྱབས་ནུག འཕྲོ་མཐུད་དེ་འབད་བ་"
+"ཅིན་ བུཊི་མངོན་གསལ་པ་འདི་ ལེགས་ཤོམ་སྦེ་རིམ་སྒྲིག་མི་འབདཝ་་འོང་། དེ་ལས་ ཁྱོད་ཀྱི་གློག་རིག་འདི་ཤུལ་ལས་"
+"འགོ་བཙུགསཔ་ད་ ཧེ་མ་ལས་བུཊི་ས་ཁོངས་ག་ཅི་ཡོད་རུང་ ལག་ལེན་འཐབ་འོང་། གལ་སྲིད་ བུཊི་ས་ཁོངས་ ནང་ ཧེ་"
+"མའི་ཐོན་རིམ་ GRUB ༢ འདི་ཡོད་པ་ཅིན་ མོ་ཌུལ་འདི་མངོན་གསལའབད་མི་ཚུགས་ནི་ ཡང་ན་ ད་ལྟོའི་རིམ་སྒྲིག་ཡིག་"
+"སྣོད་འདི་ལེགས་སྐྱོང་འཐབ་མི་ཚུགསཔ་འོང་།"
+
+#. Type: string
+#. Description
+#: ../templates.in:11001
 msgid "kFreeBSD command line:"
 msgstr "kFreeBSD བརྡ་བཀོད་གྲལ་ཐིག་:"
 
 #. Type: string
 #. Description
-#: ../templates.in:6001
+#: ../templates.in:11001
 msgid ""
 "The following kFreeBSD command line was extracted from /etc/default/grub or "
 "the `kopt' parameter in GRUB Legacy's menu.lst. Please verify that it is "
@@ -404,19 +458,54 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid "kFreeBSD default command line:"
 msgstr "kFreeBSD སྔོན་སྒྲིག་བརྡ་བཀོད་གྲལ་ཐིག་:"
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid ""
 "The following string will be used as kFreeBSD parameters for the default "
 "menu entry but not for the recovery mode."
 msgstr ""
 "འོག་གི་ཡིག་རྒྱུན་ཚུ་ སྔོན་སྒྲིག་དཀར་ཆག་ཐོ་བཀོད་ཀྱི་དོན་ལུ་ kFreeBSD སྦེ་ལག་ལེན་འཐབ་འོང་ དེ་འབདཝད་ "
 "སླར་གསོ་ཐབས་ལམ་གྱི་དོན་ལུ་ལག་ལེན་མི་འཐབ།"
+
+#. Type: title
+#. Description
+#: ../templates.in:13001
+msgid "unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid "Cannot upgrade Secure Boot enforcement policy due to unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"Your system has UEFI Secure Boot enabled in firmware, and the following "
+"kernels present on your system are unsigned:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid " ${unsigned_versions}"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"These kernels cannot be verified under Secure Boot.  To ensure your system "
+"remains bootable, GRUB will not be upgraded on your disk until these kernels "
+"are removed or replaced with signed kernels."
+msgstr ""
 
 #~ msgid "/boot/grub/device.map has been regenerated"
 #~ msgstr "/boot/grub/device.map འདི་ ལོག་བཟོ་ཡོདཔ།"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-07-28 14:49+0200\n"
+"POT-Creation-Date: 2024-01-29 10:53+0000\n"
 "PO-Revision-Date: 2017-01-20 14:11+0100\n"
 "Last-Translator: Łukasz Dulny <BartekChom@poczta.onet.pl>\n"
 "Language-Team: Polish <debian-l10n-polish@lists.debian.org>\n"
@@ -74,6 +74,7 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../grub-pc.templates.in:3001 ../grub-pc.templates.in:4001
+#: ../templates.in:7001
 msgid "GRUB install devices:"
 msgstr "Urządzenia do instalacji GRUB-a:"
 
@@ -90,7 +91,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:3001
+#: ../grub-pc.templates.in:3001 ../templates.in:6001
 msgid ""
 "Running grub-install automatically is recommended in most situations, to "
 "prevent the installed GRUB core image from getting out of sync with GRUB "
@@ -131,7 +132,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:4001
+#: ../grub-pc.templates.in:4001 ../templates.in:7001
 msgid ""
 "The GRUB boot loader was previously installed to a disk that is no longer "
 "present, or whose unique identifier has changed for some reason. It is "
@@ -162,7 +163,7 @@ msgstr "- ${DEVICE} (${SIZE} MB; ${PATH})"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid "Writing GRUB to boot device failed - continue?"
 msgstr ""
 "Zapisywanie GRUB-a na urządzenia rozruchowe nie powiodło się - kontynuować?"
@@ -172,12 +173,13 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../grub-pc.templates.in:7001 ../grub-pc.templates.in:8001
+#: ../templates.in:9001
 msgid "GRUB failed to install to the following devices:"
 msgstr "Nie powiodło się zainstalowanie GRUB-a na następujących urządzeniach:"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid ""
 "Do you want to continue anyway? If you do, your computer may not start up "
 "properly."
@@ -207,7 +209,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid "Continue without installing GRUB?"
 msgstr "Kontynuować bez instalowania GRUB-a?"
 
@@ -230,7 +232,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid ""
 "If you are already using a different boot loader and want to carry on doing "
 "so, or if this is a special environment where you do not need a boot loader, "
@@ -343,20 +345,31 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates.in:3001
-msgid "Force extra installation to the EFI removable media path?"
+#, fuzzy
+#| msgid "Force extra installation to the EFI removable media path?"
+msgid "Skip extra installation to the EFI removable media path?"
 msgstr "Wymusić dodatkową instalację do ścieżki nośników wymiennych EFI?"
 
 #. Type: boolean
 #. Description
 #: ../templates.in:3001
+#, fuzzy
+#| msgid ""
+#| "Some EFI-based systems are buggy and do not handle new bootloaders "
+#| "correctly. If you force an extra installation of GRUB to the EFI "
+#| "removable media path, this should ensure that this system will boot "
+#| "Debian correctly despite such a problem. However, it may remove the "
+#| "ability to boot any other operating systems that also depend on this "
+#| "path. If so, you will need to make sure that GRUB is configured "
+#| "successfully to be able to boot any other OS installations correctly."
 msgid ""
 "Some EFI-based systems are buggy and do not handle new bootloaders "
-"correctly. If you force an extra installation of GRUB to the EFI removable "
-"media path, this should ensure that this system will boot Debian correctly "
-"despite such a problem. However, it may remove the ability to boot any other "
-"operating systems that also depend on this path. If so, you will need to "
-"make sure that GRUB is configured successfully to be able to boot any other "
-"OS installations correctly."
+"correctly. If you do not make an extra installation of GRUB to the EFI "
+"removable media path, this may prevent your system from booting Debian "
+"correctly in case it is affected by this problem. However, it may remove the "
+"ability to boot any other operating systems that also depend on this path. "
+"If so, you will need to make sure that GRUB is configured successfully to be "
+"able to boot any other OS installations correctly."
 msgstr ""
 "Niektóre oparte na EFI systemy mają błędy i nie obsługują poprawnie nowych "
 "programów rozruchowych. Jeśli wymusisz dodatkową instalację GRUB-a do "
@@ -412,15 +425,69 @@ msgid ""
 "those guest OSes as it mounts filesystems to look for things."
 msgstr ""
 
-#. Type: string
+#. Type: multiselect
 #. Description
 #: ../templates.in:6001
+msgid "GRUB EFI system partitions:"
+msgstr ""
+
+#. Type: multiselect
+#. Description
+#: ../templates.in:6001
+#, fuzzy
+#| msgid ""
+#| "The grub-pc package is being upgraded. This menu allows you to select "
+#| "which devices you'd like grub-install to be automatically run for, if any."
+msgid ""
+"The grub-efi package is being upgraded. This menu allows you to select which "
+"EFI system partions you'd like grub-install to be automatically run for, if "
+"any."
+msgstr ""
+"Pakiet grub-pc został zaktualizowany. To menu pozwala na wybranie urządzeń, "
+"dla których powinno zostać uruchomione automatycznie polecenie grub-install, "
+"jeśli to konieczne."
+
+#. Type: text
+#. Description
+#: ../templates.in:8001
+#, fuzzy
+#| msgid "${DEVICE} (${SIZE} MB; ${MODEL})"
+msgid "${DEVICE} (${SIZE} MB; ${PATH}) on ${DISK_SIZE} MB ${DISK_MODEL}"
+msgstr "${DEVICE} (${SIZE} MB; ${MODEL})"
+
+#. Type: boolean
+#. Description
+#: ../templates.in:10001
+#, fuzzy
+#| msgid ""
+#| "You chose not to install GRUB to any devices. If you continue, the boot "
+#| "loader may not be properly configured, and when this computer next starts "
+#| "up it will use whatever was previously in the boot sector. If there is an "
+#| "earlier version of GRUB 2 in the boot sector, it may be unable to load "
+#| "modules or handle the current configuration file."
+msgid ""
+"You chose not to install GRUB to any devices. If you continue, the boot "
+"loader may not be properly configured, and when this computer next starts up "
+"it will use whatever was previously configured. If there is an earlier "
+"version of GRUB 2 in the EFI system partition, it may be unable to load "
+"modules or handle the current configuration file."
+msgstr ""
+"Wybrano nieinstalowanie GRUB-a na żadnym urządzeniu. W przypadku "
+"kontynuowania, program rozruchowy może nie być poprawnie skonfigurowany, a "
+"kiedy komputer zostanie uruchomiony ponownie, będzie używał tego, co "
+"znajdowało się poprzednio w sektorze rozruchowym. Jeśli jest tam "
+"wcześniejsza wersja GRUB-a 2, załadowanie modułów lub obsłużenie aktualnego "
+"pliku konfiguracyjnego może być niemożliwe."
+
+#. Type: string
+#. Description
+#: ../templates.in:11001
 msgid "kFreeBSD command line:"
 msgstr "Wiersz poleceń do kFreeBSD:"
 
 #. Type: string
 #. Description
-#: ../templates.in:6001
+#: ../templates.in:11001
 msgid ""
 "The following kFreeBSD command line was extracted from /etc/default/grub or "
 "the `kopt' parameter in GRUB Legacy's menu.lst. Please verify that it is "
@@ -433,19 +500,54 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid "kFreeBSD default command line:"
 msgstr "Domyślny wiersz poleceń do kFreeBSD:"
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid ""
 "The following string will be used as kFreeBSD parameters for the default "
 "menu entry but not for the recovery mode."
 msgstr ""
 "Następujący ciąg będzie użyty jako parametry przekazywane do jądra kFreeBSD "
 "w domyślnym wpisie menu (ale nie w trybie ratunkowym)."
+
+#. Type: title
+#. Description
+#: ../templates.in:13001
+msgid "unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid "Cannot upgrade Secure Boot enforcement policy due to unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"Your system has UEFI Secure Boot enabled in firmware, and the following "
+"kernels present on your system are unsigned:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid " ${unsigned_versions}"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"These kernels cannot be verified under Secure Boot.  To ensure your system "
+"remains bootable, GRUB will not be upgraded on your disk until these kernels "
+"are removed or replaced with signed kernels."
+msgstr ""
 
 #~ msgid "/boot/grub/device.map has been regenerated"
 #~ msgstr "/boot/grub/device.map został odtworzony"

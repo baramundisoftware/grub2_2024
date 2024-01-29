@@ -15,7 +15,11 @@ export DEB_BUILD_MAINT_OPTIONS = optimize=-lto
 HOST_CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
 # -O3 (default on Ubuntu ppc64el) introduces various -Werror failures, and
 # isn't worth it here.
+ifneq (,$(filter s390x,$(DEB_HOST_ARCH_CPU)))
+HOST_CFLAGS := -Wall -Wno-error=unused-result $(shell dpkg-buildflags --get CFLAGS | perl -pe 's/-O[23]\b/-O1/')
+else
 HOST_CFLAGS := -Wall -Wno-error=unused-result $(shell dpkg-buildflags --get CFLAGS | perl -pe 's/-O3\b/-O2/')
+endif
 HOST_LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 
 include /usr/share/dpkg/pkg-info.mk
@@ -109,7 +113,7 @@ FLICKER_FREE_BOOT := no
 endif
 
 ifeq ($(FLICKER_FREE_BOOT),yes)
-DEFAULT_HIDDEN_TIMEOUT := 0
+DEFAULT_TIMEOUT := 0
 DEFAULT_HIDDEN_TIMEOUT_BOOL := true
 confflags += \
 	--enable-quiet-boot \
@@ -120,7 +124,6 @@ substvars += \
 	-Vlsb-base-depends="lsb-base (>= 3.0-6)" \
 	-Vgfxpayload-depends="grub-gfxpayload-lists [any-i386 any-amd64]"
 else
-DEFAULT_HIDDEN_TIMEOUT :=
 DEFAULT_HIDDEN_TIMEOUT_BOOL := false
 endif
 
@@ -132,12 +135,70 @@ debian/stamps/build-grub-efi-amd64 install/grub-efi-amd64: export SB_EFI_NAME :=
 debian/stamps/build-grub-efi-arm64 install/grub-efi-arm64: export SB_PLATFORM := arm64-efi
 debian/stamps/build-grub-efi-arm64 install/grub-efi-arm64: export SB_EFI_NAME := aa64
 SB_PACKAGE :=
+ONLY_BUILD :=
 ifeq (yes,$(shell dpkg-vendor --derives-from Ubuntu && echo yes))
+generate-grub2-unsigned:
+	rm -f debian/files
+	sed '1s/^grub2 /grub2-unsigned /' -i debian/changelog
+	sed '1s/ grub2$$/ grub2-unsigned/' -i debian/control
+	cp debian/changelog debian/changelog.unsigned
+	grep-dctrl -r -F Source grub2 debian/control | sed '1s/ grub2$$/ grub2-unsigned/' > debian/control.unsigned
+	grep-dctrl -r -F Package '^grub-efi-a.*64$$' debian/control >> debian/control.unsigned
+	grep-dctrl -r -F Package '^grub-efi-a.*64.*-bin$$' debian/control >> debian/control.unsigned
+	grep-dctrl -r -F Package '^grub-efi-a.*64.*-dbg$$' debian/control >> debian/control.unsigned
+	cp ../grub2_$(DEB_VERSION_UPSTREAM).orig.tar.xz ../grub2-unsigned_$(DEB_VERSION_UPSTREAM).orig.tar.xz
+	dch --append -c debian/changelog.unsigned 'Source package generated from src:grub2 using make -f ./debian/rules generate-grub2-unsigned'
+	rm -f debian/files
+	dpkg-buildpackage -S -d -nc -sa -uc -us \
+	--source-option=-I --source-option=-Idebian/control.unsigned --source-option=-Idebian/changelog.unsigned \
+	--source-option=-c$(CURDIR)/debian/control.unsigned --changes-option=-c$(CURDIR)/debian/control.unsigned --buildinfo-option=-c$(CURDIR)/debian/control.unsigned \
+	--source-option=-l$(CURDIR)/debian/changelog.unsigned --changes-option=-l$(CURDIR)/debian/changelog.unsigned  --buildinfo-option=-l$(CURDIR)/debian/changelog.unsigned $(DPKG_BUILDPACKAGE_OPTIONS)
+	rm debian/changelog.unsigned debian/control.unsigned
+	rm -f debian/files
+	sed '1s/^grub2-unsigned /grub2 /' -i debian/changelog
+	sed '1s/ grub2-unsigned$$/ grub2/' -i debian/control
+
+# Submit this build of grub for raw-uefi signing?
+ifeq ($(DEB_SOURCE),grub2)
+SB_SUBMIT := no
+COMPRESSION :=
+else
+SB_SUBMIT := yes
+COMPRESSION := -Zxz
+endif
 ifeq ($(DEB_HOST_ARCH),amd64)
 SB_PACKAGE := grub-efi-amd64
+override_dh_builddeb: SB_PLATFORM := x86_64-efi
+ifeq ($(SB_SUBMIT),yes)
+# on amd64, src:grub2-unsigned builds efi-amd64 (-bin & -dbg)
+ONLY_BUILD := -pgrub-efi-$(DEB_HOST_ARCH) -pgrub-efi-$(DEB_HOST_ARCH)-bin -pgrub-efi-$(DEB_HOST_ARCH)-dbg
+else
+# on amd64, src:grub2 does not build efi-amd64 (-bin & -dbg)
+ONLY_BUILD := -Ngrub-efi-$(DEB_HOST_ARCH) -Ngrub-efi-$(DEB_HOST_ARCH)-bin -Ngrub-efi-$(DEB_HOST_ARCH)-dbg
 endif
-ifeq ($(DEB_HOST_ARCH),arm64)
+else ifeq ($(DEB_HOST_ARCH),arm64)
 SB_PACKAGE := grub-efi-arm64
+override_dh_builddeb: SB_PLATFORM := arm64-efi
+ifeq ($(SB_SUBMIT),yes)
+# on amd64, src:grub2-unsigned builds efi-arm64 (-bin & -dbg)
+ONLY_BUILD := -pgrub-efi-$(DEB_HOST_ARCH) -pgrub-efi-$(DEB_HOST_ARCH)-bin -pgrub-efi-$(DEB_HOST_ARCH)-dbg
+else
+# on arm64, src:grub2 does not build efi-arm64 (-bin & -dbg)
+ONLY_BUILD := -Ngrub-efi-$(DEB_HOST_ARCH) -Ngrub-efi-$(DEB_HOST_ARCH)-bin -Ngrub-efi-$(DEB_HOST_ARCH)-dbg
+endif
+else ifeq ($(DEB_HOST_ARCH),i386)
+ifeq ($(SB_SUBMIT),yes)
+# on i386, src:grub2-unsigned builds efi-amd64 (-bin & -dbg)
+ONLY_BUILD := -pgrub-efi-amd64 -pgrub-efi-amd64-bin -pgrub-efi-amd64-dbg
+else
+# on i386, src:grub2 only builds common packages
+ONLY_BUILD := -pgrub-common -pgrub2-common
+endif
+else
+ifeq ($(SB_SUBMIT),yes)
+# on all other arches src:grub2-unsigned FTBFS
+ONLY_BUILD := -pnone
+endif
 endif
 endif
 
@@ -538,8 +599,8 @@ ifneq (,$(filter grub2-common,$(BUILD_PACKAGES)))
 		-e "s/@DEFAULT_CMDLINE@/$(DEFAULT_CMDLINE)/g" \
 		-e "s/@DEFAULT_TIMEOUT@/$(DEFAULT_TIMEOUT)/g" \
 		debian/grub2-common/usr/share/grub/default/grub
-ifneq (,$(DEFAULT_HIDDEN_TIMEOUT))
-	perl -pi -e 's/^GRUB_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=0\nGRUB_HIDDEN_TIMEOUT_QUIET=true\n$$&/' \
+ifneq (false,$(DEFAULT_HIDDEN_TIMEOUT_BOOL))
+	perl -pi -e 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT_STYLE=hidden\n$$&/' \
 		debian/grub2-common/usr/share/grub/default/grub
 endif
 endif
@@ -581,16 +642,25 @@ LEGACY_DOC_BR := grub-doc (<< 0.97-32), grub-legacy-doc (<< 0.97-59)
 endif
 
 override_dh_gencontrol:
-	dh_gencontrol -- -Vlegacy-doc-br="$(LEGACY_DOC_BR)" -V"efi:Vendor=$(SB_EFI_VENDOR)" -VBuilt-Using="$(BUILT_USING)" $(substvars)
+	dh_gencontrol $(ONLY_BUILD) -- -Vlegacy-doc-br="$(LEGACY_DOC_BR)" -V"efi:Vendor=$(SB_EFI_VENDOR)" -VBuilt-Using="$(BUILT_USING)" $(substvars)
 
 TARNAME := grub2_$(deb_version)_$(DEB_HOST_ARCH).tar.gz
 
 override_dh_builddeb:
-	dh_builddeb
+	dh_builddeb $(ONLY_BUILD) -- $(COMPRESSION)
 ifneq (,$(SB_PACKAGE))
 	echo $(deb_version) > obj/monolithic/$(SB_PACKAGE)/version
-	tar -c -f ../$(TARNAME) -a -C obj/monolithic/$(SB_PACKAGE) -v .
+ifeq (yes,$(shell dpkg-vendor --derives-from Ubuntu && echo yes))
+	if [ -d obj/monolithic/$(SB_PACKAGE)/$(deb_version) ]; then \
+		rm -rf obj/monolithic/$(SB_PACKAGE)/$(deb_version); \
+	fi
+	mkdir -v obj/monolithic/$(SB_PACKAGE)/$(deb_version)
+	ln -v obj/monolithic/$(SB_PACKAGE)/* obj/monolithic/$(SB_PACKAGE)/$(deb_version) || :
+endif
+	tar -c -f ../$(TARNAME) -a -C obj/monolithic/$(SB_PACKAGE) -v $(deb_version)
+ifeq ($(SB_SUBMIT),yes)
 	dpkg-distaddfile $(TARNAME) raw-uefi -
+endif
 endif
 
 override_dh_auto_clean:

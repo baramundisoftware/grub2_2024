@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-04-23 20:27+0000\n"
+"POT-Creation-Date: 2024-01-29 10:53+0000\n"
 "PO-Revision-Date: 2023-04-26 19:30+0200\n"
 "Last-Translator: Baptiste Jammet <baptiste@mailoo.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -74,6 +74,7 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../grub-pc.templates.in:3001 ../grub-pc.templates.in:4001
+#: ../templates.in:7001
 msgid "GRUB install devices:"
 msgstr "Périphériques sur lesquels installer GRUB :"
 
@@ -90,7 +91,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:3001
+#: ../grub-pc.templates.in:3001 ../templates.in:6001
 msgid ""
 "Running grub-install automatically is recommended in most situations, to "
 "prevent the installed GRUB core image from getting out of sync with GRUB "
@@ -132,7 +133,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:4001
+#: ../grub-pc.templates.in:4001 ../templates.in:7001
 msgid ""
 "The GRUB boot loader was previously installed to a disk that is no longer "
 "present, or whose unique identifier has changed for some reason. It is "
@@ -164,22 +165,24 @@ msgstr "- ${DEVICE} (${SIZE} Mo; ${PATH})"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid "Writing GRUB to boot device failed - continue?"
 msgstr ""
-"Échec de l'installation de GRUB sur le périphérique d'amorçage. Faut-il continuer ?"
+"Échec de l'installation de GRUB sur le périphérique d'amorçage. Faut-il "
+"continuer ?"
 
 #. Type: boolean
 #. Description
 #. Type: boolean
 #. Description
 #: ../grub-pc.templates.in:7001 ../grub-pc.templates.in:8001
+#: ../templates.in:9001
 msgid "GRUB failed to install to the following devices:"
 msgstr "GRUB n'a pas pu être installé sur les périphériques suivants :"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid ""
 "Do you want to continue anyway? If you do, your computer may not start up "
 "properly."
@@ -192,8 +195,8 @@ msgstr ""
 #: ../grub-pc.templates.in:8001
 msgid "Writing GRUB to boot device failed - try again?"
 msgstr ""
-"Échec de l'installation de GRUB sur le périphérique d'amorçage. Faut-il essayer à "
-"nouveau ?"
+"Échec de l'installation de GRUB sur le périphérique d'amorçage. Faut-il "
+"essayer à nouveau ?"
 
 #. Type: boolean
 #. Description
@@ -209,7 +212,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid "Continue without installing GRUB?"
 msgstr "Faut-il poursuivre sans installer GRUB ?"
 
@@ -224,25 +227,25 @@ msgid ""
 "modules or handle the current configuration file."
 msgstr ""
 "Vous avez choisi de n'installer GRUB sur aucun périphérique. Si vous "
-"poursuivez, il est possible que le chargeur d'amorçage ne soit pas "
-"configuré correctement et que la machine démarre avec ce qui était "
-"précédemment installé sur le secteur d'amorçage. Si une ancienne version de "
-"GRUB 2 s'y trouve, il est possible qu'elle ne puisse pas charger certains "
-"modules ou lire le fichier de configuration actuel."
+"poursuivez, il est possible que le chargeur d'amorçage ne soit pas configuré "
+"correctement et que la machine démarre avec ce qui était précédemment "
+"installé sur le secteur d'amorçage. Si une ancienne version de GRUB 2 s'y "
+"trouve, il est possible qu'elle ne puisse pas charger certains modules ou "
+"lire le fichier de configuration actuel."
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid ""
 "If you are already using a different boot loader and want to carry on doing "
 "so, or if this is a special environment where you do not need a boot loader, "
 "then you should continue anyway. Otherwise, you should install GRUB "
 "somewhere."
 msgstr ""
-"Si vous utilisez déjà un autre chargeur d'amorçage et souhaitez "
-"poursuivre ou si, en raison d'un environnement particulier, vous n'avez pas "
-"besoin de chargeur d'amorçage, vous pouvez continuer malgré tout. Dans le "
-"cas contraire, il est nécessaire d'installer GRUB quelque part."
+"Si vous utilisez déjà un autre chargeur d'amorçage et souhaitez poursuivre "
+"ou si, en raison d'un environnement particulier, vous n'avez pas besoin de "
+"chargeur d'amorçage, vous pouvez continuer malgré tout. Dans le cas "
+"contraire, il est nécessaire d'installer GRUB quelque part."
 
 #. Type: boolean
 #. Description
@@ -280,9 +283,9 @@ msgid ""
 "This system still has files from the GRUB Legacy boot loader installed, but "
 "it now also has GRUB 2 boot records installed on these disks:"
 msgstr ""
-"Ce système comporte encore des fichiers de la version précédente du "
-"chargeur d'amorçage GRUB mais comporte également des secteurs d'amorçage "
-"de GRUB 2 sur les disques suivants :"
+"Ce système comporte encore des fichiers de la version précédente du chargeur "
+"d'amorçage GRUB mais comporte également des secteurs d'amorçage de GRUB 2 "
+"sur les disques suivants :"
 
 #. Type: boolean
 #. Description
@@ -350,7 +353,9 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates.in:3001
-msgid "Force extra installation to the EFI removable media path?"
+#, fuzzy
+#| msgid "Force extra installation to the EFI removable media path?"
+msgid "Skip extra installation to the EFI removable media path?"
 msgstr ""
 "Faut-il forcer une installation supplémentaire sur le chemin des supports "
 "amovibles EFI ?"
@@ -358,14 +363,23 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates.in:3001
+#, fuzzy
+#| msgid ""
+#| "Some EFI-based systems are buggy and do not handle new bootloaders "
+#| "correctly. If you force an extra installation of GRUB to the EFI "
+#| "removable media path, this should ensure that this system will boot "
+#| "Debian correctly despite such a problem. However, it may remove the "
+#| "ability to boot any other operating systems that also depend on this "
+#| "path. If so, you will need to make sure that GRUB is configured "
+#| "successfully to be able to boot any other OS installations correctly."
 msgid ""
 "Some EFI-based systems are buggy and do not handle new bootloaders "
-"correctly. If you force an extra installation of GRUB to the EFI removable "
-"media path, this should ensure that this system will boot Debian correctly "
-"despite such a problem. However, it may remove the ability to boot any other "
-"operating systems that also depend on this path. If so, you will need to "
-"make sure that GRUB is configured successfully to be able to boot any other "
-"OS installations correctly."
+"correctly. If you do not make an extra installation of GRUB to the EFI "
+"removable media path, this may prevent your system from booting Debian "
+"correctly in case it is affected by this problem. However, it may remove the "
+"ability to boot any other operating systems that also depend on this path. "
+"If so, you will need to make sure that GRUB is configured successfully to be "
+"able to boot any other OS installations correctly."
 msgstr ""
 "Certains systèmes EFI ne gèrent pas correctement les nouveaux chargeurs "
 "d'amorçage. Si vous forcez l'installation de GRUB sur le chemin des supports "
@@ -434,15 +448,69 @@ msgstr ""
 "peut causer des dégâts à ces systèmes invités. En effet, les systèmes de "
 "fichiers seront montés pour être analysés."
 
-#. Type: string
+#. Type: multiselect
 #. Description
 #: ../templates.in:6001
+msgid "GRUB EFI system partitions:"
+msgstr ""
+
+#. Type: multiselect
+#. Description
+#: ../templates.in:6001
+#, fuzzy
+#| msgid ""
+#| "The grub-pc package is being upgraded. This menu allows you to select "
+#| "which devices you'd like grub-install to be automatically run for, if any."
+msgid ""
+"The grub-efi package is being upgraded. This menu allows you to select which "
+"EFI system partions you'd like grub-install to be automatically run for, if "
+"any."
+msgstr ""
+"Le paquet grub-pc est en cours de mise à jour. Ce menu permet de choisir "
+"pour quels périphériques vous souhaitez exécuter la commande grub-install "
+"automatiquement."
+
+#. Type: text
+#. Description
+#: ../templates.in:8001
+#, fuzzy
+#| msgid "${DEVICE} (${SIZE} MB; ${MODEL})"
+msgid "${DEVICE} (${SIZE} MB; ${PATH}) on ${DISK_SIZE} MB ${DISK_MODEL}"
+msgstr "${DEVICE} (${SIZE} Mo; ${MODEL})"
+
+#. Type: boolean
+#. Description
+#: ../templates.in:10001
+#, fuzzy
+#| msgid ""
+#| "You chose not to install GRUB to any devices. If you continue, the boot "
+#| "loader may not be properly configured, and when this computer next starts "
+#| "up it will use whatever was previously in the boot sector. If there is an "
+#| "earlier version of GRUB 2 in the boot sector, it may be unable to load "
+#| "modules or handle the current configuration file."
+msgid ""
+"You chose not to install GRUB to any devices. If you continue, the boot "
+"loader may not be properly configured, and when this computer next starts up "
+"it will use whatever was previously configured. If there is an earlier "
+"version of GRUB 2 in the EFI system partition, it may be unable to load "
+"modules or handle the current configuration file."
+msgstr ""
+"Vous avez choisi de n'installer GRUB sur aucun périphérique. Si vous "
+"poursuivez, il est possible que le chargeur d'amorçage ne soit pas configuré "
+"correctement et que la machine démarre avec ce qui était précédemment "
+"installé sur le secteur d'amorçage. Si une ancienne version de GRUB 2 s'y "
+"trouve, il est possible qu'elle ne puisse pas charger certains modules ou "
+"lire le fichier de configuration actuel."
+
+#. Type: string
+#. Description
+#: ../templates.in:11001
 msgid "kFreeBSD command line:"
 msgstr "Ligne de commande de kFreeBSD :"
 
 #. Type: string
 #. Description
-#: ../templates.in:6001
+#: ../templates.in:11001
 msgid ""
 "The following kFreeBSD command line was extracted from /etc/default/grub or "
 "the `kopt' parameter in GRUB Legacy's menu.lst. Please verify that it is "
@@ -455,19 +523,54 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid "kFreeBSD default command line:"
 msgstr "Ligne de commande par défaut de kFreeBSD :"
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid ""
 "The following string will be used as kFreeBSD parameters for the default "
 "menu entry but not for the recovery mode."
 msgstr ""
 "Les paramètres indiqués seront utilisés pour le noyau kFreeBSD de l'entrée "
 "de menu par défaut mais pas pour le mode de secours."
+
+#. Type: title
+#. Description
+#: ../templates.in:13001
+msgid "unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid "Cannot upgrade Secure Boot enforcement policy due to unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"Your system has UEFI Secure Boot enabled in firmware, and the following "
+"kernels present on your system are unsigned:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid " ${unsigned_versions}"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"These kernels cannot be verified under Secure Boot.  To ensure your system "
+"remains bootable, GRUB will not be upgraded on your disk until these kernels "
+"are removed or replaced with signed kernels."
+msgstr ""
 
 #~ msgid "/boot/grub/device.map has been regenerated"
 #~ msgstr "Recréation de /boot/grub/device.map"

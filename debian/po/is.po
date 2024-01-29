@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub_debian_po_is\n"
 "Report-Msgid-Bugs-To: grub2@packages.debian.org\n"
-"POT-Creation-Date: 2023-07-28 14:49+0200\n"
+"POT-Creation-Date: 2024-01-29 10:53+0000\n"
 "PO-Revision-Date: 2014-12-13 23:20+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -73,6 +73,7 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../grub-pc.templates.in:3001 ../grub-pc.templates.in:4001
+#: ../templates.in:7001
 msgid "GRUB install devices:"
 msgstr "GRUB uppsetningartæki:"
 
@@ -88,7 +89,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:3001
+#: ../grub-pc.templates.in:3001 ../templates.in:6001
 msgid ""
 "Running grub-install automatically is recommended in most situations, to "
 "prevent the installed GRUB core image from getting out of sync with GRUB "
@@ -128,7 +129,7 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../grub-pc.templates.in:4001
+#: ../grub-pc.templates.in:4001 ../templates.in:7001
 msgid ""
 "The GRUB boot loader was previously installed to a disk that is no longer "
 "present, or whose unique identifier has changed for some reason. It is "
@@ -159,7 +160,7 @@ msgstr "- ${DEVICE} (${SIZE} MB; ${PATH})"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid "Writing GRUB to boot device failed - continue?"
 msgstr "Uppsetning GRUB á ræsitæki mistókst. Halda áfram?"
 
@@ -168,12 +169,13 @@ msgstr "Uppsetning GRUB á ræsitæki mistókst. Halda áfram?"
 #. Type: boolean
 #. Description
 #: ../grub-pc.templates.in:7001 ../grub-pc.templates.in:8001
+#: ../templates.in:9001
 msgid "GRUB failed to install to the following devices:"
 msgstr "Uppsetning GRUB mistókst á eftirfarandi tækjum:"
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:7001
+#: ../grub-pc.templates.in:7001 ../templates.in:9001
 msgid ""
 "Do you want to continue anyway? If you do, your computer may not start up "
 "properly."
@@ -201,7 +203,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid "Continue without installing GRUB?"
 msgstr "Halda áfram án þess að setja upp GRUB?"
 
@@ -224,7 +226,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../grub-pc.templates.in:9001
+#: ../grub-pc.templates.in:9001 ../templates.in:10001
 msgid ""
 "If you are already using a different boot loader and want to carry on doing "
 "so, or if this is a special environment where you do not need a boot loader, "
@@ -335,20 +337,31 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates.in:3001
-msgid "Force extra installation to the EFI removable media path?"
+#, fuzzy
+#| msgid "Force extra installation to the EFI removable media path?"
+msgid "Skip extra installation to the EFI removable media path?"
 msgstr "Þvinga aukauppsetningu inn á EFI-slóðina fyrir útskiptanlega miðla?"
 
 #. Type: boolean
 #. Description
 #: ../templates.in:3001
+#, fuzzy
+#| msgid ""
+#| "Some EFI-based systems are buggy and do not handle new bootloaders "
+#| "correctly. If you force an extra installation of GRUB to the EFI "
+#| "removable media path, this should ensure that this system will boot "
+#| "Debian correctly despite such a problem. However, it may remove the "
+#| "ability to boot any other operating systems that also depend on this "
+#| "path. If so, you will need to make sure that GRUB is configured "
+#| "successfully to be able to boot any other OS installations correctly."
 msgid ""
 "Some EFI-based systems are buggy and do not handle new bootloaders "
-"correctly. If you force an extra installation of GRUB to the EFI removable "
-"media path, this should ensure that this system will boot Debian correctly "
-"despite such a problem. However, it may remove the ability to boot any other "
-"operating systems that also depend on this path. If so, you will need to "
-"make sure that GRUB is configured successfully to be able to boot any other "
-"OS installations correctly."
+"correctly. If you do not make an extra installation of GRUB to the EFI "
+"removable media path, this may prevent your system from booting Debian "
+"correctly in case it is affected by this problem. However, it may remove the "
+"ability to boot any other operating systems that also depend on this path. "
+"If so, you will need to make sure that GRUB is configured successfully to be "
+"able to boot any other OS installations correctly."
 msgstr ""
 "Sum EFI-kerfi eru ekki villulaus og meðhöndla nýja ræsistjóra (bootloaders) "
 "ekki rétt. Ef þú þvingar aukauppsetningu af GRUB inn á EFI-slóðina fyrir "
@@ -399,15 +412,68 @@ msgid ""
 "those guest OSes as it mounts filesystems to look for things."
 msgstr ""
 
-#. Type: string
+#. Type: multiselect
 #. Description
 #: ../templates.in:6001
+msgid "GRUB EFI system partitions:"
+msgstr ""
+
+#. Type: multiselect
+#. Description
+#: ../templates.in:6001
+#, fuzzy
+#| msgid ""
+#| "The grub-pc package is being upgraded. This menu allows you to select "
+#| "which devices you'd like grub-install to be automatically run for, if any."
+msgid ""
+"The grub-efi package is being upgraded. This menu allows you to select which "
+"EFI system partions you'd like grub-install to be automatically run for, if "
+"any."
+msgstr ""
+"Verið er að uppfæra grub-pc pakkann. Þessi valmynd gerir þér kleift að velja "
+"af hvaða tækjum hægt er að keyra grub-install sjálfvirkt, ef þá nokkrum."
+
+#. Type: text
+#. Description
+#: ../templates.in:8001
+#, fuzzy
+#| msgid "${DEVICE} (${SIZE} MB; ${MODEL})"
+msgid "${DEVICE} (${SIZE} MB; ${PATH}) on ${DISK_SIZE} MB ${DISK_MODEL}"
+msgstr "${DEVICE} (${SIZE} MB; ${MODEL})"
+
+#. Type: boolean
+#. Description
+#: ../templates.in:10001
+#, fuzzy
+#| msgid ""
+#| "You chose not to install GRUB to any devices. If you continue, the boot "
+#| "loader may not be properly configured, and when this computer next starts "
+#| "up it will use whatever was previously in the boot sector. If there is an "
+#| "earlier version of GRUB 2 in the boot sector, it may be unable to load "
+#| "modules or handle the current configuration file."
+msgid ""
+"You chose not to install GRUB to any devices. If you continue, the boot "
+"loader may not be properly configured, and when this computer next starts up "
+"it will use whatever was previously configured. If there is an earlier "
+"version of GRUB 2 in the EFI system partition, it may be unable to load "
+"modules or handle the current configuration file."
+msgstr ""
+"Þú valdir að setja GRUB ekki upp á neitt tæki. Ef þú heldur áfram verður "
+"ræsistjórinn ekki rétt stilltur, og þegar tölvan þín ræsist næst mun hún "
+"nota hvað það sem fyrir er núna á ræsigeiranum. Ef á ræsigeiranum er til "
+"dæmis eldri útgáfa af GRUB 2, er möguleiki á að hún ráði ekki við að hlaða "
+"inn ákveðnum kjarnaeiningum eða nái ekki að lesa stillingaskrána fyrir þetta "
+"stýrikerfi."
+
+#. Type: string
+#. Description
+#: ../templates.in:11001
 msgid "kFreeBSD command line:"
 msgstr "kFreeBSD skipanalína:"
 
 #. Type: string
 #. Description
-#: ../templates.in:6001
+#: ../templates.in:11001
 msgid ""
 "The following kFreeBSD command line was extracted from /etc/default/grub or "
 "the `kopt' parameter in GRUB Legacy's menu.lst. Please verify that it is "
@@ -419,19 +485,54 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid "kFreeBSD default command line:"
 msgstr "Sjálfgefin kFreeBSD skipanalína:"
 
 #. Type: string
 #. Description
-#: ../templates.in:7001
+#: ../templates.in:12001
 msgid ""
 "The following string will be used as kFreeBSD parameters for the default "
 "menu entry but not for the recovery mode."
 msgstr ""
 "Eftirfarandi strengur verður notaður sem kFreeBSD viðfang í sjálfgefnu "
 "valmyndarfærslunni en ekki í viðgerðarham."
+
+#. Type: title
+#. Description
+#: ../templates.in:13001
+msgid "unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid "Cannot upgrade Secure Boot enforcement policy due to unsigned kernels"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"Your system has UEFI Secure Boot enabled in firmware, and the following "
+"kernels present on your system are unsigned:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid " ${unsigned_versions}"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates.in:14001
+msgid ""
+"These kernels cannot be verified under Secure Boot.  To ensure your system "
+"remains bootable, GRUB will not be upgraded on your disk until these kernels "
+"are removed or replaced with signed kernels."
+msgstr ""
 
 #~ msgid "/boot/grub/device.map has been regenerated"
 #~ msgstr "/boot/grub/device.map var endurskrifað"
