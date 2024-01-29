@@ -854,6 +854,7 @@ zfs_linux_entry () {
     fi
 
     echo "${submenu_indentation}	insmod gzio"
+    echo "${submenu_indentation}	if [ \"\${grub_platform}\" = xen ]; then insmod xzio; insmod lzopio; fi"
 
     echo "$(prepare_grub_to_access_device_cached "${boot_device}" "${submenu_level}")"
 
