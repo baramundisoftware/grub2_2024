@@ -3,6 +3,7 @@ Description=GRUB failed boot detection
 After=local-fs.target
 After=grub-common.service
 After=sleep.target
+ConditionPathExists=/boot/grub/grub.cfg
 
 [Service]
 Type=oneshot
