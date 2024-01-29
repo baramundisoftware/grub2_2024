@@ -43,6 +43,12 @@ EOF
 if ! command -v os-prober > /dev/null || ! command -v linux-boot-prober > /dev/null ; then
   # missing os-prober and/or linux-boot-prober
   exit 0
+elif [ "x${GRUB_DISABLE_OS_PROBER}" = "xauto" ]; then
+  # UBUNTU: We do not want to disable os-prober on upgrades if we found items before.
+  if test -e /boot/grub/grub.cfg && ! grep -q osprober /boot/grub/grub.cfg; then
+    grub_warn "$(gettext_printf "os-prober will not be executed to detect other bootable partitions.\nSystems on them will not be added to the GRUB boot configuration.\nCheck GRUB_DISABLE_OS_PROBER documentation entry.")"
+    exit 0
+  fi
 fi
 
 if [ "x${GRUB_DISABLE_OS_PROBER}" = "xtrue" ]; then

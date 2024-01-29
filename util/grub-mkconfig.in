@@ -141,7 +141,7 @@ GRUB_DEVICE_BOOT="`${grub_probe} --target=device /boot`"
 GRUB_DEVICE_BOOT_UUID="`${grub_probe} --device ${GRUB_DEVICE_BOOT} --target=fs_uuid 2> /dev/null`" || true
 
 # Disable os-prober by default due to security reasons.
-GRUB_DISABLE_OS_PROBER="true"
+GRUB_DISABLE_OS_PROBER="auto"
 
 # Filesystem for the device containing our userland.  Used for stuff like
 # choosing Hurd filesystem module.
