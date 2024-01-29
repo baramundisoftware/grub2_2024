@@ -209,7 +209,7 @@ grub_normal_init_page (struct grub_term_output *term,
 
   grub_term_cls (term);
 
-  msg_formatted = grub_xasprintf (_("GNU GRUB  version %s"), PACKAGE_VERSION);
+  msg_formatted = grub_xasprintf (_("GNU GRUB  version %s"), VERSION);
   if (!msg_formatted)
     return;
 
@@ -650,6 +650,9 @@ GRUB_MOD_INIT(normal)
   grub_env_export ("grub_cpu");
   grub_env_set ("grub_platform", GRUB_PLATFORM);
   grub_env_export ("grub_platform");
+
+  grub_env_set ("package_version", PACKAGE_VERSION);
+  grub_env_export ("package_version");
 
   grub_boot_time ("Normal module prepared");
 }

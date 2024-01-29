@@ -37,12 +37,14 @@
 #include <grub/list.h>
 #include <grub/misc.h>
 #include <grub/emu/exec.h>
+#include <grub/emu/getroot.h>
 #include <linux/magic.h>
 #include <sys/types.h>
 #include <sys/vfs.h>
 #include <sys/statvfs.h>
 #include <ctype.h>
 #include <errno.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -267,9 +269,10 @@ remove_from_boot_order (struct efi_variable *order, uint16_t num)
 }
 
 static void
-add_to_boot_order (struct efi_variable *order, uint16_t num)
+add_to_boot_order (struct efi_variable *order, uint16_t num,
+		   uint16_t *alt_nums, size_t n_alt_nums, bool is_boot_efi)
 {
-  int i;
+  int i, j, position = -1;
   size_t new_data_size;
   uint8_t *new_data;
 
@@ -279,10 +282,36 @@ add_to_boot_order (struct efi_variable *order, uint16_t num)
     if (GET_ORDER (order->data, i) == num)
       return;
 
+  if (!is_boot_efi)
+    {
+      for (i = 0; i < order->data_size / sizeof (uint16_t); ++i)
+	for (j = 0; j < n_alt_nums; j++)
+	  if (GET_ORDER (order->data, i) == alt_nums[j])
+	    position = i;
+    }
+
   new_data_size = order->data_size + sizeof (uint16_t);
   new_data = xmalloc (new_data_size);
-  SET_ORDER (new_data, 0, num);
-  memcpy (new_data + sizeof (uint16_t), order->data, order->data_size);
+
+  if (position != -1)
+    {
+      /* So we should be inserting after something else, as we're not the
+	 preferred ESP. Could write this as memcpy(), but this is far more
+	 readable. */
+      for (i = 0; i <= position; ++i)
+	SET_ORDER (new_data, i, GET_ORDER (order->data, i));
+
+      SET_ORDER (new_data, position + 1, num);
+
+      for (i = position + 1; i < order->data_size / sizeof (uint16_t); ++i)
+	SET_ORDER (new_data, i + 1, GET_ORDER (order->data, i));
+    }
+  else
+    {
+      SET_ORDER (new_data, 0, num);
+      memcpy (new_data + sizeof (uint16_t), order->data, order->data_size);
+    }
+
   free (order->data);
   order->data = new_data;
   order->data_size = new_data_size;
@@ -339,14 +368,12 @@ get_edd_version (void)
   return 1;
 }
 
-static struct efi_variable *
-make_boot_variable (int num, const char *disk, int part, const char *loader,
-		    const char *label)
+static ssize_t
+make_efidp (const char *disk, int part, const char *loader, efidp *out)
 {
-  struct efi_variable *entry = new_boot_variable ();
   uint32_t options;
   uint32_t edd10_devicenum;
-  ssize_t dp_needed, loadopt_needed;
+  ssize_t dp_needed;
   efidp dp = NULL;
 
   options = EFIBOOT_ABBREV_HD;
@@ -374,6 +401,27 @@ make_boot_variable (int num, const char *disk, int part, const char *loader,
 						      dp_needed, disk, part,
 						      loader, options,
 						      edd10_devicenum);
+  if (dp_needed < 0)
+    goto err;
+
+  *out = dp;
+  return dp_needed;
+
+err:
+  free (dp);
+  *out = NULL;
+  return -1;
+}
+
+static struct efi_variable *
+make_boot_variable (int num, const char *disk, int part, const char *loader,
+		    const char *label)
+{
+  struct efi_variable *entry = new_boot_variable ();
+  ssize_t dp_needed, loadopt_needed;
+  efidp dp = NULL;
+
+  dp_needed = make_efidp (disk, part, loader, &dp);
   if (dp_needed < 0)
     goto err;
 
@@ -424,17 +472,87 @@ efivar_is_rw (void)
   return true;
 }
 
+// I hurt my grub today, to see what I can do.
+static efidp *
+get_alternative_esps (void)
+{
+  size_t result_size = 0;
+  efidp *result = NULL;
+  char *alternatives = getenv ("_UBUNTU_ALTERNATIVE_ESPS");
+  char *esp;
+
+  if (!alternatives)
+    goto out;
+
+  for (esp = strtok (alternatives, ", "); esp; esp = strtok (NULL, ", "))
+    {
+      while (isspace (*esp))
+	esp++;
+      if (!*esp)
+	continue;
+
+      char *devname = grub_util_get_grub_dev (esp);
+      if (!devname)
+	continue;
+      grub_device_t dev = grub_device_open (devname);
+      free (devname);
+      if (!dev)
+	continue;
+
+      const char *disk = grub_util_biosdisk_get_osdev (dev->disk);
+      int part = dev->disk->partition ? dev->disk->partition->number + 1 : 1;
+
+      result = xrealloc (result, (++result_size) * sizeof (*result));
+      if (make_efidp (disk, part, "", &result[result_size - 1]) < 0)
+	continue;
+      grub_device_close (dev);
+    }
+
+out:
+  result = xrealloc (result, (++result_size) * sizeof (*result));
+  result[result_size - 1] = NULL;
+  return result;
+}
+
+/* Check if both efidp are on the same device. */
+static bool
+devices_equal (const_efidp a, const_efidp b)
+{
+  while (a && b)
+    {
+      // We reached a file, so we must be on the same device, woohoo
+      if (efidp_subtype (a) == EFIDP_MEDIA_FILE
+	  && efidp_subtype (b) == EFIDP_MEDIA_FILE)
+	return true;
+      if (efidp_node_size (a) != efidp_node_size (b))
+	break;
+      if (memcmp (a, b, efidp_node_size (a)) != 0)
+	break;
+      if (efidp_next_node (a, &a) < 0)
+	break;
+      if (efidp_next_node (b, &b) < 0)
+	break;
+    }
+
+  return false;
+}
+
 int
 grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
-				  const char *efifile_path,
+				  const char *efidir, const char *efifile_path,
 				  const char *efi_distributor)
 {
   const char *efidir_disk;
   int efidir_part;
   struct efi_variable *entries = NULL, *entry;
   struct efi_variable *order;
+  efidp *alternatives;
+  efidp this;
   int entry_num = -1;
+  uint16_t *alt_nums = NULL;
+  size_t n_alt_nums = 0;
   int rc;
+  bool is_boot_efi;
 
   /* Check if EFI variable can be written */
   if (!efivar_is_rw ())
@@ -444,8 +562,16 @@ grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
       return 0;
     }
 
+  is_boot_efi = strstr (efidir, "/boot/efi") != NULL;
   efidir_disk = grub_util_biosdisk_get_osdev (efidir_grub_dev->disk);
   efidir_part = efidir_grub_dev->disk->partition ? efidir_grub_dev->disk->partition->number + 1 : 1;
+  alternatives = get_alternative_esps ();
+
+  if (make_efidp (efidir_disk, efidir_part, "", &this) < 0)
+    {
+      grub_util_warn ("Internal error");
+      return 1;
+    }
 
 #ifdef __linux__
   /*
@@ -487,12 +613,41 @@ grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
     {
       efi_load_option *load_option = (efi_load_option *) entry->data;
       const char *label;
+      efidp path;
+      efidp *alt;
 
       if (entry->num < 0)
 	continue;
       label = (const char *) efi_loadopt_desc (load_option, entry->data_size);
       if (strcasecmp (label, efi_distributor) != 0)
 	continue;
+
+      path = efi_loadopt_path (load_option, entry->data_size);
+      if (!path)
+	continue;
+
+      /* Do not remove this entry if it's an alternative ESP, but do reuse
+       * or remove this entry if it is for the current ESP or any unspecified
+       * ESP */
+      if (!devices_equal (path, this))
+	{
+	  for (alt = alternatives; *alt; alt++)
+	    {
+	      if (devices_equal (path, *alt))
+		break;
+	    }
+
+	  if (*alt)
+	    {
+	      grub_util_info ("not deleting alternative EFI variable %s (%s)",
+			      entry->name, label);
+
+	      alt_nums
+		  = xrealloc (alt_nums, (++n_alt_nums) * sizeof (*alt_nums));
+	      alt_nums[n_alt_nums - 1] = entry->num;
+	      continue;
+	    }
+	}
 
       /* To avoid problems with some firmware implementations, reuse the first
          matching variable we find rather than deleting and recreating it.  */
@@ -525,7 +680,8 @@ grub_install_efivar_register_efi (grub_device_t efidir_grub_dev,
   if (rc < 0)
     goto err;
 
-  add_to_boot_order (order, (uint16_t) entry_num);
+  add_to_boot_order (order, (uint16_t)entry_num, alt_nums, n_alt_nums,
+		     is_boot_efi);
 
   grub_util_info ("setting EFI variable BootOrder");
   rc = set_efi_variable ("BootOrder", order);

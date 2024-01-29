@@ -319,6 +319,16 @@ AC_SUBST(grubdirname)
 AC_DEFINE_UNQUOTED(GRUB_DIR_NAME, "$grubdirname",
     [Default grub directory name])
 
+##### systemd unit files
+AC_ARG_WITH([systemdsystemunitdir],
+            AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [Directory for systemd service files]),
+            [],
+            [with_systemdsystemunitdir=/usr/lib/systemd/system],
+            [with_systemdsystemunitdir=no])
+if test "x$with_systemdsystemunitdir" != xno; then
+   AC_SUBST([systemdsystemunitdir], [$with_systemdsystemunitdir])
+fi
+
 #
 # Checks for build programs.
 #

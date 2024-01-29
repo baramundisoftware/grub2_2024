@@ -297,6 +297,22 @@ get_mountpoint()
   echo "${boot_mountpoint:-/}"
 }
 
+# Parse /proc/mounts and find out the mount for the given device.
+# The device must be a real device in /dev, not a symlink to one.
+get_mounted_device()
+{
+  mountpoint="$1"
+  cat /proc/mounts | while read -r line; do
+    set -f
+    set -- $line
+    set +f
+    if [ "$2" = "$mountpoint" ]; then
+      echo "$1"
+      break
+    fi
+  done
+}
+
 config_item()
 {
   for x in /etc/default/grub /etc/default/grub.d/*.cfg; do
@@ -318,6 +334,31 @@ running_in_container()
   type systemd-detect-virt >/dev/null 2>&1 && systemd-detect-virt --quiet --container
 }
 
+
+no_extra_removable_arg()
+{
+    if grub-install --help | grep -q no-extra-removable; then
+	    removable=""
+	    no_removable="--no-extra-removable"
+    elif grub-install --help | grep -q force-extra-removable; then
+	    removable="--force-extra-removable"
+	    no_removable=""
+    else
+	    removable=""
+	    no_removable=""
+    fi
+
+    # Ignore this setting in xenial and bionic, see https://launchpad.net/bugs/1930742
+    local codename="$(cat /etc/os-release | sed -n 's/VERSION_CODENAME=//p')"
+    db_get grub2/no_efi_extra_removable
+    if [ "$RET" = true ] && [ "$codename" != xenial ] && [ "$codename" != bionic ]; then
+        echo "$no_removable"
+    else
+        echo "$removable"
+    fi
+}
+
+
 no_nvram_arg() {
     db_get grub2/update_nvram
     if [ "$RET" = false ]; then
@@ -333,11 +374,29 @@ run_grub_install()
     fi
 }
 
+run_grub_multi_install()
+{
+    tool=/usr/lib/grub/grub-multi-install
+    if [ ! -x $tool ]; then
+	    tool=grub-install
+    fi
+    if ! $tool $@ ; then
+        echo "Failed: grub-install $@" >&2
+        echo "WARNING: Bootloader is not properly installed, system may not be bootable" >&2
+    fi
+}
+
 case "$1" in
   configure)
     . /usr/share/debconf/confmodule
 
     devicemap_regenerated=
+
+    if [ @PACKAGE@ = "grub-efi-amd64" ] && dpkg --compare-versions "$2" lt-nl 2.02-2ubuntu11; then
+      if [ -x /usr/share/grub/grub-check-signatures ]; then
+        /usr/share/grub/grub-check-signatures
+      fi
+    fi
 
     if egrep -q '^[[:space:]]*post(inst|rm)_hook[[:space:]]*=[[:space:]]*(/sbin/|/usr/sbin/)?update-grub' /etc/kernel-img.conf 2>/dev/null; then
       echo 'Removing update-grub hooks from /etc/kernel-img.conf in favour of' >&2
@@ -735,12 +794,23 @@ case "$1" in
           grub-efi-riscv64) target=riscv64-efi ;;
         esac
         if [ "$bootloader_id" ] && [ -e "/boot/grub/$target/core.efi" ]; then
-          db_get grub2/force_efi_extra_removable
-          if [ "$RET" = true ]; then
-            FORCE_EXTRA_REMOVABLE="--force-extra-removable"
+          if dpkg --compare-versions "$2" lt-nl 2.02-1~; then
+            # Try to not break people upgrading by suddenly installing things
+            # to /EFI/BOOT without knowing if it might break.
+            db_get grub2/force_efi_extra_removable || true
+            if [ "$RET" = false ]; then
+              db_set grub2/no_efi_extra_removable true
+              db_fset grub2/no_efi_extra_removable seen true
+            fi
+            db_reset grub2/force_efi_extra_removable || true
+            if [ -e "/boot/efi/EFI/${bootloader_id}/fbx64.efi" ]; then
+              rm -f "/boot/efi/EFI/${bootloader_id}/fbx64.efi";
+            fi
           fi
+
+          NO_EXTRA_REMOVABLE="$(no_extra_removable_arg)"
           NO_NVRAM="$(no_nvram_arg)"
-          run_grub_install --target="$target" "$FORCE_EXTRA_REMOVABLE" "$NO_NVRAM"
+          run_grub_multi_install --target="$target" "$NO_EXTRA_REMOVABLE" "$NO_NVRAM"
         fi
 
         # /boot/grub/ has more chances of being accessible by GRUB

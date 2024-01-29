@@ -1,3 +1,78 @@
+grub2 (2.12-1ubuntu1) noble; urgency=medium
+
+  * Merge from Debian unstable; remaining changes:
+    - Add Ubuntu sbat data
+    - build-efi-images: do not produce -installer.efi.signed. LP: 1863994
+    - grub-common: Install canonical-uefi-ca.crt
+    - Check signatures
+    - Support installing to multiple ESP (LP: 1871821)
+    - Disable various bits on i386
+    - Split out unsigned artefacts into grub2-unsigned
+    - Vcs-Git: Point to ubuntu packaging branch
+    - Relax dependencies on grub-common and grub2-common
+    - grub-pc: Avoid the possibility of breaking grub on SRU update due
+      to ABI change
+    - UBUNTU: Default timeout changes
+    - Revert "Add jfs module to signed UEFI images. Closes: #950959"
+    - Revert "Add f2fs module to signed UEFI images"
+    - Install grub-initrd-fallback.service again
+    - Build using -O1 on s390x to avoid misoptimization
+    - grub-check-signatures: Support gzip compressed kernels (LP: #1954683)
+    - grub-multi-install: Reset partition type between partitions (LP: #1997795)
+    - Drop i386 from grub-efi-amd64* (LP: #2020907)
+    - Turn depends on grub-efi-amd64/arm64 unversioned
+    - forward port fix for LP: #1926748
+    - Make the grub2/no_efi_extra_removable setting work correctly
+    - Forward port the fix for LP: #1930742 and make it conditional (xenial/bionic only)
+    - Build grub2-unsigned packages with xz compression
+    - Revert: "Have -bin packages Break pre-2.12 -signed packages.", this is not
+      compatible with our versioning schemes.
+    - Install a /usr/lib/grub/grub-sort-version and use that to sort versions as
+      it respects GRUB_FLAVOUR_ORDER. Depend on python3 to do so.
+    - rules: Add DPKG_BUILDPACKAGE_OPTIONS to generate-grub2-unsigned
+    - Drop luks2
+    - d/control: Add python3-apt to Depends of grub-common (LP: #2048953)
+    - Replaced patches:
+      - install-signed.patche
+      - grub-install-extra-removable.patch
+      - grub-install-removable-shim.patch
+    - Added patches:
+      + rhboot-f34-dont-use-int-for-efi-status.patch
+      + rhboot-f34-make-exit-take-a-return-code.patch
+      + suse-grub.texi-add-net_bootp6-document.patch
+      + ubuntu-add-devicetree-command-support.patch
+      + ubuntu-add-initrd-less-boot-fallback.patch
+      + ubuntu-add-initrd-less-boot-messages.patch
+      + ubuntu-boot-from-multipath-dependent-symlink.patch
+      + ubuntu-dont-verify-loopback-images.patch
+      + ubuntu-fix-lzma-decompressor-objcopy.patch
+      + ubuntu-grub-install-extra-removable.patch
+      + ubuntu-install-signed.patch
+      + ubuntu-mkconfig-leave-breadcrumbs.patch
+      + ubuntu-os-prober-auto.patch
+      + ubuntu-recovery-dis_ucode_ldr.patch
+      + ubuntu-resilient-boot-boot-order.patch
+      + ubuntu-resilient-boot-ignore-alternative-esps.patch
+      + ubuntu-shorter-version-info.patch
+      + ubuntu-speed-zsys-history.patch
+      + ubuntu-support-initrd-less-boot.patch
+      + ubuntu-verifiers-last.patch
+      + ubuntu-zfs-enhance-support.patch
+      + ubuntu-zfs-gfxpayload-dynamic.patch
+      + ubuntu-zfs-gfxpayload-keep-default.patch
+      + ubuntu-zfs-insmod-xzio-and-lzopio-on-xen.patch
+      + ubuntu-zfs-mkconfig-recovery-title.patch
+      + ubuntu-zfs-mkconfig-signed-kernel.patch
+      + ubuntu-zfs-mkconfig-ubuntu-distributor.patch
+      + ubuntu-zfs-mkconfig-ubuntu-recovery.patch
+      + ubuntu-zfs-vt-handoff.patch
+  * Unreleased changes from Debian:
+    - Update signing-template Uploaders to match main package.
+    - d/p/mkconfig-ubuntu-recovery.patch: Use "recovery" instead of "single recovery"
+      for recovery mode bootparams (LP: #2041245)
+
+ -- Mate Kukri <mate.kukri@canonical.com>  Mon, 29 Jan 2024 11:06:12 +0000
+
 grub2 (2.12-1) unstable; urgency=medium
 
   [ Mate Kukri ]
@@ -27,6 +102,99 @@ grub2 (2.12~rc1-13) unstable; urgency=medium
   * No-change rebuild to retrigger signing following binNMU breakage
 
  -- Julian Andres Klode <jak@debian.org>  Fri, 12 Jan 2024 19:00:41 +0100
+
+grub2 (2.12~rc1-12ubuntu5) noble; urgency=medium
+
+  * d/control: Add python3-apt to Depends of grub-common (LP: #2048953)
+
+ -- Mate Kukri <mate.kukri@canonical.com>  Fri, 09 Feb 2024 13:23:36 +0000
+
+grub2 (2.12~rc1-12ubuntu4) noble; urgency=medium
+
+  * d/p/delay-copying-to-grubdir.patch: Move platdir path canonicalisation
+    after files were copied to grubdir. (LP: #2045944)
+
+ -- Mate Kukri <mate.kukri@canonical.com>  Fri, 08 Dec 2023 09:22:22 +0000
+
+grub2 (2.12~rc1-12ubuntu3) noble; urgency=medium
+
+  * d/p/delay-copying-to-grubdir.patch: Improve grub-install robustness by
+    delaying the update of /boot after install device validation
+  * Remove workaround for LP: 1889556 (LP: #2043995)
+    - Was not needed since /boot rollback was introduced upstream
+    - Patch above ensures that this will not reoccur even if rollback fails
+
+ -- Mate Kukri <mate.kukri@canonical.com>  Tue, 21 Nov 2023 15:35:55 +0000
+
+grub2 (2.12~rc1-12ubuntu2) noble; urgency=medium
+
+  * Merge from Debian unstable; remaining changes:
+    - Add Ubuntu sbat data
+    - build-efi-images: do not produce -installer.efi.signed. LP: 1863994
+    - grub-common: Install canonical-uefi-ca.crt
+    - Check signatures
+    - Support installing to multiple ESP (LP: 1871821)
+    - Disable various bits on i386
+    - Split out unsigned artefacts into grub2-unsigned
+    - Vcs-Git: Point to ubuntu packaging branch
+    - Relax dependencies on grub-common and grub2-common
+    - grub-pc: Avoid the possibility of breaking grub on SRU update due
+      to ABI change
+    - UBUNTU: Default timeout changes
+    - Revert "Add jfs module to signed UEFI images. Closes: #950959"
+    - Revert "Add f2fs module to signed UEFI images"
+    - Install grub-initrd-fallback.service again
+    - Build using -O1 on s390x to avoid misoptimization
+    - grub-check-signatures: Support gzip compressed kernels (LP: #1954683)
+    - grub-multi-install: Reset partition type between partitions (LP: #1997795)
+    - Drop i386 from grub-efi-amd64* (LP: #2020907)
+    - Turn depends on grub-efi-amd64/arm64 unversioned
+    - forward port fix for LP: #1926748
+    - Make the grub2/no_efi_extra_removable setting work correctly
+    - Forward port the fix for LP: #1930742 and make it conditional (xenial/bionic only)
+    - Build grub2-unsigned packages with xz compression
+    - Revert: "Have -bin packages Break pre-2.12 -signed packages.", this is not
+      compatible with our versioning schemes.
+    - Install a /usr/lib/grub/grub-sort-version and use that to sort versions as
+      it respects GRUB_FLAVOUR_ORDER. Depend on python3 to do so.
+    - rules: Add DPKG_BUILDPACKAGE_OPTIONS to generate-grub2-unsigned
+    - Replaced patches:
+      - installe-signed.patched
+      - grub-install-extra-removable.patch
+      - grub-install-removable-shim.patch
+    - Added patches:
+      + rhboot-f34-dont-use-int-for-efi-status.patch
+      + rhboot-f34-make-exit-take-a-return-code.patch
+      + suse-grub.texi-add-net_bootp6-document.patch
+      + ubuntu-add-devicetree-command-support.patch
+      + ubuntu-add-initrd-less-boot-fallback.patch
+      + ubuntu-add-initrd-less-boot-messages.patch
+      + ubuntu-boot-from-multipath-dependent-symlink.patch
+      + ubuntu-dont-verify-loopback-images.patch
+      + ubuntu-fix-lzma-decompressor-objcopy.patch
+      + ubuntu-grub-install-extra-removable.patch
+      + ubuntu-install-signed.patch
+      + ubuntu-mkconfig-leave-breadcrumbs.patch
+      + ubuntu-os-prober-auto.patch
+      + ubuntu-recovery-dis_ucode_ldr.patch
+      + ubuntu-resilient-boot-boot-order.patch
+      + ubuntu-resilient-boot-ignore-alternative-esps.patch
+      + ubuntu-shorter-version-info.patch
+      + ubuntu-speed-zsys-history.patch
+      + ubuntu-support-initrd-less-boot.patch
+      + ubuntu-verifiers-last.patch
+      + ubuntu-zfs-enhance-support.patch
+      + ubuntu-zfs-gfxpayload-dynamic.patch
+      + ubuntu-zfs-gfxpayload-keep-default.patch
+      + ubuntu-zfs-insmod-xzio-and-lzopio-on-xen.patch
+      + ubuntu-zfs-mkconfig-recovery-title.patch
+      + ubuntu-zfs-mkconfig-signed-kernel.patch
+      + ubuntu-zfs-mkconfig-ubuntu-distributor.patch
+      + ubuntu-zfs-mkconfig-ubuntu-recovery.patch
+      + ubuntu-zfs-vt-handoff.patch
+  * Removed luks2 from signed EFI binaries (LP: #2043101)
+
+ -- Mate Kukri <mate.kukri@canonical.com>  Thu, 09 Nov 2023 16:16:56 +0200
 
 grub2 (2.12~rc1-12) unstable; urgency=medium
 
@@ -80,6 +248,108 @@ grub2 (2.12~rc1-11) unstable; urgency=medium
   * Bump SBAT to grub,4
 
  -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 02 Oct 2023 15:55:25 +0200
+
+grub2 (2.12~rc1-10ubuntu4) mantic; urgency=high
+
+  * SECURITY UPDATE: Crafted file system images can cause out-of-bounds write
+    and may leak sensitive information into the GRUB pager.
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-a-volume-
+      label.patch:
+      fs/ntfs: Fix an OOB read when parsing a volume label
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-bs-for-
+      index-at.patch:
+      fs/ntfs: Fix an OOB read when parsing bitmaps for index attributes
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-parsing-dory-
+      entries-fr.patch:
+      fs/ntfs: Fix an OOB read when parsing directory entries from resident and
+      non-resident index attributes
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-read-when-reading-data-fhe-
+      reside.patch:
+      fs/ntfs: Fix an OOB read when reading data from the resident $DATA +
+      attribute
+    - CVE-2023-4693
+  * SECURITY UPDATE: Crafted file system images can cause heap-based buffer
+    overflow and may allow arbitrary code execution and secure boot bypass.
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Fix-an-OOB-write-when-parsing-the-
+      ATTRIBUTE_LIST-.patch:
+      fs/ntfs: Fix an OOB write when parsing the $ATTRIBUTE_LIST attribute for
+      the $MFT file
+    - d/patches/ntfs-cve-fixes/fs-ntfs-Make-code-more-readable.patch
+      fs/ntfs: Make code more readable
+    - CVE-2023-4692
+
+ -- Mate Kukri <mate.kukri@canonical.com>  Mon, 02 Oct 2023 15:23:58 +0100
+
+grub2 (2.12~rc1-10ubuntu2) mantic; urgency=medium
+
+  * Merge from Debian unstable to pick up fixes (LP: #2028947); remaining changes:
+    - Add Ubuntu sbat data
+    - build-efi-images: do not produce -installer.efi.signed. LP: 1863994
+    - grub-common: Install canonical-uefi-ca.crt
+    - Check signatures
+    - Support installing to multiple ESP (LP: 1871821)
+    - Disable various bits on i386
+    - Split out unsigned artefacts into grub2-unsigned
+    - Vcs-Git: Point to ubuntu packaging branch
+    - Relax dependencies on grub-common and grub2-common
+    - grub-pc: Avoid the possibility of breaking grub on SRU update due
+      to ABI change
+    - UBUNTU: Default timeout changes
+    - Revert "Add jfs module to signed UEFI images. Closes: #950959"
+    - Revert "Add f2fs module to signed UEFI images"
+    - Install grub-initrd-fallback.service again
+    - Build using -O1 on s390x to avoid misoptimization
+    - grub-check-signatures: Support gzip compressed kernels (LP: #1954683)
+    - grub-multi-install: Reset partition type between partitions (LP: #1997795)
+    - Drop i386 from grub-efi-amd64* (LP: #2020907)
+    - Turn depends on grub-efi-amd64/arm64 unversioned
+    - forward port fix for LP: #1926748
+    - Make the grub2/no_efi_extra_removable setting work correctly
+    - Forward port the fix for LP: #1930742 and make it conditional (xenial/bionic only)
+    - Build grub2-unsigned packages with xz compression
+    - Replaced patches:
+      - installe-signed.patched
+      - grub-install-extra-removable.patch
+      - grub-install-removable-shim.patch
+    - Added patches:
+      + rhboot-f34-dont-use-int-for-efi-status.patch
+      + rhboot-f34-make-exit-take-a-return-code.patch
+      + suse-grub.texi-add-net_bootp6-document.patch
+      + ubuntu-add-devicetree-command-support.patch
+      + ubuntu-add-initrd-less-boot-fallback.patch
+      + ubuntu-add-initrd-less-boot-messages.patch
+      + ubuntu-boot-from-multipath-dependent-symlink.patch
+      + ubuntu-dont-verify-loopback-images.patch
+      + ubuntu-fix-lzma-decompressor-objcopy.patch
+      + ubuntu-grub-install-extra-removable.patch
+      + ubuntu-install-signed.patch
+      + ubuntu-mkconfig-leave-breadcrumbs.patch
+      + ubuntu-os-prober-auto.patch
+      + ubuntu-recovery-dis_ucode_ldr.patch
+      + ubuntu-resilient-boot-boot-order.patch
+      + ubuntu-resilient-boot-ignore-alternative-esps.patch
+      + ubuntu-shorter-version-info.patch
+      + ubuntu-speed-zsys-history.patch
+      + ubuntu-support-initrd-less-boot.patch
+      + ubuntu-verifiers-last.patch
+      + ubuntu-zfs-enhance-support.patch
+      + ubuntu-zfs-gfxpayload-dynamic.patch
+      + ubuntu-zfs-gfxpayload-keep-default.patch
+      + ubuntu-zfs-insmod-xzio-and-lzopio-on-xen.patch
+      + ubuntu-zfs-mkconfig-recovery-title.patch
+      + ubuntu-zfs-mkconfig-signed-kernel.patch
+      + ubuntu-zfs-mkconfig-ubuntu-distributor.patch
+      + ubuntu-zfs-mkconfig-ubuntu-recovery.patch
+      + ubuntu-zfs-vt-handoff.patch
+  * Dropped Ubuntu changes:
+    - Temporarily rmmod peimage for os-prober chainloader entries (LP: #2030810)
+  * Revert: "Have -bin packages Break pre-2.12 -signed packages.", this is not
+    compatible with our versioning schemes.
+  * Install a /usr/lib/grub/grub-sort-version and use that to sort versions as
+    it respects GRUB_FLAVOUR_ORDER. Depend on python3 to do so.
+  * rules: Add DPKG_BUILDPACKAGE_OPTIONS to generate-grub2-unsigned
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 25 Sep 2023 17:31:09 +0200
 
 grub2 (2.12~rc1-10) unstable; urgency=medium
 
@@ -140,6 +410,165 @@ grub2 (2.12~rc1-5) experimental; urgency=medium
   * Hack up the lintian overrides for stable lintian on ftp-master
 
  -- Julian Andres Klode <jak@debian.org>  Mon, 04 Sep 2023 14:16:12 +0200
+
+grub2 (2.12~rc1-4ubuntu3) mantic; urgency=medium
+
+  * zfs: Drop `set -u`, incompatible with undefined variables in library
+    (LP: #2033256)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Tue, 29 Aug 2023 16:03:49 +0200
+
+grub2 (2.12~rc1-4ubuntu2) mantic; urgency=medium
+
+  * ubuntu-zfs-enhance-support.patch: Adjustments for 2.12 library
+    (LP: #2029260)
+  * zfs: on_exit: Unmount ${MNTDIR}/boot before ${MNTDIR} (LP: #2031042)
+  * Temporarily rmmod peimage for os-prober chainloader entries (LP: #2030810)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 21 Aug 2023 14:26:07 +0200
+
+grub2 (2.12~rc1-4ubuntu1) mantic; urgency=medium
+
+  * Merge from Debian unstable (LP: #2028947); remaining changes:
+    - Add Ubuntu sbat data
+    - build-efi-images: do not produce -installer.efi.signed. LP: 1863994
+    - grub-common: Install canonical-uefi-ca.crt
+    - Check signatures
+    - Support installing to multiple ESP (LP: 1871821)
+    - Disable various bits on i386
+    - Split out unsigned artefacts into grub2-unsigned
+    - Vcs-Git: Point to ubuntu packaging branch
+    - Relax dependencies on grub-common and grub2-common
+    - grub-pc: Avoid the possibility of breaking grub on SRU update due
+      to ABI change
+    - UBUNTU: Default timeout changes
+    - Revert "Add jfs module to signed UEFI images. Closes: #950959"
+    - Revert "Add f2fs module to signed UEFI images"
+    - Install grub-initrd-fallback.service again
+    - Build using -O1 on s390x to avoid misoptimization
+    - grub-check-signatures: Support gzip compressed kernels (LP: #1954683)
+    - grub-multi-install: Reset partition type between partitions (LP: #1997795)
+    - Drop i386 from grub-efi-amd64* (LP: #2020907)
+    - Turn depends on grub-efi-amd64/arm64 unversioned
+    - forward port fix for LP: #1926748
+    - Make the grub2/no_efi_extra_removable setting work correctly
+    - Forward port the fix for LP: #1930742 and make it conditional (xenial/bionic only)
+    - Build grub2-unsigned packages with xz compression
+    - Replaced patches:
+      - installe-signed.patched
+      - grub-install-extra-removable.patch
+      - grub-install-removable-shim.patch
+    - Added patches:
+      + rhboot-f34-dont-use-int-for-efi-status.patch
+      + rhboot-f34-make-exit-take-a-return-code.patch
+      + suse-grub.texi-add-net_bootp6-document.patch
+      + ubuntu-add-devicetree-command-support.patch
+      + ubuntu-add-initrd-less-boot-fallback.patch
+      + ubuntu-add-initrd-less-boot-messages.patch
+      + ubuntu-boot-from-multipath-dependent-symlink.patch
+      + ubuntu-dont-verify-loopback-images.patch
+      + ubuntu-fix-lzma-decompressor-objcopy.patch
+      + ubuntu-grub-install-extra-removable.patch
+      + ubuntu-install-signed.patch
+      + ubuntu-mkconfig-leave-breadcrumbs.patch
+      + ubuntu-os-prober-auto.patch
+      + ubuntu-recovery-dis_ucode_ldr.patch
+      + ubuntu-resilient-boot-boot-order.patch
+      + ubuntu-resilient-boot-ignore-alternative-esps.patch
+      + ubuntu-shorter-version-info.patch
+      + ubuntu-speed-zsys-history.patch
+      + ubuntu-support-initrd-less-boot.patch
+      + ubuntu-verifiers-last.patch
+      + ubuntu-zfs-enhance-support.patch
+      + ubuntu-zfs-gfxpayload-dynamic.patch
+      + ubuntu-zfs-gfxpayload-keep-default.patch
+      + ubuntu-zfs-insmod-xzio-and-lzopio-on-xen.patch
+      + ubuntu-zfs-mkconfig-recovery-title.patch
+      + ubuntu-zfs-mkconfig-signed-kernel.patch
+      + ubuntu-zfs-mkconfig-ubuntu-distributor.patch
+      + ubuntu-zfs-mkconfig-ubuntu-recovery.patch
+      + ubuntu-zfs-vt-handoff.patch
+  * Dropped Ubuntu changes:
+    - All the rhboot loader patches
+    - Temporarily, support for GRUB_FLAVOUR_ORDER
+    - RISC-V patches, applied upstream:
+      + efi-add-definition-of-LoadFile2-protocol.patch
+      + efi-correct-struct-grub_efi_boot_services.patch
+      + efi-implemented-LoadFile2-initrd-loading-protocol-fo.patch
+      + efi-implement-grub_efi_run_image.patch
+      + RISC-V-Update-image-header.patch
+      + RISC-V-Use-common-linux-loader.patch
+      + riscv-adjust-march-flags-for-binutils-2.38.patch
+      + upstream/riscv-handle-r-riscv-call-plt-reloc.patch
+      + loader-drop-argv-argument-in-grub_initrd_load.patch
+      + loader-Move-arm64-linux-loader-to-common-code.patch
+    - Networking patches (rebasing still WIP):
+      + cherrypick-efi-grub_efi_close_protocol.patch
+      + cherrypick-efinet-correct-closing-snp-protocol.patch
+      + efinet-uefi-ipv6-pxe-support.patch
+      + suse-add-support-for-UEFI-network-protocols.patch
+      + suse-AUDIT-0-http-boot-tracker-bug.patch
+    - Red Hat boot loader, replaced by upstream:
+      + linuxefi-do-not-validate-kernels-twice.patch
+      + linuxefi-Invalidate-i-cache-before-starting-the-kern.patch
+      + rhboot-bounce-buffers.patch
+      + rhboot-efi-allocate-in-kernel-bounds.patch
+      + rhboot-efi-allocate-kernel-as-code-for-real.patch
+      + rhboot-efi-allocate-kernel-as-code.patch
+      + rhboot-efi-enumerated-array-for-allocation-choice.patch
+      + rhboot-efi-fix-incorrect-array-size.patch
+      + rhboot-efi-initrd-above-4gb.patch
+      + rhboot-efi-kernel-allocator.patch
+      + rhboot-efi-rearrange-grub-cmd-linux.patch
+      + rhboot-efi-split-allocation-policy.patch
+      + rhboot-f34-efinet-also-use-the-firmware-acceleration-for-http.patch
+      + rhboot-f34-make-pmtimer-tsc-calibration-fast.patch
+      + rhboot-try-to-pick-better-locations-for-kernel-and-initrd.patch
+      + ubuntu-linuxefi-arm64.patch
+      + ubuntu-linuxefi-arm64-set-base-addr.patch
+      + ubuntu-linuxefi.patch
+      + ubuntu-rhboot-cast-fixups.patch
+      + ubuntu-efi-allow-loopmount-chainload.patch
+      + ubuntu-efi-loader-code.patch
+    - Security patches, applied upstream:
+      + {0076...0161} security patches, applied upstream
+      + font-*.patchi - security patches applied upstream
+      + commands-efi-tpm-Use-grub_strcpy-instead-of-grub_memcpy.patch
+      + fbutil-Fix-integer-overflow.patch
+      + kern-efi-sb-Enforce-verification-of-font-files.patch
+      + normal-charset-Fix-an-integer-overflow-in-grub_unicode_ag.patch
+    - Misc patches, merged in Debian:
+      + efi-EFI-Device-Tree-Fixup-Protocol.patch
+      + efivar-check-that-efivarfs-is-writeable.patch
+      + fat-fix-listing-the-root-directory.patch
+      + fdt-add-debug-output-to-devicetree-command.patch
+      + zstd-require-8-byte-buffer.patch
+      + 0241-Call-hwmatch-only-on-the-grub-pc-platform.patch
+    - Misc patches applied upstream:
+      + 2.12-mm/* - applied upstream
+      + ubuntu-fuse3.patch
+      + xfs-fix-v4-superblock.patch
+      + tpm-unknown-error-non-fatal.patch
+      + commands-efi-tpm-Refine-the-status-of-log-event.patch
+      + efi-tpm-Add-EFI_CC_MEASUREMENT_PROTOCOL-support.patch
+      + linux_xen-Properly-load-multiple-initrd-files.patch
+      + linux_xen-Properly-order-multiple-initrd-files.patch
+      + linux-ignore-FDT-unless-we-need-to-modify-it.patch
+      + mkrescue-efi-modules.patch
+      + tests-ahci-update-qemu-device-name.patch
+    - No longer relevant:
+      + ubuntu-disable-LOAD-FILE2-protocol-for-initrd-on-ARM.patch
+      + ubuntu-temp-keep-auto-nvram.patch: was temporary in 2019 lol
+      + ubuntu-skip-disk-by-id-lvm-pvm-uuid-entries.patch
+      + no-devicetree-if-secure-boot.patch
+      + no-insmod-on-sb.patch
+    - To be rewritten later in this cycle:
+      + ubuntu-flavour-order.patch
+    - Coalesced into some other patches:
+      + ubuntu-zfs-maybe-quiet.patch
+      + ubuntu-zfs-quick-boot.patch
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Fri, 28 Jul 2023 15:34:32 +0200
 
 grub2 (2.12~rc1-4) experimental; urgency=medium
 
@@ -514,6 +943,385 @@ grub2 (2.06-3) unstable; urgency=medium
     - update debian/sbat.debian.csv.in
 
  -- Julian Andres Klode <jak@debian.org>  Fri, 10 Jun 2022 11:15:11 +0200
+
+grub2 (2.06-2ubuntu18) mantic; urgency=medium
+
+  * Cherry-pick "RISC-V: Handle R_RISCV_CALL_PLT reloc" (LP: #2022379)
+  * Drop i386 from grub-efi-amd64* (LP: #2020907)
+  * Turn depends on grub-efi-amd64/arm64 unversioned
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 05 Jun 2023 18:55:05 +0200
+
+grub2 (2.06-2ubuntu17) lunar; urgency=medium
+
+  * Cherry-pick more upstream memory patches (LP: #2004643)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 20 Feb 2023 17:24:10 +0100
+
+grub2 (2.06-2ubuntu16) lunar; urgency=medium
+
+  * Cherry-pick all memory patches from rhboot
+    - Allocate initrd > 4 GB (LP: #1842320)
+    - Allocate kernels as code, not data (needed for newer firmware)
+  * ubuntu: Fix casts on i386-efi target
+  * Cherry-pick all the 2.12 memory management changes (LP: #1842320)
+  * Allocate executables as CODE, not DATA in chainloader and arm64
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Fri, 09 Dec 2022 17:11:44 +0100
+
+grub2 (2.06-2ubuntu15) lunar; urgency=medium
+
+  * grub-multi-install: Reset partition type between partitions (LP: #1997795)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Thu, 01 Dec 2022 16:30:53 +0100
+
+grub2 (2.06-2ubuntu14) kinetic; urgency=medium
+
+  * SECURITY UPDATE: Fix out of bounds writes due specially crafted fonts.
+    - add debian/patches/font-Fix-several-integer-overflows-in-grub_font_construct.patch
+    - add debian/patches/font-Fix-an-integer-underflow-in-blit_comb.patch
+    - CVE-2022-2601, CVE-2022-3775
+    - LP: #1996950
+  * Fix various issues as a result of fuzzing, static analysis and code
+    review:
+    - add debian/patches/font-Reject-glyphs-exceeds-font-max_glyph_width-or-font-m.patch
+    - add debian/patches/font-Fix-size-overflow-in-grub_font_get_glyph_internal.patch
+    - add debian/patchces/font-Remove-grub_font_dup_glyph.patch
+    - add debian/patches/font-Fix-integer-overflow-in-ensure_comb_space.patch
+    - add debian/patches/font-Fix-integer-overflow-in-BMP-index.patch
+    - add debian/patches/font-Fix-integer-underflow-in-binary-search-of-char-index.patch
+    - add debian/patches/fbutil-Fix-integer-overflow.patch
+    - add debian/patches/font-Harden-grub_font_blit_glyph-and-grub_font_blit_glyph.patch
+    - add debian/patches/font-Assign-null_font-to-glyphs-in-ascii_font_glyph.patch
+    - add debian/patches/normal-charset-Fix-an-integer-overflow-in-grub_unicode_ag.patch
+  * Enforce verification of fonts when secure boot is enabled:
+    - add debian/patches/kern-efi-sb-Enforce-verification-of-font-files.patch
+  * Bundle unicode.pf2 in a squashfs memdisk attached to the signed EFI binary
+    - update debian/control
+    - update debian/build-efi-image
+    - add debian/patches/font-Try-opening-fonts-from-the-bundled-memdisk.patch
+  * Fix LP: #1997006 - add support for performing measurements to RTMRs
+    - add debian/patches/commands-efi-tpm-Refine-the-status-of-log-event.patch
+    - add debian/patches/commands-efi-tpm-Use-grub_strcpy-instead-of-grub_memcpy.patch
+    - add debian/patches/efi-tpm-Add-EFI_CC_MEASUREMENT_PROTOCOL-support.patch
+  * Fix the squashfs tests during the build
+    - remove debian/patches/ubuntu-fix-reproducible-squashfs-test.patch
+    - add debian/patches/tests-Explicitly-unset-SOURCE_DATE_EPOCH-before-running-f.patch
+  * Bump SBAT generation:
+    - update debian/sbat.ubuntu.csv.in
+
+ -- Chris Coulson <chris.coulson@canonical.com>  Wed, 16 Nov 2022 14:40:42 +0000
+
+grub2 (2.06-2ubuntu13) kinetic; urgency=medium
+
+  * Try to pick better locations for kernel and initrd (LP: #1989446)
+  * x86-efi: Use bounce buffers for reading to addresses > 4GB (enhances
+    firmware compatibility of previous change)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Thu, 20 Oct 2022 21:18:25 +0200
+
+grub2 (2.06-2ubuntu12) kinetic; urgency=medium
+
+  * ubuntu-zfs-enhance-support.patch: Fix missing lines (LP: #1990143)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 19 Sep 2022 16:00:47 +0200
+
+grub2 (2.06-2ubuntu11) kinetic; urgency=medium
+
+  [ Mauricio Faria de Oliveira ]
+  * linux_xen: Properly handle multiple initrd files (LP: #1987567)
+    - d/p/linux_xen-Properly-load-multiple-initrd-files.patch
+    - d/p/linux_xen-Properly-order-multiple-initrd-files.patch
+  * Fix for ZFS snapshots without etc directory.
+    Thanks to Adam R Bell <a_0x07@protonmail.ch> (LP: #1965983)
+
+  [ Heinrich Schuchardt ]
+  * efi/peimage: fix typos in code comments
+
+  [ dann frazier ]
+  * linuxefi: Invalidate i-cache before starting the kernel (LP: #1987924)
+    - d/p/linuxefi-Invalidate-i-cache-before-starting-the-kern.patch
+
+ -- dann frazier <dannf@ubuntu.com>  Wed, 14 Sep 2022 12:35:29 -0600
+
+grub2 (2.06-2ubuntu10) kinetic; urgency=medium
+
+  [ Chris Coulson ]
+  * SECURITY UPDATE: Crafted PNG grayscale images may lead to out-of-bounds
+    write in heap.
+    - 0139-video-readers-png-Drop-greyscale-support-to-fix-heap.patch:
+      video/readers/png: Drop greyscale support to fix heap out-of-bounds write
+    - CVE-2021-3695
+  * SECURITY UPDATE: Crafted PNG image may lead to out-of-bound write during
+    huffman table handling.
+    - 0140-video-readers-png-Avoid-heap-OOB-R-W-inserting-huff-.patch:
+      video/readers/png: Avoid heap OOB R/W inserting huff table items
+    - CVE-2021-3696
+  * SECURITY UPDATE: Crafted JPEG image can lead to buffer underflow write in
+    the heap.
+    - 0145-video-readers-jpeg-Block-int-underflow-wild-pointer-.patch:
+      video/readers/jpeg: Block int underflow -> wild pointer write
+    - CVE-2021-3697
+  * SECURITY UPDATE: Integer underflow in grub_net_recv_ip4_packets
+    - 0148-net-ip-Do-IP-fragment-maths-safely.patch: net/ip: Do IP fragment
+      maths safely
+    - CVE-2022-28733
+  * SECURITY UPDATE: Out-of-bounds write when handling split HTTP headers
+    - 0154-net-http-Fix-OOB-write-for-split-http-headers.patch: net/http: Fix
+      OOB write for split http headers
+    - CVE-2022-28734
+  * SECURITY UPDATE: shim_lock verifier allows non-kernel files to be loaded
+    - 0135-kern-efi-sb-Reject-non-kernel-files-in-the-shim_lock.patch:
+      kern/efi/sb: Reject non-kernel files in the shim_lock verifier
+    - CVE-2022-28735
+  * SECURITY UPDATE: use-after-free in grub_cmd_chainloader()
+    - 0130-loader-efi-chainloader-simplify-the-loader-state.patch:
+      loader/efi/chainloader: simplify the loader state
+    - 0131-commands-boot-Add-API-to-pass-context-to-loader.patch: commands/boot:
+      Add API to pass context to loader
+    - 0132-loader-efi-chainloader-Use-grub_loader_set_ex.patch:
+      loader/efi/chainloader: Use grub_loader_set_ex
+    - 0133-loader-i386-efi-linux-Use-grub_loader_set_ex.patch:
+      loader/i386/efi/linux: Use grub_loader_set_ex
+  * Various fixes as a result of fuzzing and static analysis:
+    - 0129-loader-efi-chainloader-grub_load_and_start_image-doe.patch:
+      loader/efi/chainloader: grub_load_and_start_image doesn't load and start
+    - 0134-loader-i386-efi-linux-Fix-a-memory-leak-in-the-initr.patch:
+      loader/i386/efi/linux: Fix a memory leak in the initrd command
+    - 0136-kern-file-Do-not-leak-device_name-on-error-in-grub_f.patch:
+      kern/file: Do not leak device_name on error in grub_file_open()
+    - 0137-video-readers-png-Abort-sooner-if-a-read-operation-f.patch:
+      video/readers/png: Abort sooner if a read operation fails
+    - 0138-video-readers-png-Refuse-to-handle-multiple-image-he.patch:
+      video/readers/png: Refuse to handle multiple image headers
+    - 0141-video-readers-png-Sanity-check-some-huffman-codes.patch:
+      video/readers/png: Sanity check some huffman codes
+    - 0142-video-readers-jpeg-Abort-sooner-if-a-read-operation-.patch:
+      video/readers/jpeg: Abort sooner if a read operation fails
+    - 0143-video-readers-jpeg-Do-not-reallocate-a-given-huff-ta.patch:
+      video/readers/jpeg: Do not reallocate a given huff table
+    - 0144-video-readers-jpeg-Refuse-to-handle-multiple-start-o.patch:
+      video/readers/jpeg: Refuse to handle multiple start of streams
+    - 0146-normal-charset-Fix-array-out-of-bounds-formatting-un.patch:
+      normal/charset: Fix array out-of-bounds formatting unicode for display
+    - 0147-net-netbuff-Block-overly-large-netbuff-allocs.patch:
+      net/netbuff: Block overly large netbuff allocs
+    - 0149-net-dns-Fix-double-free-addresses-on-corrupt-DNS-res.patch:
+      net/dns: Fix double-free addresses on corrupt DNS response
+    - 0150-net-dns-Don-t-read-past-the-end-of-the-string-we-re-.patch:
+      net/dns: Don't read past the end of the string we're checking against
+    - 0151-net-tftp-Prevent-a-UAF-and-double-free-from-a-failed.patch:
+      net/tftp: Prevent a UAF and double-free from a failed seek
+    - 0152-net-tftp-Avoid-a-trivial-UAF.patch: net/tftp: Avoid a trivial UAF
+    - 0153-net-http-Do-not-tear-down-socket-if-it-s-already-bee.patch:
+      net/http: Do not tear down socket if it's already been torn down
+    - 0155-net-http-Error-out-on-headers-with-LF-without-CR.patch:
+      net/http: Error out on headers with LF without CR
+    - 0156-fs-f2fs-Do-not-read-past-the-end-of-nat-journal-entr.patch:
+      fs/f2fs: Do not read past the end of nat journal entries
+    - 0157-fs-f2fs-Do-not-read-past-the-end-of-nat-bitmap.patch:
+      fs/f2fs: Do not read past the end of nat bitmap
+    - 0158-fs-f2fs-Do-not-copy-file-names-that-are-too-long.patch:
+      fs/f2fs: Do not copy file names that are too long
+    - 0159-fs-btrfs-Fix-several-fuzz-issues-with-invalid-dir-it.patch:
+      fs/btrfs: Fix several fuzz issues with invalid dir item sizing
+    - 0160-fs-btrfs-Fix-more-ASAN-and-SEGV-issues-found-with-fu.patch:
+      fs/btrfs: Fix more ASAN and SEGV issues found with fuzzing
+    - 0161-fs-btrfs-Fix-more-fuzz-issues-related-to-chunks.patch:
+      fs/btrfs: Fix more fuzz issues related to chunks
+  * Bump SBAT generation:
+    - update debian/sbat.ubuntu.csv.in
+  * Make the grub2/no_efi_extra_removable setting work correctly
+    - update debian/postinst.in
+  * Build grub2-unsigned packages with xz compression for compatibility
+    with xenial dpkg
+    - update debian/rules
+
+  [ Steve Langasek ]
+  * Bump versioned dependency on grub2-common to 2.02~beta2-36ubuntu3.32 for
+    necessary arm relocation support.  LP: #1926748.
+  * debian/postinst.in: Unconditionally call grub-install with
+    --force-extra-removable on xenial and bionic, so that the \EFI\BOOT
+    removable path as used in cloud images receives the updates.  LP: #1930742.
+
+ -- Chris Coulson <chris.coulson@canonical.com>  Tue, 07 Jun 2022 17:36:27 +0100
+
+grub2 (2.06-2ubuntu7) jammy; urgency=medium
+
+  [ Heinrich Schuchardt ]
+  * Disable LOAD FILE2 protocol for initrd on ARM (LP: #1967562)
+
+ -- dann frazier <dannf@ubuntu.com>  Fri, 15 Apr 2022 15:50:11 -0600
+
+grub2 (2.06-2ubuntu6) jammy; urgency=medium
+
+  [ Heinrich Schuchardt ]
+  * efivar: check that efivarfs is writeable (LP: #1965288)
+
+  [ Dimitri John Ledkov ]
+  * Do not validate kernels twice. (LP: #1964943)
+
+  [ Heinrich Schuchardt ]
+  * efi: EFI Device Tree Fixup Protocol (LP: #1965796)
+  * fdt: add debug output to devicetree command
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Fri, 25 Mar 2022 16:03:11 +0100
+
+grub2 (2.06-2ubuntu5) jammy; urgency=medium
+
+  [ Julian Andres Klode ]
+  * Free correct size when freeing params, rather than 16 Ki (LP: #1958623)
+  * Build with FUSE3 (LP: #1935659)
+  * Only run os-prober on first run and if it previously found other OS
+    (LP: #1955109)
+
+  [ Heinrich Schuchardt ]
+  * Rename grub-core/loader/efi/linux.c
+  * Add patches for GRUB on RISC-V
+  * fat: fix listing the root directory
+  * Enable building for RISC-V (LP: #1876620)
+
+  [ Julian Andres Klode ]
+  * Re-enable peimage code on other archs outside secure boot; this
+    fixes LP: #1947046 when not booting in secure boot mode (secure
+    boot pending security review of the code)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Fri, 18 Feb 2022 17:21:16 +0100
+
+grub2 (2.06-2ubuntu4) jammy; urgency=medium
+
+  * UBUNTU: Move verifiers after decompressors (LP: #1954683)
+  * grub-check-signatures: Support gzip compressed kernels (LP: #1954683)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 10 Jan 2022 14:52:04 +0100
+
+grub2 (2.06-2ubuntu3) jammy; urgency=medium
+
+  * Cherry-pick the missing hunk back that changes parameter loading
+    in grub-core/loader/i386/linux.c, this should fix booting on
+    BIOS systems.
+  * Fix the fallback for kernel addresses on amd64 EFI, if the kernel
+    could not be allocated at the preferred address, reset errno such
+    that if the 2nd allocation succeeds, we do not fail erroneously.
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 13 Dec 2021 14:27:53 +0100
+
+grub2 (2.06-2ubuntu2) jammy; urgency=medium
+
+  * Restore still relevant patches lost in rebase.
+    They got lost in a first rebase, when we did not include
+    ubuntu-linuxefi.patch as they modify code in there.
+    - no-devicetree-if-secure-boot.patch
+    - 0077-ubuntu-Update-the-linux-boot-protocol-version-check.patch
+    - 0096-linuxefi-fail-kernel-validation-without-shim-protoco.patch
+    - 0099-chainloader-Avoid-a-double-free-when-validation-fail.patch
+    - 0105-efilinux-Fix-integer-overflows-in-grub_cmd_initrd.patch
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Wed, 08 Dec 2021 17:14:50 +0100
+
+grub2 (2.06-2ubuntu1) jammy; urgency=medium
+
+  * Merge from Debian unstable; remaining changes:
+    - Build without lto
+    - Add Ubuntu sbat data
+    - Make prebuilt netboot image look for MAAS grub.cfg
+    - build-efi-images: add smbios module to the prebuilt signed EFI images
+      (LP: 1856424)
+    - build-efi-images: do not produce -installer.efi.signed. LP: 1863994
+    - build-efi-images: Add http to netboot images
+    - grub-common: Install canonical-uefi-ca.crt
+    - Check signatures
+    - minilzo: built using the distribution's minilzo
+    - Support installing to multiple ESP (LP: 1871821)
+    - Disable various bits on i386
+    - Split out unsigned artefacts into grub2-unsigned
+    - Vcs-Git: Point to ubuntu packaging branch
+    - Relax dependencies on grub-common and grub2-common
+    - grub-pc: Avoid the possibility of breaking grub on SRU update due
+      to ABI change
+    - UBUNTU: Default timeout changes
+    - Disable os-prober for ppc64el on the PowerNV platform (for Petitboot)
+    - dirs.in: create var/lib/grub/ucf in grub-efi-amd64 (and similar)
+    - Link grub-efi-{amd64,arm64}-bin docs directory
+    - grub-common.service: port init.d script to systemd unit. Add warning
+      message, when initrdless boot fails triggering fallback. LP: 1901553
+    - Removed patches:
+      - grub-install-extra-removable.patch
+      - grub-install-removable-shim.patch
+    - Added patches:
+      + ubuntu-grub-install-extra-removable.patch
+      + ubuntu-zfs-enhance-support.patch
+      + ubuntu-zfs-gfxpayload-keep-default.patch
+      + ubuntu-zfs-mkconfig-ubuntu-distributor.patch
+      + ubuntu-zfs-mkconfig-signed-kernel.patch
+      + ubuntu-zfs-maybe-quiet.patch
+      + ubuntu-zfs-quick-boot.patch
+      + ubuntu-zfs-gfxpayload-dynamic.patch
+      + ubuntu-zfs-vt-handoff.patch
+      + ubuntu-zfs-mkconfig-recovery-title.patch
+      + ubuntu-zfs-insmod-xzio-and-lzopio-on-xen.patch
+      + ubuntu-support-initrd-less-boot.patch
+      + ubuntu-shorter-version-info.patch
+      + ubuntu-add-initrd-less-boot-fallback.patch
+      + ubuntu-mkconfig-leave-breadcrumbs.patch
+      + ubuntu-fix-lzma-decompressor-objcopy.patch
+      + ubuntu-temp-keep-auto-nvram.patch
+      + ubuntu-add-devicetree-command-support.patch
+      + ubuntu-boot-from-multipath-dependent-symlink.patch
+      + ubuntu-skip-disk-by-id-lvm-pvm-uuid-entries.patch
+      + ubuntu-efi-allow-loopmount-chainload.patch
+      + 0076-ubuntu-Make-the-linux-command-in-EFI-grub-always-try.patch
+      + ubuntu-resilient-boot-ignore-alternative-esps.patch
+      + ubuntu-resilient-boot-boot-order.patch
+      + ubuntu-speed-zsys-history.patch
+      + ubuntu-flavour-order.patch
+      + ubuntu-dont-verify-loopback-images.patch
+      + ubuntu-recovery-dis_ucode_ldr.patch
+      + ubuntu-linuxefi-arm64.patch
+      + ubuntu-add-initrd-less-boot-messages.patch
+      + ubuntu-fix-reproducible-squashfs-test.patch
+      + rhboot-f34-make-exit-take-a-return-code.patch
+      + rhboot-f34-dont-use-int-for-efi-status.patch
+      + rhboot-f34-make-pmtimer-tsc-calibration-fast.patch
+      + suse-add-support-for-UEFI-network-protocols.patch
+      + suse-AUDIT-0-http-boot-tracker-bug.patch
+      + rhboot-f34-efinet-also-use-the-firmware-acceleration-for-http.patch
+      + 0241-Call-hwmatch-only-on-the-grub-pc-platform.patch
+  * Dropped changes:
+    - Remove obsolete dependencies on dh-autoreconf and automake
+    - Remove explicit --with systemd in debhelper invocation
+    - Remove debian/gettext-patches; they do not seem to be necessary anymore
+    - Remove inadvertent change to debian/signing-template.json.in, we do not
+      use that file anyway.
+    - Merged upstream:
+      + merged: 0074-uefi-firmware-rename-fwsetup-menuentry-to-UEFI-Firmw.patch
+      + merged: 0075-smbios-Add-a-linux-argument-to-apply-linux-modalias-.patch
+      + merged security patches 0081-0105, and 0128-0240
+      + various cherry picks: cherry-* and cherrypick-*.patch
+      + grub-install-backup-and-restore.patch
+      + uefi-firmware-setup.patch
+      + sleep-shift.patch
+      + vsnprintf-upper-case-hex.patch
+      + rhboot-f34-update-info-with-grub.cfg-netboot-selection-order.patch
+      + suse-search-for-specific-config-files-for-netboot.patch
+      + tftp-rollover-block-counter.patch
+      + ubuntu-efi-console-set-text-mode-as-needed.patch
+    - Merged in Debian:
+      + install-efi-ubuntu-flavours.patch
+      + ubuntu-dejavu-font-path.patch
+      + ubuntu-tpm-unknown-error-non-fatal.patch
+    - Not applicable:
+      + 0077-ubuntu-Update-the-linux-boot-protocol-version-check.patch: The
+        check has been removed.
+  * Fix zstd build on s390x
+  * Cherry-pick two upstream fixes to fix closing of SNP protocol in EFI
+    networking stack
+  * Build with -O1 on s390x to avoid build failure due to gcc optimization
+    failure causing it to wrongly assume variables as uninitialized.
+  * Revert integration of jfs and f2fs modules into signed images, we do not
+    support these file systems on /boot.
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Tue, 07 Dec 2021 13:40:32 +0100
 
 grub2 (2.06-2) unstable; urgency=medium
 
@@ -937,6 +1745,705 @@ grub2 (2.04-2) unstable; urgency=medium
 
  -- Colin Watson <cjwatson@debian.org>  Sat, 03 Aug 2019 13:42:49 +0100
 
+grub2 (2.04-1ubuntu48) jammy; urgency=medium
+
+  * d/p/0241-Call-hwmatch-only-on-the-grub-pc-platform.patch:
+    Fix "error: can't find command `hwmatch'." on non-i386/pc
+    platforms such as x86_64/efi. (LP: #1840560)
+
+ -- Mauricio Faria de Oliveira <mfo@canonical.com>  Thu, 04 Nov 2021 10:48:06 -0300
+
+grub2 (2.04-1ubuntu47) impish; urgency=medium
+
+  * Drop grub.cfg-400.patch (LP: #1933826)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Thu, 02 Sep 2021 14:37:43 +0200
+
+grub2 (2.04-1ubuntu46) impish; urgency=medium
+
+  * debian/grub-common.service: change type to oneshot, add wantedby
+    sleep.target, after sleep.target. The service will now start after
+    resume from hybernation. LP: #1929860
+  * grub-initrd-fallback.service: add wantedby sleep.target, after
+    sleep.target. The service will now start after resume from
+    hybernation. LP: #1929860
+  * cherrypick upstream fix to make armhf efi boot work. LP: #1788940
+  * debian/rules: disable LTO. LP: #1922005
+  * grub-initrd-fallback.service, debian/grub-common.service: only start
+    units when booted with grub. Use presence of /boot/grub/grub.cfg as
+    proxy. LP: #1925507
+  * tests: patch qemu command to use ide-hd instead of the removed
+    ide-drive.
+
+ -- Dimitri John Ledkov <dimitri.ledkov@canonical.com>  Fri, 16 Jul 2021 14:01:31 +0100
+
+grub2 (2.04-1ubuntu45) hirsute; urgency=medium
+
+  * Unapply all patches.
+  * Stop using git-dpm.
+  * Start using gbp pq import|export --no-patch-numbers, this brings grub2
+    packaging closer to other non-debian distributions.
+  * It would be nice to separate patches into topic subdirs -
+    i.e. reverts, upstream cherry picks, debian, ubuntu, rhel, security,
+    etc.
+  * Drop redundant dh-systemd build-dependency.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 30 Mar 2021 11:55:05 +0100
+
+grub2 (2.04-1ubuntu44) hirsute; urgency=medium
+
+  * Compile grub-efi-amd64 installable i386 platform on hirsute, to make
+    it available in bionic and earlier as part of onegrub builds.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Wed, 03 Mar 2021 11:42:28 +0000
+
+grub2 (2.04-1ubuntu42) hirsute; urgency=medium
+
+  * SECURITY UPDATE: acpi command allows privilleged user to load crafted
+    ACPI tables when secure boot is enabled.
+    - 0126-acpi-Don-t-register-the-acpi-command-when-locked-dow.patch: Don't
+      register the acpi command when secure boot is enabled.
+    - CVE-2020-14372
+  * SECURITY UPDATE: use-after-free in rmmod command
+    - 0128-dl-Only-allow-unloading-modules-that-are-not-depende.patch: Don't
+      allow rmmod to unload modules that are dependencies of other modules.
+    - CVE-2020-25632
+  * SECURITY UPDATE: out-of-bound write in grub_usb_device_initialize()
+    - 0129-usb-Avoid-possible-out-of-bound-accesses-caused-by-m.patch
+    - CVE-2020-25647
+  * SECURITY UPDATE: Stack buffer overflow in grub_parser_split_cmdline
+    - 0206-kern-parser-Introduce-process_char-helper.patch,
+      0207-kern-parser-Introduce-terminate_arg-helper.patch,
+      0208-kern-parser-Refactor-grub_parser_split_cmdline-clean.patch,
+      0209-kern-buffer-Add-variable-sized-heap-buffer.patch,
+      0210-kern-parser-Fix-a-stack-buffer-overflow.patch: Add a variable
+      sized heap buffer type and use this.
+    - CVE-2020-27749
+  * SECURITY UPDATE: cutmem command allows privileged user to remove memory
+    regions when Secure Boot is enabled.
+    - 0127-mmap-Don-t-register-cutmem-and-badram-commands-when-.patch:
+      Don't register cutmem and badram commands when secure boot is enabled.
+    - CVE-2020-27779
+  * SECURITY UPDATE: heap out-of-bounds write in short form option parser.
+    - 0173-lib-arg-Block-repeated-short-options-that-require-an.patch:
+      Block repeated short options that require an argument.
+    - CVE-2021-20225
+  * SECURITY UPDATE: heap out-of-bound write due to mis-calculation of space
+    required for quoting.
+    - 0175-commands-menuentry-Fix-quoting-in-setparams_prefix.patch: Fix
+      quoting in setparams_prefix()
+    - CVE-2021-20233
+  * Partially backport the lockdown framework to restrict certain features
+    when secure boot is enabled.
+  * Backport various fixes for Coverity defects.
+  * Add SBAT metadata to the grub EFI binary.
+    - Backport patches to support adding SBAT metadata with grub-mkimage:
+      + 0212-util-mkimage-Remove-unused-code-to-add-BSS-section.patch
+      + 0213-util-mkimage-Use-grub_host_to_target32-instead-of-gr.patch
+      + 0214-util-mkimage-Always-use-grub_host_to_target32-to-ini.patch
+      + 0215-util-mkimage-Unify-more-of-the-PE32-and-PE32-header-.patch
+      + 0216-util-mkimage-Reorder-PE-optional-header-fields-set-u.patch
+      + 0217-util-mkimage-Improve-data_size-value-calculation.patch
+      + 0218-util-mkimage-Refactor-section-setup-to-use-a-helper.patch
+      + 0219-util-mkimage-Add-an-option-to-import-SBAT-metadata-i.patch
+    - Add debian/sbat.csv.in
+    - Update debian/build-efi-image and debian/rules
+
+  [ Dimitri John Ledkov & Steve Langasek LP: #1915536 ]
+  * Allow grub-efi-amd64|arm64 & -bin & -dbg be built by
+    src:grub2-unsigned (potentially of a higher version number).
+  * Add debian/rules generate-grub2-unsigned target to quickly build
+    src:grub2-unsigned for binary-copy backports.
+  * postinst: allow postinst to with with or without grub-multi-install
+    binary.
+  * postinst: allow using various grub-install options to achieve
+    --no-extra-removable.
+  * postinst: only call grub-check-signatures if it exists.
+  * control: relax dependency on grub2-common, as maintainer script got
+    fixed up to work with grub2-common/grub-common as far back as trusty.
+  * control: allow higher version depdencies from grub-efi package.
+  * dirs.in: create var/lib/grub/ucf in grub-efi-amd64 (and similar) as
+    postinst script uses that directory, and yet relies on grub-common to
+    create/ship it, which is not true in older releases. Also make sure
+    dh_installdirs runs after the .dirs files are generated.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 23 Feb 2021 16:23:39 +0000
+
+grub2 (2.04-1ubuntu41) hirsute; urgency=medium
+
+  * No-change rebuild to drop the udeb package.
+
+ -- Matthias Klose <doko@ubuntu.com>  Mon, 22 Feb 2021 10:33:38 +0100
+
+grub2 (2.04-1ubuntu40) hirsute; urgency=medium
+
+  * Revert: rhboot-f34-tcp-add-window-scaling-support.patch,
+    rhboot-f34-support-non-ethernet.patch,
+    ubuntu-fixup-rhboot-f34-support-non-ethernet.patch,
+    ubuntu-fixup-rhboot-f34-support-non-ethernet-2.patch: these break MAAS
+    LXD KVM pod deployments. LP: #1915288
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 12 Feb 2021 20:29:16 +0000
+
+grub2 (2.04-1ubuntu39) hirsute; urgency=medium
+
+  * Cherrypick a bunch of patches:
+    - fix crash in http LP: #1915288
+    - add bootp6 documentation
+    - add support for UEFI boot protocols
+    - use UEFI protocols for http & https networking
+    - make netboot search for by-mac/by-uuid/by-ip for grub.cfg
+    - update documentation for netboot search paths of grub.cfg
+  * Make prebuilt netboot image look for MAAS grub.cfg
+  * Fix grub-initrd-fallback.service thanks to JawnSmith LP: #1910815
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 12 Feb 2021 00:42:07 +0000
+
+grub2 (2.04-1ubuntu38) hirsute; urgency=medium
+
+  [ Jean-Baptiste Lallement ]
+  [ Didier Roche ]
+  * Fix warnings during grub menu generation.  Thanks wdoekes for the patch
+    (LP: #1898177)
+    - Fix warnings when bpool doesn't exist.
+    - Fix warnings when snapshot name contains dashes.
+  * Do not fail to generate grub menu when name of the snapshot contains
+    spaces. (LP: #1903524)
+
+ -- Jean-Baptiste Lallement <jean-baptiste.lallement@ubuntu.com>  Mon, 08 Feb 2021 10:50:21 +0100
+
+grub2 (2.04-1ubuntu37) hirsute; urgency=medium
+
+  * debian/patches/grub-install-backup-and-restore.patch: Fix-up the patch
+    to correctly initialyze the names of the modules to restore. LP:
+    #1907085
+  * 10_linux: emit messages when initrdless boot is configured, attempted
+    and fails triggering fallback. LP: #1901553
+  * grub-common.service: port init.d script to systemd unit. Add warning
+    message, when initrdless boot fails triggering fallback. LP: #1901553
+  * debian/rules: undo po/ directory patching in
+    override_dh_autoreconf_clean.
+  * minilzo: built using the distribution's minilzo
+  * ubuntu-fix-reproducible-squashfs-test.patch: fix squashfs-test with
+    new squashfs-tools in hirsute.
+  * rhboot-f34-make-exit-take-a-return-code.patch,
+    rhboot-f34-dont-use-int-for-efi-status.patch: allow grub to exit
+    non-zero under EFI, this should allow falling back to the next
+    BootOrder BootEntry.
+  * rhboot-f34-tcp-add-window-scaling-support.patch: speed up netboot
+    transfer speed.
+  * rhboot-f34-support-non-ethernet.patch,
+    ubuntu-fixup-rhboot-f34-support-non-ethernet.patch,
+    ubuntu-fixup-rhboot-f34-support-non-ethernet-2.patch:
+    add support for link layer addresses of up to 32-bytes.
+  * rhboot-f34-make-pmtimer-tsc-calibration-fast.patch:
+    speed up calibration time, especially when booting VMs.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Sat, 12 Dec 2020 00:50:47 +0000
+
+grub2 (2.04-1ubuntu36) hirsute; urgency=medium
+
+  * Avoid "EFI stub: FIRMWARE BUG" message when booting >= 5.7 kernels
+    on arm64 by setting the image base address before jumping to the
+    PE/COFF entry point LP: #1900774
+  * Fix tftp timeouts when fetch large files. LP: #1900773
+
+ -- dann frazier <dannf@ubuntu.com>  Wed, 11 Nov 2020 07:17:49 -0700
+
+grub2 (2.04-1ubuntu35) groovy; urgency=medium
+
+  * postinst.in, grub-multi-install: fix logic of skipping installing onto
+    any device, if one chose to not install bootloader on any device. LP:
+    #1896608
+  * Do not finalize params twice on arm64. LP: #1897819
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Thu, 01 Oct 2020 22:59:51 +0800
+
+grub2 (2.04-1ubuntu34) groovy; urgency=medium
+
+  * configure.ac: one more dejavu font search path
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Mon, 14 Sep 2020 10:53:07 +0100
+
+grub2 (2.04-1ubuntu33) groovy; urgency=medium
+
+  * Build-depend on fonts-dejavu-core, not obsolete ttf-dejavu-core.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Sun, 13 Sep 2020 23:49:08 -0700
+
+grub2 (2.04-1ubuntu32) groovy; urgency=medium
+
+  * ubuntu-linuxefi-arm64.patch: Fix build on armhf
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Fri, 11 Sep 2020 20:33:34 +0200
+
+grub2 (2.04-1ubuntu31) groovy; urgency=medium
+
+  * ubuntu-linuxefi-arm64.patch: Restore arm64 parts of ubuntu-linuxefi.patch
+    that got lost in the 2.04 rebase (LP: #1862279)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Fri, 11 Sep 2020 17:49:50 +0200
+
+grub2 (2.04-1ubuntu30) groovy; urgency=medium
+
+  * postinst.in: do not attempt to call grub-install upon fresh install of
+    grub-pc because it it a job of installers to do that after fresh
+    install.
+  * grub-multi-install: fix non-interactive failures for grub-efi like it
+    was fixed in postinst for grub-pc.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Thu, 03 Sep 2020 14:54:23 +0100
+
+grub2 (2.04-1ubuntu29) groovy; urgency=medium
+
+  * grub-install: cherry-pick patch from grub-devel to make grub-install
+    fault tolerant. Create backup of files in /boot/grub, and restore them
+    on failure to complete grub-install. LP: #1891680
+  * postinst.in: do not exit successfully when failing to show critical
+    grub-pc/install_devices_failed and grub-pc/install_devices_empty
+    prompts in non-interactive mode. This enables surfacing upgrade errors
+    to the users and/or automation. LP: #1891680
+  * postinst.in: Fixup postinst.in, to attempt grub-install upon explicit
+    dpkg-reconfigure grub-pc. LP: #1892526
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 01 Sep 2020 20:04:44 +0100
+
+grub2 (2.04-1ubuntu28) groovy; urgency=medium
+
+  * Ensure that grub-multi-install can always find templates (LP: #1879948)
+  * Fix changelog entries for security update
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Mon, 10 Aug 2020 15:07:29 +0200
+
+grub2 (2.04-1ubuntu27) groovy; urgency=medium
+
+  * debian/patches/ubuntu-flavour-order.patch:
+    - Add a (hidden) GRUB_FLAVOUR_ORDER setting that can mark certain kernel
+      flavours as preferred, and specify an order between those preferred
+      flavours (LP: #1882663)
+  * debian/patches/ubuntu-zfs-enhance-support.patch:
+    - Use version_find_latest for ordering kernels, so it also supports
+      the GRUB_FLAVOUR_ORDER setting.
+  * debian/patches/ubuntu-dont-verify-loopback-images.patch:
+    - disk/loopback: Don't verify loopback images (LP: #1878541),
+      Thanks to Chris Coulson for the patch
+  * debian/patches/ubuntu-recovery-dis_ucode_ldr.patch
+    - Pass dis_ucode_ldr to kernel for recovery mode (LP: #1831789)
+  * debian/patches/ubuntu-add-initrd-less-boot-fallback.patch:
+    - Merge changes from xnox to fix multiple initrds support (LP: #1878705)
+  * debian/patches/ubuntu-clear-invalid-initrd-spacing.patch:
+    - Remove, no longer needed thanks to xnox's patch
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Thu, 06 Aug 2020 14:47:52 +0200
+
+grub2 (2.04-1ubuntu26.2) focal; urgency=medium
+
+  * debian/postinst.in: Avoid calling grub-install on upgrade of the grub-pc
+    package, since we cannot be certain that it will install to the correct
+    disk and a grub-install failure will render the system unbootable.
+    LP: #1889556.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 30 Jul 2020 17:34:25 -0700
+
+grub2 (2.04-1ubuntu26.1) focal; urgency=medium
+
+  [ Julian Andres Klode ]
+  * Move gettext patches out of git-dpm's way, so it does not delete them
+
+  [ Chris Coulson ]
+  * SECURITY UPDATE: Heap buffer overflow when encountering commands that
+    cannot be tokenized to less than 8192 characters.
+    - 0082-yylex-Make-lexer-fatal-errors-actually-be-fatal.patch: Make
+      fatal lexer errors actually be fatal
+    - CVE-2020-10713
+  * SECURITY UPDATE: Multiple integer overflow bugs that could result in
+    heap buffer allocations that were too small and subsequent heap buffer
+    overflows when handling certain filesystems, font files or PNG images.
+    - 0083-safemath-Add-some-arithmetic-primitives-that-check-f.patch: Add
+      arithmetic primitives that allow for overflows to be detected
+    - 0084-calloc-Make-sure-we-always-have-an-overflow-checking.patch:
+      Make sure that there is always an overflow checking implementation
+      of calloc() available
+    - 0085-calloc-Use-calloc-at-most-places.patch: Use calloc where
+      appropriate
+    - 0086-malloc-Use-overflow-checking-primitives-where-we-do-.patch: Use
+      overflow-safe arithmetic primitives when performing allocations
+      based on the results of operations that might overflow
+    - 0094-hfsplus-fix-two-more-overflows.patch: Fix integer overflows in
+      hfsplus
+    - 0095-lvm-fix-two-more-potential-data-dependent-alloc-over.patch: Fix
+      more potential integer overflows in lvm
+    - CVE-2020-14308, CVE-2020-14309, CVE-2020-14310, CVE-2020-14311
+  * SECURITY UPDATE: Use-after-free when executing a command that causes
+    a currently executing function to be redefined.
+    - 0092-script-Remove-unused-fields-from-grub_script_functio.patch:
+      Remove unused fields from grub_script_function
+    - 0093-script-Avoid-a-use-after-free-when-redefining-a-func.patch:
+      Avoid a use-after-free when redefining a function during execution
+    - CVE-2020-15706
+  * SECURITY UPDATE: Integer overflows that could result in heap buffer
+    allocations that were too small and subsequent heap buffer overflows
+    during initrd loading.
+    - 0105-linux-Fix-integer-overflows-in-initrd-size-handling.patch: Fix
+      integer overflows in initrd size handling
+    - 0106-efilinux-Fix-integer-overflows-in-grub_cmd_initrd.patch: Fix
+      integer overflows in linuxefi grub_cmd_initrd
+    - CVE-2020-15707
+  * Various fixes as a result of code review and static analysis:
+    - 0087-iso9660-Don-t-leak-memory-on-realloc-failures.patch: Fix a
+     memory leak on realloc failures when processing symbolic links
+    - 0088-font-Do-not-load-more-than-one-NAME-section.patch: Fix a
+      memory leak when processing font files with more than one NAME
+      section
+    - 0089-gfxmenu-Fix-double-free-in-load_image.patch: Zero self->bitmap
+      after it is freed in order to avoid a potential double free later on
+    - 0090-lzma-Make-sure-we-don-t-dereference-past-array.patch: Fix an
+      out-of-bounds read in LzmaEncode
+    - 0091-tftp-Do-not-use-priority-queue.patch: Refactor tftp to not use
+      priority queues and fix a double free
+    - 0096-efi-fix-some-malformed-device-path-arithmetic-errors.patch: Fix
+      various arithmetic errors with malformed device paths
+    - 0098-Fix-a-regression-caused-by-efi-fix-some-malformed-de.patch: Fix
+      a NULL deref in the chainloader command introduced by a previous
+      patch
+    - 0099-efi-Fix-use-after-free-in-halt-reboot-path.patch: Fix a
+      use-after-free in the halt and reboot commands by not freeing
+      allocated memory in these paths
+    - 0100-chainloader-Avoid-a-double-free-when-validation-fail.patch:
+      Avoid a double free in the chainloader command when validation fails
+    - 0101-relocator-Protect-grub_relocator_alloc_chunk_addr-in.patch:
+      Protect grub_relocator_alloc_chunk_addr input arguments against
+      integer overflow / underflow
+    - 0102-relocator-Protect-grub_relocator_alloc_chunk_align-m.patch:
+      Protect grub_relocator_alloc_chunk_align max_addr argument against
+      integer underflow
+    - 0103-relocator-Fix-grub_relocator_alloc_chunk_align-top-m.patch: Fix
+      grub_relocator_alloc_chunk_align top memory allocation
+    - 0104-linux-loader-avoid-overflow-on-initrd-size-calculati.patch:
+      Avoid overflow on initrd size calculation
+
+  [ Dimitri John Ledkov ]
+  * SECURITY UPDATE: Grub does not enforce kernel signature validation
+    when the shim protocol isn't present.
+    - 0097-linuxefi-fail-kernel-validation-without-shim-protoco.patch:
+      Fail kernel validation if the shim protocol isn't available
+    - CVE-2020-15705
+
+ -- Chris Coulson <chris.coulson@canonical.com>  Mon, 20 Jul 2020 19:19:08 +0100
+
+grub2 (2.04-1ubuntu26) focal; urgency=medium
+
+  [ Julian Andres Klode ]
+  * Move /boot/efi -> debconf migration into wrapper, so it runs everywhere
+    (LP: #1872077)
+  * Display disk name and size in the ESP selection dialog, instead of ???
+
+  [ Sebastien Bacher ]
+  * debian/patches/gettext,
+    debian/patches/rules:
+    - backport upstream patches to fix the list of translated strings,
+      reported on the ubuntu-translators mailing list. The changes would
+      be overwritten by autoreconf so applying from a rules override.
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Wed, 15 Apr 2020 13:31:27 +0200
+
+grub2 (2.04-1ubuntu25) focal; urgency=medium
+
+  [ Jean-Baptiste Lallement ]
+  [ Didier Roche ]
+  * debian/patches/ubuntu-zfs-enhance-support.patch:
+    - fix trailing } when no advanced menu is printed
+    - ensure we unmount all temporary snapshots path before zfs collect them
+      out.
+  * debian/patches/ubuntu-speed-zsys-history.patch:
+    - Speed up navigating zsys history by reducing greatly grub.cfg file size.
+      It used to take eg 80 seconds when loading 100 system snapshots. This is
+      now instantaneous by using a function with parameters that the users can
+      still easily edit.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 13 Apr 2020 15:17:42 +0200
+
+grub2 (2.04-1ubuntu24) focal; urgency=medium
+
+  * Support installing to multiple ESPs (LP: #1871821)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Thu, 09 Apr 2020 12:51:07 +0200
+
+grub2 (2.04-1ubuntu23) focal; urgency=medium
+
+  [ Jean-Baptiste Lallement ]
+  [ Didier Roche ]
+  * Performance improvements for update-grub on ZFS systems (LP: #1869885)
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 31 Mar 2020 15:30:36 +0200
+
+grub2 (2.04-1ubuntu22) focal; urgency=medium
+
+  * smbios: Add a --linux argument to apply linux modalias-like filtering
+  * Make the linux command in EFI grub always try EFI handover; thanks
+    to Chris Coulson for the patches (LP: #1864533)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Wed, 11 Mar 2020 17:46:35 +0100
+
+grub2 (2.04-1ubuntu21) focal; urgency=medium
+
+  * Make ZFS menu generation depending on new zsysd binary instead of eoan
+    zsys compatibility symlink.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 26 Feb 2020 09:59:49 +0100
+
+grub2 (2.04-1ubuntu20) focal; urgency=medium
+
+  * build-efi-images: do not produce -installer.efi.signed. LP: #1863994
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 25 Feb 2020 01:11:31 +0000
+
+grub2 (2.04-1ubuntu19) focal; urgency=medium
+
+  * uefi-firmware: rename fwsetup menuentry to UEFI Firmware Settings
+    (LP: #1864547)
+  * build-efi-images: add smbios module to the prebuilt signed EFI images
+    (LP: #1856424)
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Mon, 24 Feb 2020 20:34:13 +0000
+
+grub2 (2.04-1ubuntu18) focal; urgency=medium
+
+  * Cherry-pick fix from Colin W. in debian to build with python3.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 06 Feb 2020 18:37:44 +0100
+
+grub2 (2.04-1ubuntu17) focal; urgency=medium
+
+  * Fix ZFS menu generation with ZFS 0.8.x where mounted datasets can’t list
+    snapshots due to an upstream change.
+    https://github.com/zfsonlinux/zfs/issues/9958
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 06 Feb 2020 18:20:16 +0100
+
+grub2 (2.04-1ubuntu16) focal; urgency=medium
+
+  * Revert "Add smbios module to build-efi-images script" from previous
+    upload, pending review see https://bugs.launchpad.net/bugs/1856424
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Sun, 15 Dec 2019 01:28:49 +0000
+
+grub2 (2.04-1ubuntu15) focal; urgency=medium
+
+  * ubuntu-efi-allow-loopmount-chainload.patch:
+    - Enable chainloading EFI apps from loopmounts
+  * cherrypick-lsefisystab-define-smbios3.patch:
+  * cherrypick-smbios-modules.patch:
+    - Cherrypick from 2.05 module for retrieving SMBIOS information
+  * cherrypick-lsefisystab-show-dtb.patch:
+    - If dtb is provided by the firmware / DtbLoader driver, display it in
+    human form, rather than just UUID
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 13 Dec 2019 11:24:21 +0000
+
+grub2 (2.04-1ubuntu14) focal; urgency=medium
+
+  * debian/patches/ubuntu-zfs-enhance-support.patch:
+    - Handle the case where grub-probe returns several devices for a single
+      pool (LP: #1848856). Thanks jpb for the report and the proposed patch.
+    - Add savedefault to non-recovery entries (LP: #1850202). Thanks Deltik
+      for the patch.
+    - Do not crash on invalid fstab and report the invalid entry.
+      (LP: #1849347) Thanks Deltik for the patch.
+    - When a pool fails to import, catch and display the error message and
+      continue with other pools. Import all the pools in readonly mode so we
+      can import other pools with unsupported features (LP: #1848399) Thanks
+      satmandu for the investigation and the proposed patch
+
+ -- Jean-Baptiste Lallement <jean-baptiste.lallement@ubuntu.com>  Mon, 18 Nov 2019 11:22:43 +0100
+
+grub2 (2.04-1ubuntu13) focal; urgency=medium
+
+  * debian/patches/ubuntu-tpm-unknown-error-non-fatal.patch: treat "unknown"
+    TPM errors as non-fatal, but still write up the details as debug messages
+    so we can further track what happens with the systems throwing those up.
+    (LP: #1848892)
+  * debian/patches/ubuntu-linuxefi.patch: Drop extra check for Secure Boot
+    status in linuxefi_secure_validate(); it's unnecessary and blocking boot
+    in chainload (like chainloading Windows) when SB is disabled.
+    (LP: #1845289)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 31 Oct 2019 17:58:47 -0400
+
+grub2 (2.04-1ubuntu12) eoan; urgency=medium
+
+  * Move our identifier to com.ubuntu
+    As we are not going to own org.zsys, move our identifier under
+    com.ubuntu.zsys (LP: #1847711)
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 11 Oct 2019 15:57:47 +0200
+
+grub2 (2.04-1ubuntu11) eoan; urgency=medium
+
+  * Load all kernels (even those without .efi.signed) for secure boot mode
+    as those are signed kernels on ubuntu, loaded by the shim. (LP: #1847581)
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 10 Oct 2019 11:40:44 +0200
+
+grub2 (2.04-1ubuntu10) eoan; urgency=medium
+
+  * debian/patches/ubuntu-skip-disk-by-id-lvm-pvm-uuid-entries.patch:
+    skip /dev/disk/by-id/lvm-pvm-uuid entries from device iteration.
+    (LP: #1838525)
+
+ -- Rafael David Tinoco <rafaeldtinoco@ubuntu.com>  Mon, 07 Oct 2019 23:23:54 -0300
+
+grub2 (2.04-1ubuntu9) eoan; urgency=medium
+
+  * debian/patches/ubuntu-zfs-enhance-support.patch:
+    - Handle case of pure zfs only snapshots giving additional "}", and as
+      such, creating invalid grub menu.
+      Spotted by grubzfs-testsuite autopkgtests.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 02 Oct 2019 09:59:19 +0200
+
+grub2 (2.04-1ubuntu8) eoan; urgency=medium
+
+  * debian/patches/install-signed.patch -> ubuntu-install-signed.patch:
+    Really fix the installation of UEFI artefacts to the distributor path (we
+    only want shim, grub, and MokManager, and shim's boot.csv there), and to
+    the removable /EFI/BOOT path (where we want shim and fallback only).
+    Rename the patch to ubuntu- like others that are Ubuntu-specific or
+    otherwise modified to avoid such confusion at merge time in the future.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 01 Oct 2019 11:29:24 -0400
+
+grub2 (2.04-1ubuntu7) eoan; urgency=medium
+
+  * debian/patches/ubuntu-zfs-enhance-support.patch:
+    Disable history entry under some conditions:
+    - Don't show up if the system is a zsys one and zsys isn't installed
+      (LP: #1845333)
+    - Don't show for pure zfs systems: we identified multiple issues due
+      to the mount generator in upstream zfs which makes it incompatible.
+      Disable for now (LP: #1845913)
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 30 Sep 2019 09:35:03 +0200
+
+grub2 (2.04-1ubuntu6) eoan; urgency=medium
+
+  * debian/patches/install-signed.patch: fix paths for MokManager/fallback;
+    shim no longer ships these with a .signed suffix. (LP: #1845466)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 26 Sep 2019 09:48:07 -0400
+
+grub2 (2.04-1ubuntu5) eoan; urgency=medium
+
+  * d/patches/ubuntu-boot-from-multipath-dependent-symlink.patch: fix
+    mis-spelling of helper function in final computation of GRUB_DEVICE in
+    multipath case.
+
+ -- Michael Hudson-Doyle <michael.hudson@ubuntu.com>  Tue, 13 Aug 2019 08:56:16 +1200
+
+grub2 (2.04-1ubuntu4) eoan; urgency=medium
+
+  * d/patches/ubuntu-boot-from-multipath-dependent-symlink.patch: when / is
+    multipathed there will be multiple paths to the partition, so using
+    root=UUID= exposes the boot process to udev races.  In addition
+    grub-probe --target device / in this case reports /dev/dm-1 or similar --
+    better to use a symlink that depends on the multipath name. (LP: #1429327)
+
+ -- Michael Hudson-Doyle <michael.hudson@ubuntu.com>  Tue, 06 Aug 2019 12:37:18 +1200
+
+grub2 (2.04-1ubuntu3) eoan; urgency=medium
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/patches/ubuntu-add-devicetree-command-support.patch: import patch
+    into git-dpm: drop [PATCH] tag and add Patch-Name.
+
+  [ Didier Roche ]
+  * debian/patches/ubuntu-zfs-enhance-support.patch
+    - Don't patch autoregenerated files.
+    - rewrite generate MenuMeta implementation in shell (LP: #1834095)
+      mawk doesn't support \s and other array features.
+      + Change \s by their space or tab equivalent.
+      + Rewrite the menumeta generation in pure shell, which is easier to
+        debug, keeping globally the same algorithm
+      + Support i18n in entry name generation.
+      Co-authored with Jean-Baptiste.
+    - Resplit all patches in debian/patches/*, so that we have upstreamable
+      and non upstreamable parts separate. Also, any change in 10_linux patch
+      will be reflected in 10_linux_zfs.
+    - Always import pools (using force), as we don't mount them. Ensure also
+      that we don't update the host cache, as we import all pools, and not
+      only those attached to that system.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 29 Jul 2019 08:08:48 +0200
+
+grub2 (2.04-1ubuntu2) eoan; urgency=medium
+
+  * Add device-tree command support as installed by flash-kernel.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Wed, 17 Jul 2019 23:47:27 +0100
+
+grub2 (2.04-1ubuntu1) eoan; urgency=medium
+
+  * Merge against Debian; remaining changes:
+    - debian/control: Update Vcs fields for code location on Ubuntu.
+    - debian/control: Breaks shim (<< 13).
+    - debian/patches/linuxefi.patch: Secure Boot support: use newer patchset
+      from rhboot repo, flattened to a single patch.
+    - debian/patches/install_signed.patch, grub-install-extra-removable.patch:
+      - Make sure if we install shim; it should also be exported as the default
+        bootloader to install later to a removable path, if we do.
+      - Rework grub-install-extra-removable.patch to reverse its logic: in the
+        default case, install the bootloader to /EFI/BOOT, unless we're trying
+        to install on a removable device, or explicitly telling grub *not* to
+        do it.
+      - Install a BOOT.CSV for fallback to use.
+      - Make sure postinst and templates know about the replacement of
+        --force-extra-removable with --no-extra-removable.
+    - debian/patches/ubuntu-support-initrd-less-boot.patch: allow non-initrd
+      boot config.
+    - debian/patches/ubuntu-add-initrd-less-boot-fallback.patch: If a kernel
+      fails to boot without initrd, we will fallback to trying to boot the
+      kernel with an initrd.
+    - debian/patches/ubuntu-mkconfig-leave-breadcrumbs.patch: make sure
+      grub-mkconfig leaves a trace of what files were sourced to help generate
+      the config we're building.
+    - debian/patches/ubuntu-efi-console-set-text-mode-as-needed.patch: in EFI
+      console, only set text-mode when we're actually going to need it.
+    - debian/patches/ubuntu-zfs-enhance-support.patch: Better ZFS grub support.
+    - Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+      number of entries/clutter from other OSes in Petitboot
+    - debian/patches/ubuntu-shorter-version-info.patch: Only show the upstream
+      version in menu and console, and hide the package one in a
+      package_version variable.
+    - Verify that the current and newer kernels are signed when grub is
+      updated, to make sure people do not accidentally shutdown without a
+      signed kernel.
+    - debian/default/grub: replace GRUB_HIDDEN_* variables with the less
+      confusing GRUB_TIMEOUT_STYLE=hidden.
+    - debian/rules: shuffle files around for now to keep build artefacts
+      for signing at the same location as they were expected by Launchpad.
+    - debian/rules, debian/control: enable dh-systemd.
+    - debian/grub-common.install.in: install the systemd unit that's part of
+      initrd fallback handling, missed when the feature landed.
+    - debian/build-efi-images: add http module to NET_MODULES.
+  * debian/patches/linuxefi*.patch: Flatten linuxefi patches into one.
+  * debian/patches: rename patches to use "-" as a separator rather than "_".
+  * debian/patches: rename Ubuntu-specific patches and commits to add "ubuntu"
+    so it's clearer which are new or changed when doing a merge.
+  * debian/patches/ubuntu-fix-lzma-decompressor-objcopy.patch: fix FTBFS due
+    to objcopy building an invalid binary padded with zeroes (LP: #1833234)
+  * debian/patches/ubuntu-clear-invalid-initrd-spacing.patch: clear up invalid
+    spacing for the initrd command when not using early initrds.
+  * debian/patches/ubuntu-add-initrd-less-boot-fallback.patch: move the initrd
+    boot success/failure service to start later at boot time. (LP: #1823391)
+  * debian/patches/fix-lockdown.patch: Drop lockdown patch from Debian, which
+    breaks with new linuxefi patchset.
+  * debian/patches/ubuntu-temp-keep-auto-nvram.patch: Temporarily keep the
+    --auto-nvram option we previously had as a supported option in grub-install
+    (with no effect now), to avoid breaking upgrades. "auto-nvram" is default
+    behavior now that we use libefivar instead of calling efibootmgr.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 16 Jul 2019 11:31:29 -0400
+
 grub2 (2.04-1) unstable; urgency=medium
 
   * New upstream release.
@@ -1069,6 +2576,112 @@ grub2 (2.02+dfsg1-13) unstable; urgency=medium
   * [nb] Norwegian Bokmål (Petter Reinholdtsen; closes: #924326).
 
  -- Colin Watson <cjwatson@debian.org>  Thu, 14 Mar 2019 10:33:24 +0000
+
+grub2 (2.02+dfsg1-12ubuntu3) eoan; urgency=medium
+
+  * debian/patches/zfs_enhance_support.patch:
+    Enhance ZFS grub support:
+    - Support multiple zfs systems (grouped by machine-id)
+    - Group zfs snapshots and clones with latest dataset for a given
+      installation.
+    - Support "history" entry with one time boot, recovery mode and
+      consecutive reboots.
+    - Pin kernel to particular snapshot, trying to reboot with the exact
+      same kernel and initrd.
+    - Disable in 10_linux zfs support if 10_linux_zfs is installed so that
+      we don't end up with the same installation multiple times.
+  * debian/patches/*:
+    - Apply ubuntu/debian specific changes of 10_linux to 10_linux_zfs.
+
+  Work done with Jean-Baptiste.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 17 Jun 2019 11:28:48 +0200
+
+grub2 (2.02+dfsg1-12ubuntu2) disco; urgency=medium
+
+  * debian/patches/efi-console-set-text-mode-as-needed.patch: in EFI console,
+    only set text-mode when we're actually going to need it.
+  * debian/build-efi-images: add http module to NET_MODULES. (LP: #1787630)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 11 Mar 2019 17:48:49 -0400
+
+grub2 (2.02+dfsg1-12ubuntu1) disco; urgency=medium
+
+  * Merge against Debian unstable; remaining changes (LP: #564853):
+    - debian/control: Update Vcs fields for code location on Ubuntu.
+    - debian/control: Breaks shim (<< 13).
+    - Secure Boot support: use newer patchset from rhboot repo:
+      - many linuxefi_* patches added and modified
+      - dropped debian/patches/linuxefi_require_shim.patch
+      - renamed: debian/patches/no_insmod_on_sb.patch ->
+        debian/patches/linuxefi_no_insmod_on_sb.patch
+    - debian/patches/install_signed.patch, grub-install-extra-removable.patch:
+      - Make sure if we install shim; it should also be exported as the default
+        bootloader to install later to a removable path, if we do.
+      - Rework grub-install-extra-removable.patch to reverse its logic: in the
+        default case, install the bootloader to /EFI/BOOT, unless we're trying
+        to install on a removable device, or explicitly telling grub *not* to
+        do it.
+      - Install a BOOT.CSV for fallback to use.
+      - Make sure postinst and templates know about the replacement of
+        --force-extra-removable with --no-extra-removable.
+    - debian/patches/add-an-auto-nvram-option-to-grub-install.patch: Add the
+      --auto-nvram option to grub-install for auto-detecting NVRAM availability
+      before attempting NVRAM updates.
+    - debian/build-efi-images: provide a new grub EFI image which enforces that
+      loaded kernels are signed for Secure Boot: build gsb$arch.efi; which is
+      the same as grub$arch.efi minus the 'linux' module. Without fallback to
+      'linux' for unsigned loading, this makes it effectively enforce having a
+      signed kernel.
+    - Verify that the current and newer kernels are signed when grub is
+      updated, to make sure people do not accidentally shutdown without a
+      signed kernel.
+    - debian/default/grub: replace GRUB_HIDDEN_* variables with the less
+      confusing GRUB_TIMEOUT_STYLE=hidden.
+    - debian/patches/support_initrd-less_boot.patch: Added knobs to allow
+      non-initrd boot config.
+    - Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+      number of entries/clutter from other OSes in Petitboot
+    - debian/patches/shorter_version_info.patch: Only show the upstream version
+      in menu and console, and hide the package one in a package_version
+      variable.
+    - debian/patches/skip_text_gfxpayload_where_not_supported.patch: Skip the
+      'text' payload if it's not supported but present in gfxpayload, such as
+      on EFI systems.
+    - debian/patches/bufio_sensible_block_sizes.patch: Don't use arbitrary file
+      fizes as block sizes in bufio: this avoids potentially seeking back in
+      the files unnecessarily, which may require re-open files that cannot be
+      seeked into, such as via TFTP.
+    - debian/patches/ofnet-init-structs-in-bootpath-parser.patch: initialize
+      structs in bootpath parser.
+    - debian/rules: shuffle files around for now to keep build artefacts
+      for signing at the same location as they were expected by Launchpad.
+    - debian/rules, debian/control: enable dh-systemd.
+    - debian/grub-common.install.in: install the systemd unit that's part of
+      initrd fallback handling, missed when the feature landed.
+    - debian/patches/quick-boot-lvm.patch: If we don't have writable
+      grubenv and we're on EFI, always show the menu.
+    - debian/patches/mkconfig_leave_breadcrumbs.patch: make sure grub-mkconfig
+      leaves a trace of what files were sourced to help generate the config
+      we're building.
+    - debian/patches/linuxefi_truncate_overlong_reloc_section.patch: Windows
+      7 bootloader has inconsistent headers; truncate to the smaller, correct
+      size to fix chainloading Windows 7.
+    - debian/patches/linuxefi_fix_relocate_coff.patch: fix typo in
+      relocate_coff() causing issues with relocation of code in chainload.
+    - debian/patches/add-initrd-less-boot-fallback.patch: add initrd-less
+      capabilities. If a kernel fails to boot without initrd, we will fallback
+      to trying to boot the kernel with an initrd. Patch by Chris Glass.
+    - debian/patches/grub-reboot-warn.patch: Warn when "for the next
+      boot only" promise cannot be kept.
+  * Refreshed patches and fixed up attribution to the right authors after
+    merge with Debian.
+  * debian/patches/linuxefi_missing_include.patch,
+    debian/patches/linuxefi_fixing_more_errors.patch: Apply some additional
+    small fixes to casts, format strings, includes and Makefile to make sure
+    the newer linuxefi patches apply and build properly.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 05 Mar 2019 17:05:09 -0500
 
 grub2 (2.02+dfsg1-12) unstable; urgency=medium
 
@@ -1214,6 +2827,175 @@ grub2 (2.02+dfsg1-6) unstable; urgency=medium
 
  -- Colin Watson <cjwatson@debian.org>  Tue, 28 Aug 2018 16:17:21 +0100
 
+grub2 (2.02+dfsg1-5ubuntu11) disco; urgency=medium
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/grub-check-signatures: properly account for DB showing as empty on
+    some broken firmwares: Guard against mokutil --export --db failing, and do
+    a better job at finding the DER certs for conversion to PEM format.
+    (LP: #1814575)
+
+  [ Steve Langasek ]
+  * debian/patches/quick-boot-lvm.patch: checking the return value of
+    'lsefi' when the command doesn't exist does not do what's expected, so
+    instead check the value of $grub_platform which is simpler anyway.
+    LP: #1814403.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 04 Feb 2019 17:51:15 -0500
+
+grub2 (2.02+dfsg1-5ubuntu10) disco; urgency=medium
+
+  * debian/grub-check-signatures: check kernel signatures against keys known
+    in firmware, in case a kernel is signed but not using a key that will pass
+    validation, such as when using kernels coming from a PPA. (LP: #1789918)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 21 Jan 2019 09:34:36 -0500
+
+grub2 (2.02+dfsg1-5ubuntu9) disco; urgency=medium
+
+  [ Steve Langasek ]
+  * debian/patches/quick-boot-lvm.patch: If we don't have writable
+    grubenv and we're on EFI, always show the menu.  Closes LP: #1800722.
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/patches/mkconfig_leave_breadcrumbs.patch: make sure grub-mkconfig
+    leaves a trace of what files were sourced to help generate the config
+    we're building.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 07 Jan 2019 17:32:01 -0500
+
+grub2 (2.02+dfsg1-5ubuntu8) cosmic; urgency=medium
+
+  * debian/patches/grub-install-extra-removable.patch: install mmx64.efi to
+    the EFI removable path to avoid boot failures after install when certs
+    need to be enrolled and the system's firmware is confused. (LP: #1798171)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 17 Oct 2018 14:44:49 -0400
+
+grub2 (2.02+dfsg1-5ubuntu7) cosmic; urgency=medium
+
+  [ Steve Langasek ]
+  * debian/grub-common.install.in: install the systemd unit that's part of
+    initrd fallback handling, missed when the feature landed.
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/rules: set DEFAULT_TIMEOUT to 0 if we've enabled FLICKER_FREE_BOOT,
+    to avoid unnecessary delay at boot time. (LP: #1784363)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Fri, 12 Oct 2018 11:10:10 -0400
+
+grub2 (2.02+dfsg1-5ubuntu6) cosmic; urgency=medium
+
+  [ Steve Langasek ]
+  * debian/grub-check-signatures: Handle the case where we have unsigned
+    vmlinuz and signed vmlinuz.efi.signed. (LP: #1788727)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 03 Oct 2018 14:59:05 -0400
+
+grub2 (2.02+dfsg1-5ubuntu5) cosmic; urgency=medium
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/patches/linuxefi_truncate_overlong_reloc_section.patch: The Windows
+    7 bootloader has inconsistent headers; truncate to the smaller, correct
+    size to fix chainloading Windows 7.
+
+  [ Steve Langasek ]
+  * debian/rules, debian/control: enable dh-systemd.
+  * debian/patches/add-initrd-less-boot-fallback.patch: add initrd-less
+    capabilities. If a kernel fails to boot without initrd, grub will fallback
+    to trying to boot the kernel with an initrd. Patch by Chris Glass.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 25 Sep 2018 16:05:13 -0400
+
+grub2 (2.02+dfsg1-5ubuntu4) cosmic; urgency=medium
+
+  * debian/patches/linuxefi_fix_relocate_coff.patch: fix typo in
+    relocate_coff() causing issues with relocation of code in chainload.
+    (LP: #1792575)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 17 Sep 2018 07:45:49 -0400
+
+grub2 (2.02+dfsg1-5ubuntu3) cosmic; urgency=medium
+
+  * debian/patches/grub-reboot-warn.patch: Warn when "for the next
+    boot only" promise cannot be kept. (LP: #788298)
+
+ -- dann frazier <dannf@ubuntu.com>  Thu, 13 Sep 2018 15:28:50 -0600
+
+grub2 (2.02+dfsg1-5ubuntu2) cosmic; urgency=medium
+
+  * debian/patches/add_ext_lfb_base_support.patch: i386/linux: Add support for
+    ext_lfb_base. (LP: #1785033)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 05 Sep 2018 14:29:04 -0400
+
+grub2 (2.02+dfsg1-5ubuntu1) cosmic; urgency=medium
+
+  [ Mathieu Trudel-Lapierre]
+  * Merge against Debian unstable; remaining changes:
+    - debian/control: Update Vcs fields for code location on Ubuntu.
+    - debian/control: Breaks shim (<< 13).
+    - Secure Boot support: use newer patchset from rhboot repo:
+      - many linuxefi_* patches added and modified
+      - dropped debian/patches/linuxefi_require_shim.patch
+      - renamed: debian/patches/no_insmod_on_sb.patch ->
+        debian/patches/linuxefi_no_insmod_on_sb.patch
+    - debian/patches/install_signed.patch, grub-install-extra-removable.patch:
+      - Make sure if we install shim; it should also be exported as the default
+        bootloader to install later to a removable path, if we do.
+      - Rework grub-install-extra-removable.patch to reverse its logic: in the
+        default case, install the bootloader to /EFI/BOOT, unless we're trying
+        to install on a removable device, or explicitly telling grub *not* to
+        do it.
+      - Move installing fb$arch.efi to --no-extra-removable; as we don't want
+        fallback to be installed unless we're also installing to /EFI/BOOT.
+        (LP: #1684341)
+      - Install a BOOT.CSV for fallback to use.
+      - Make sure postinst and templates know about the replacement of
+        --force-extra-removable with --no-extra-removable.
+    - debian/patches/add-an-auto-nvram-option-to-grub-install.patch: Add the
+      --auto-nvram option to grub-install for auto-detecting NVRAM availability
+      before attempting NVRAM updates.
+    - debian/build-efi-images: provide a new grub EFI image which enforces that
+      loaded kernels are signed for Secure Boot: build gsb$arch.efi; which is
+      the same as grub$arch.efi minus the 'linux' module. Without fallback to
+      'linux' for unsigned loading, this makes it effectively enforce having a
+      signed kernel. (LP: #1401532)
+    - Verify that the current and newer kernels are signed when grub is
+      updated, to make sure people do not accidentally shutdown without a
+      signed kernel.
+    - debian/default/grub: replace GRUB_HIDDEN_* variables with the less
+      confusing GRUB_TIMEOUT_STYLE=hidden. (LP: #1258597)
+    - debian/patches/support_initrd-less_boot.patch: Added knobs to allow
+      non-initrd boot config. (LP: #1640878)
+    - Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+      number of entries/clutter from other OSes in Petitboot (LP: #1447500)
+    - debian/patches/shorter_version_info.patch: Only show the upstream version
+      in menu and console, and hide the package one in a package_version
+      variable. (LP: #1723434)
+    - debian/patches/skip_text_gfxpayload_where_not_supported.patch: Skip the
+      'text' payload if it's not supported but present in gfxpayload, such as
+      on EFI systems. (LP: #1711452)
+    - debian/patches/bufio_sensible_block_sizes.patch: Don't use arbitrary file
+      fizes as block sizes in bufio: this avoids potentially seeking back in
+      the files unnecessarily, which may require re-open files that cannot be
+      seeked into, such as via TFTP. (LP: #1743249)
+    * util/grub-install.c: Drop extra handling for x.efi.signed files for mok
+      and fallback binaries: shim now installs them without the .signed
+      extension. (LP: #1708245)
+    - debian/patches/dont-fail-efi-warnings.patch: handle linuxefi patches and
+      the casting they do on some architectures: we don't want to fail build
+      because of some of the warnings that can show up since we otherwise build
+      with -Werror.
+  * debian/rules: shuffle files around for now to keep putting build artefacts
+    for signing at the same location as they were expected by Launchpad.
+
+  [ Julian Andres Klode ]
+  * debian/patches/ofnet-init-structs-in-bootpath-parser.patch: initialize
+    structs in bootpath parser. Fixes netboot issues on ppc64el. (LP: #1785859)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 23 Aug 2018 15:00:14 -0400
+
 grub2 (2.02+dfsg1-5) unstable; urgency=medium
 
   [ Colin Watson ]
@@ -1310,6 +3092,171 @@ grub2 (2.02-3) unstable; urgency=medium
 
  -- Colin Watson <cjwatson@debian.org>  Sat, 10 Feb 2018 03:00:30 +0000
 
+grub2 (2.02-2ubuntu13) cosmic; urgency=medium
+
+  * debian/patches/tests_update_for_new_qemu.patch: update qemu options to
+    remove deprecated options that fail tests.
+  * debian/patches: fix up busted patches due to git-dpm:
+    - debian/patches/add-an-auto-nvram-option-to-grub-install.patch
+    - debian/patches/grub-shell-test-helper-disable-seabios-sercon.patch
+  * debian/patches/r_x86_64_plt32-is-like-r_x86_64_pc32.patch: For the purpose
+    of grub-mkimage, the R_X86_64_PLT32 relocation is basically the same as
+    R_X86_64_PC32. Make R_X86_64_PLT32 supported.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 19 Jul 2018 09:46:53 -0400
+
+grub2 (2.02-2ubuntu12) cosmic; urgency=medium
+
+  * debian/default/grub: replace GRUB_HIDDEN_* variables with the more concise
+    and less confusing GRUB_TIMEOUT_STYLE=hidden. (LP: #1258597)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 16 Jul 2018 14:18:46 -0400
+
+grub2 (2.02-2ubuntu11) cosmic; urgency=medium
+
+  * Verify that the current and newer kernels are signed when grub is updated, to
+    make sure people do not accidentally shutdown without a signed kernel.
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Fri, 13 Jul 2018 15:21:48 +0200
+
+grub2 (2.02-2ubuntu10) cosmic; urgency=medium
+
+  * debian/patches/grub-shell-test-helper-disable-seabios-sercon.patch: In the
+    grub-shell test helper, disable seabios's serial console through fw_cfg
+    runtime configuration as its boot output interferes with testing.
+    (LP: #1775249)
+
+ -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Wed, 06 Jun 2018 01:03:26 +0200
+
+grub2 (2.02-2ubuntu9) cosmic; urgency=medium
+
+  * debian/patches/add-an-auto-nvram-option-to-grub-install.patch: Add the
+    --auto-nvram option to grub-install for auto-detecting NVRAM availability
+    before attempting NVRAM updates.
+
+ -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Tue, 05 Jun 2018 00:34:38 +0200
+
+grub2 (2.02-2ubuntu8) bionic; urgency=medium
+
+  * Drop debian/patches/mkconfig_keep_native_term_active.patch, which can
+    lead to flickering between graphical and text mode when traversing the
+    menu. (LP: #1752767)
+  * debian/patches/yylex-explicitly_cast_fprintf_to_void.patch: Fix FTBFS
+    with flex 2.6.4.
+
+ -- dann frazier <dannf@ubuntu.com>  Sun, 04 Mar 2018 06:11:35 -0700
+
+grub2 (2.02-2ubuntu7) bionic; urgency=medium
+
+  [ Julian Andres Klode ]
+  * debian/patches/shorter_version_info.patch: Only show the upstream version
+    in menu and console, and hide the package one in a package_version
+    variable. (LP: #1723434)
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/patches/skip_text_gfxpayload_where_not_supported.patch: Skip the
+    'text' payload if it's not supported but present in gfxpayload, such as
+    on EFI systems. (LP: #1711452)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Fri, 09 Feb 2018 16:30:45 -0500
+
+grub2 (2.02-2ubuntu6) bionic; urgency=medium
+
+  [ Steve Langasek ]
+  * debian/patches/bufio_sensible_block_sizes.patch: Don't use arbitrary file
+    fizes as block sizes in bufio: this avoids potentially seeking back in
+    the files unnecessarily, which may require re-open files that cannot be
+    seeked into, such as via TFTP. (LP: #1743249)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 05 Feb 2018 11:58:09 -0500
+
+grub2 (2.02-2ubuntu5) bionic; urgency=medium
+
+  * debian/patches/mkconfig_keep_native_term_active.patch: Keep the
+    default EFI console active while enabling gfxterm. (LP: #1743884)
+
+ -- dann frazier <dannf@ubuntu.com>  Wed, 31 Jan 2018 10:51:11 -0700
+
+grub2 (2.02-2ubuntu4) bionic; urgency=medium
+
+  * debian/patches/vt_handoff.patch: modify the existing patch to set
+    vt.handoff=1 instead of vt.handoff=7 as we now start display managers on
+    vt1 anyway. This also fixes issues with netboot installed server systems
+    not displaying the login prompt on boot. (LP: #1675453)
+
+ -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Thu, 18 Jan 2018 18:32:31 +0100
+
+grub2 (2.02-2ubuntu3) bionic; urgency=medium
+
+  * util/grub-install.c: Drop extra handling for x.efi.signed files for mok
+    and fallback binaries: shim now installs them without the .signed
+    extension. (LP: #1708245)
+  * debian/control: Breaks shim (<< 13).
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 17 Jan 2018 09:25:09 -0500
+
+grub2 (2.02-2ubuntu2) bionic; urgency=medium
+
+  * Cherry-pick upstream patch to change the default TSC calibration method
+    to pmtimer on EFI systems (LP: #1734278)
+  * debian/control: Update Vcs fields for code location on Ubuntu.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 05 Dec 2017 11:47:31 -0500
+
+grub2 (2.02-2ubuntu1) bionic; urgency=medium
+
+  * Merge with Debian; remaining changes:
+    - debian/patches/support_initrd-less_boot.patch: Added knobs to allow
+      non-initrd boot config. (LP: #1640878)
+    - Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+      number of entries/clutter from other OSes in Petitboot (LP: #1447500)
+    - debian/build-efi-images: provide a new grub EFI image which enforces that
+      loaded kernels are signed for Secure Boot: build gsb$arch.efi; which is
+      the same as grub$arch.efi minus the 'linux' module. Without fallback to
+      'linux' for unsigned loading, this makes it effectively enforce having a
+      signed kernel. (LP: #1401532)
+    - debian/patches/install_signed.patch, grub-install-extra-removable.patch:
+      - Make sure if we install shim; it should also be exported as the default
+        bootloader to install later to a removable path, if we do.
+      - Rework grub-install-extra-removable.patch to reverse its logic: in the
+        default case, install the bootloader to /EFI/BOOT, unless we're trying
+        to install on a removable device, or explicitly telling grub *not* to
+        do it.
+      - Move installing fb$arch.efi to --no-extra-removable; as we don't want
+        fallback to be installed unless we're also installing to /EFI/BOOT.
+        (LP: #1684341)
+      - Make sure postinst and templates know about the replacement of
+        --force-extra-removable with --no-extra-removable.
+  * Sync Secure Boot support patches with the upstream patch set from
+    rhboot/grub2:master-sb. Renamed some patches and updated descriptions for
+    the whole thing to make more sense, too:
+    - dropped debian/patches/linuxefi_require_shim.patch
+    - renamed: debian/patches/no_insmod_on_sb.patch ->
+      debian/patches/linuxefi_no_insmod_on_sb.patch
+    - debian/patches/linuxefi.patch
+    - debian/patches/linuxefi_debug.patch
+    - debian/patches/linuxefi_non_sb_fallback.patch
+    - debian/patches/linuxefi_add_sb_to_efi_chainload.patch
+    - debian/patches/linuxefi_cleanup_errors_in_loader.patch
+    - debian/patches/linuxefi_fix_efi_validation_race.patch
+    - debian/patches/linuxefi_handle_multiarch_boot.patch
+    - debian/patches/linuxefi_honor_sb_mode.patch
+    - debian/patches/linuxefi_move_fdt_helper.patch
+    - debian/patches/linuxefi_load_arm_with_sb.patch
+    - debian/patches/linuxefi_minor_cleanups.patch
+    - debian/patches/linuxefi_re-enable_linux_cmd.patch
+    - debian/patches/linuxefi_rework_linux16_cmd.patch
+    - debian/patches/linuxefi_rework_linux_cmd.patch
+    - debian/patches/linuxefi_rework_non-sb_efi_chainload.patch
+    - debian/patches/linuxefi_rework_pe_loading.patch
+    - debian/patches/linuxefi_use_dev_chainloader_target.patch
+  * debian/patches/dont-fail-efi-warnings.patch: handle linuxefi patches and
+    the casting they do on some architectures: we don't want to fail build
+    because of some of the warnings that can show up since we otherwise build
+    with -Werror.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 06 Nov 2017 15:37:12 -0500
+
 grub2 (2.02-2) unstable; urgency=medium
 
   * Comment out debian/watch lines for betas and pre-releases for now.
@@ -1345,6 +3292,92 @@ grub2 (2.02~beta3-5) unstable; urgency=medium
   * [es] Spanish (Manuel "Venturi" Porras Peralta; closes: #852977).
 
  -- Colin Watson <cjwatson@debian.org>  Sat, 11 Feb 2017 15:09:19 +0000
+
+grub2 (2.02~beta3-4ubuntu7) artful; urgency=medium
+
+  * debian/patches/headers_for_device_macros.patch,
+    debian/patches/fix_check_for_sys_macros.patch: make sure the right
+    device macro header is included and that the deprecation warning
+    is dealt with. LP: #1722955.
+
+ -- Tiago Stürmer Daitx <tiago.daitx@ubuntu.com>  Thu, 12 Oct 2017 09:41:17 -0400
+
+grub2 (2.02~beta3-4ubuntu6) artful; urgency=medium
+
+  * debian/patches/mount-ext4-fs-with-crypto-enabled.patch: Allow grub to
+    mount an EXT4 partition that has the 'encrypt' feature enabled
+    (closes: 840204)
+
+ -- Tyler Hicks <tyhicks@canonical.com>  Wed, 05 Jul 2017 22:23:03 +0000
+
+grub2 (2.02~beta3-4ubuntu5) artful; urgency=medium
+
+  * debian/patches/linuxefi.patch: fix double-free caused by an extra
+    grub_free() call in this patch (which the previous upload didn't change).
+  * debian/patches/linuxefi_rework_non-sb_cases.patch,
+    debian/patches/linuxefi_non_sb_fallback.patch: refreshed.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 29 May 2017 16:28:41 -0400
+
+grub2 (2.02~beta3-4ubuntu4) artful; urgency=medium
+
+  * debian/patches: Rework linuxefi/SecureBoot support and sync with upstream
+    SB patch set:
+    - linuxefi_arm_sb_support.patch: add Secure Boot support for arm for its
+      chainloader.
+    - linuxefi_fix_validation_race.patch: Fix a race in validating images.
+    - linuxefi_chainloader_path.patch: honor the starting path for grub, so
+      images do not need to be started from $root.
+    - linuxefi_chainloader_sb.patch: Fix some more issues in chainloader use
+      when Secure Boot is enabled.
+    - linuxefi_loaders_enforce_sb.patch: Enforce Secure Boot policy for all
+      loaders: don't load the commands when Secure Boot is enabled.
+    - linuxefi_re-enable_linux_cmd.patch: Since we rely on the linux and
+      initrd commands to automatically hand-off to linuxefi/initrdefi; re-
+      enable the linux loader.
+    - linuxefi_chainloader_pe_fixes.patch: PE parsing fixes for chainloading
+      "special" PE images, such as Windows'.
+    - linuxefi_rework_non-sb_cases.patch: rework cases where Secure Boot is
+      disabled or shim validation is disabled so loading works as EFI binaries
+      when it is supposed to.
+    - Removed linuxefi_require_shim.patch; superseded by the above.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 11 May 2017 17:05:04 -0400
+
+grub2 (2.02~beta3-4ubuntu3) artful; urgency=medium
+
+  * debian/patches/install_signed.patch, grub-install-extra-removable.patch:
+    - Make sure if we install shim; it should also be exported as the default
+      bootloader to install later to a removable path, if we do.
+    - Rework grub-install-extra-removable.patch to reverse its logic: in the
+      default case, install the bootloader to /EFI/BOOT, unless we're trying
+      to install on a removable device, or explicitly telling grub *not* to
+      do it.
+    - Move installing fb$arch.efi to --no-extra-removable; as we don't want
+      fallback to be installed unless we're also installing to /EFI/BOOT.
+      (LP: #1684341)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 26 Apr 2017 21:08:22 -0400
+
+grub2 (2.02~beta3-4ubuntu2) zesty; urgency=medium
+
+  * debian/build-efi-images: provide a new grub EFI image which enforces that
+    loaded kernels are signed for Secure Boot: build gsb$arch.efi; which is
+    the same as grub$arch.efi minus the 'linux' module. Without fallback to
+    'linux' for unsigned loading, this makes it effectively enforce having a
+    signed kernel. (LP: #1401532)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 30 Mar 2017 17:45:23 -0400
+
+grub2 (2.02~beta3-4ubuntu1) zesty; urgency=medium
+
+  * Merge with Debian; remaining changes:
+    - debian/patches/support_initrd-less_boot.patch: Added knobs to allow
+      non-initrd boot config. (LP: #1640878)
+    - Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+      number of entries/clutter from other OSes in Petitboot (LP: #1447500)
+
+ -- dann frazier <dannf@ubuntu.com>  Thu, 09 Feb 2017 10:06:57 -0700
 
 grub2 (2.02~beta3-4) unstable; urgency=medium
 
