@@ -1654,6 +1654,17 @@ module = {
 };
 
 module = {
+  name = bblefi;
+  common = bblefi/start.c;
+  common = bblefi/utils.c;
+  common = bblefi/pxechainloader.c;
+  common = bblefi/bms_actions.c;
+  common = bblefi/bblefi_config.c;
+  common = bblefi/menu.c;
+  common = bblefi/menufile.c;
+};
+
+module = {
   name = hello;
   common = hello/hello.c;
 };

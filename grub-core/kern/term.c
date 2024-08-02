@@ -91,8 +91,8 @@ grub_getkey_noblock (void)
   if (grub_term_poll_usb)
     grub_term_poll_usb (0);
 
-  if (grub_net_poll_cards_idle)
-    grub_net_poll_cards_idle ();
+  // if (grub_net_poll_cards_idle)
+  //   grub_net_poll_cards_idle ();
 
   FOR_ACTIVE_TERM_INPUTS(term)
   {

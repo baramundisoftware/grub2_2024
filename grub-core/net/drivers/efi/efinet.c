@@ -83,7 +83,9 @@ send_card_buffer (struct grub_net_card *dev,
 
   st = net->transmit (net, 0, dev->last_pkt_size,
 		      dev->txbuf, NULL, NULL, NULL);
-  if (st != GRUB_EFI_SUCCESS)
+  if (st == GRUB_EFI_NOT_READY)
+    return grub_error (GRUB_ERR_WAIT, N_("network device not ready"));
+  else if (st != GRUB_EFI_SUCCESS)
     return grub_error (GRUB_ERR_IO, N_("couldn't send network packet"));
 
   /*
@@ -171,7 +173,7 @@ open_card (struct grub_net_card *dev)
    * that may compete for packet polling.
    */
   net = grub_efi_open_protocol (dev->efi_handle, &net_io_guid,
-				GRUB_EFI_OPEN_PROTOCOL_BY_EXCLUSIVE);
+				GRUB_EFI_OPEN_PROTOCOL_GET_PROTOCOL);
   if (net != NULL)
     {
       if (net->mode->state == GRUB_EFI_NETWORK_STOPPED
